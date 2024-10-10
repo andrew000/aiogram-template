@@ -1,0 +1,1 @@
+createdb $PSQL_DB -U $POSTGRES_USER --owner=$POSTGRES_USER

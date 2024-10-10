@@ -1,0 +1,94 @@
+services:
+  bot:
+    build:
+      context: app
+      dockerfile: Dockerfile
+
+    env_file: .env
+
+    networks:
+      - aiogram_network
+
+    user: bot
+
+    stop_signal: SIGINT
+
+    depends_on:
+      - database
+      - redis
+    #      - caddy  # Uncomment if you want to use Caddy as a reverse proxy
+
+    restart: always
+
+    entrypoint: [ "python", "-m", "bot" ]
+
+  database:
+    image: postgres:17.0
+    shm_size: 1gb
+
+    environment:
+      - POSTGRES_USER=$PSQL_USER
+      - POSTGRES_PASSWORD=$PSQL_PASSWORD
+      - POSTGRES_DB=$PSQL_DB
+
+    networks:
+      - aiogram_network
+
+    ports:
+      - "127.0.0.1:5432:5432"
+
+    volumes:
+      - ./psql/data:/var/lib/postgresql/data
+      - ./psql/db-init-scripts:/docker-entrypoint-initdb.d:ro
+
+    restart: always
+
+  redis:
+    image: redis:7.4.1
+
+    command:
+      - --port 6379
+      - --protected-mode no
+      - --loglevel notice
+      - --requirepass $REDIS_PASSWORD
+      - --maxmemory 256MB
+      - --save 60 300
+      - --dir /data
+      - --dbfilename dump.rdb
+      - --rdbcompression yes
+      - --rdbchecksum yes
+      - --always-show-logo yes
+
+    networks:
+      - aiogram_network
+
+    ports:
+      - "127.0.0.1:6379:6379"
+
+    volumes:
+      - ./redis/data:/data
+
+    restart: always
+
+    entrypoint: [ "redis-server" ]
+
+#  caddy:  # Uncomment if you want to use Caddy as a reverse proxy
+#    image: caddy:2.8.4
+#
+#    networks:
+#      - aiogram_network
+#
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#
+#    volumes:
+#      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+#      - ./caddy/data:/data
+#      - ./caddy/config:/config
+#      - ./caddy/public:/usr/share/caddy/
+#
+#    restart: always
+
+networks:
+  aiogram_network:

@@ -5,7 +5,7 @@ repos:
       - id: uv-export
         name: UV Export
         description: "Runs uv export to update the requirements.txt file"
-        entry: make uv-export
+        entry: make freeze
         language: system
         pass_filenames: false
         always_run: true

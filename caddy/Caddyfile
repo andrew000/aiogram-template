@@ -1,0 +1,62 @@
+{
+	# acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+	admin off
+}
+
+(common) {
+	header /* {
+		-Server
+	}
+}
+
+(error) {
+	handle_errors {
+		header -Server
+		respond 401
+	}
+}
+
+example.com {
+	import common
+	import error
+
+	log {
+		output stderr
+		format filter {
+			wrap console
+			fields {
+				request>headers>X-Telegram-Bot-Api-Secret-Token delete
+			}
+		}
+		level INFO
+	}
+
+	log {
+		output file /var/log/caddy/example.com.log {
+			roll_size 100MiB
+		}
+		format filter {
+			wrap json
+			fields {
+				request>headers>X-Telegram-Bot-Api-Secret-Token delete
+			}
+		}
+		level INFO
+	}
+
+	@tg_bot_api {
+		method POST
+		path /webhook/*
+		remote_ip 149.154.160.0/20 91.108.4.0/22
+	}
+
+	route @tg_bot_api {
+		reverse_proxy {
+			to /bot:8080
+		}
+	}
+
+	respond 404 {
+		close
+	}
+}
