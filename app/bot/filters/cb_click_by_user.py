@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from typing import TYPE_CHECKING, Any, Protocol, Self
+from typing import TYPE_CHECKING, Protocol, Self
 
 import msgspec
 from aiogram.filters import Filter
@@ -24,7 +24,7 @@ class CallbackClickedByTargetUser[T: HasOwnerId](Filter):
         self,
         query: CallbackQuery,
         callback_data: T | None = None,
-    ) -> bool | dict[str, Any]:
+    ) -> bool:
         if not callback_data or not hasattr(callback_data, "owner_id"):
             return False
 
@@ -70,7 +70,7 @@ class RDMessageOwner(msgspec.Struct, kw_only=True, array_like=True):
 
 
 class CallbackClickedByRedisUser(Filter):
-    async def __call__(self, cb: CallbackQuery, i18n: I18nContext, redis: Redis) -> bool | dict[str, Any]:
+    async def __call__(self, cb: CallbackQuery, i18n: I18nContext, redis: Redis) -> bool:
         message_owner = await RDMessageOwner.get(redis, cb.message.chat.id, cb.message.message_id)
         if not message_owner:
             await cb.message.edit_text(i18n.message.deprecated())
@@ -118,7 +118,7 @@ class RDMessageMultipleOwners(msgspec.Struct, kw_only=True, array_like=True):
 
 
 class CallbackClickedByMultipleRedisUser(Filter):
-    async def __call__(self, cb: CallbackQuery, i18n: I18nContext, redis: Redis) -> bool | dict[str, Any]:
+    async def __call__(self, cb: CallbackQuery, i18n: I18nContext, redis: Redis) -> bool:
         message_owners = await RDMessageMultipleOwners.get(redis, cb.message.chat.id, cb.message.message_id)
         if not message_owners:
             await cb.message.edit_text(i18n.message.deprecated())

@@ -1,7 +1,12 @@
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 
 from aiogram import Router
-from aiogram.types import ErrorEvent
+
+if TYPE_CHECKING:
+    from aiogram.types import ErrorEvent
 
 router = Router()
 logger = logging.getLogger(__name__)

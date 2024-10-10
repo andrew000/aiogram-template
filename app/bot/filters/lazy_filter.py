@@ -1,8 +1,12 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
 
 from aiogram.filters import Filter
-from aiogram.types import Message
-from aiogram_i18n import I18nContext
+
+if TYPE_CHECKING:
+    from aiogram.types import Message
+    from aiogram_i18n import I18nContext
 
 
 class LazyFilter(Filter):

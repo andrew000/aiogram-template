@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import asyncio
 import logging
 from asyncio import CancelledError
 from functools import partial
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import msgspec
 from aiogram import Bot, Dispatcher
@@ -17,7 +20,6 @@ from aiogram.webhook.security import DEFAULT_TELEGRAM_NETWORKS, IPFilter
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
 from aiohttp import web
-from redis.asyncio import Redis
 
 from bot import errors, handlers
 from bot.middlewares.check_chat_middleware import CheckChatMiddleware
@@ -26,6 +28,9 @@ from bot.middlewares.throttling_middleware import ThrottlingMiddleware
 from bot.settings import Settings
 from bot.storages.psql.base import close_db, create_db_session_pool, init_db
 from bot.utils.fsm_manager import FSMManager
+
+if TYPE_CHECKING:
+    from redis.asyncio import Redis
 
 logging.basicConfig(level=logging.INFO)
 

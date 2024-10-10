@@ -1,13 +1,19 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from aiogram import Router
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
-from aiogram_i18n import I18nContext
-from redis.asyncio import Redis
 
 from bot.filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
 from bot.handlers.cbs.language_settings.keyboards import LanguageWindowCB
 from bot.handlers.cbs.universal_close import UniversalWindowCloseCB
 from bot.utils.callback_data_prefix_enums import CallbackDataPrefix
+
+if TYPE_CHECKING:
+    from aiogram_i18n import I18nContext
+    from redis.asyncio import Redis
 
 router = Router()
 

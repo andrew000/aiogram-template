@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
 
 from aiogram import F, Router
-from aiogram.types import Message
-from redis.asyncio.client import Redis
-from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from bot.storages.psql import DBChatModel
 from bot.storages.redis.chat import RDChatModel, RDChatSettingsModel
+
+if TYPE_CHECKING:
+    from aiogram.types import Message
+    from redis.asyncio.client import Redis
+    from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 router = Router()
 

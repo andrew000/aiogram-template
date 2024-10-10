@@ -1,8 +1,14 @@
-from aiogram.types import User
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from aiogram_i18n.managers.base import BaseManager
-from redis.asyncio import Redis
 
 from bot.storages.redis.user.user_settings_model import RDUserSettingsModel
+
+if TYPE_CHECKING:
+    from aiogram.types import User
+    from redis.asyncio import Redis
 
 
 class FSMManager(BaseManager):

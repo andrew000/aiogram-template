@@ -1,5 +1,11 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import msgspec
-from sqlalchemy.orm import DeclarativeBase
+
+if TYPE_CHECKING:
+    from sqlalchemy.orm import DeclarativeBase
 
 
 class AlchemyStruct[T]:
