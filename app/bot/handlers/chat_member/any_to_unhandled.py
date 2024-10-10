@@ -14,7 +14,7 @@ router = Router()
 
 
 @router.chat_member()
-async def any_to_unhandled(chat_member: ChatMemberUpdated, bot: Bot) -> None:
+async def any_to_unhandled(chat_member: ChatMemberUpdated, bot: Bot, developer_id: int) -> None:
     alert_id = uuid.uuid4()
 
     logger.warning(
@@ -34,7 +34,7 @@ async def any_to_unhandled(chat_member: ChatMemberUpdated, bot: Bot) -> None:
     )
 
     await bot.send_message(
-        382182253,
+        developer_id,
         f"🚨 DETECTED ANY TO UNHANDLED:\n"
         f"Alert id: {alert_id}\n"
         f"user_id: {chat_member.new_chat_member.user.id}\n"
