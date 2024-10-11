@@ -2,6 +2,15 @@
 
 This is a template for creating Telegram bots using the aiogram library.
 
+### Template uses:
+* SQLAlchemy
+* PostgreSQL
+* Redis
+* Caddy Server
+* Docker
+* i18n
+* uv
+
 ## Installation
 
 ### Step 1: Clone the repository
