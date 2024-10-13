@@ -4,7 +4,7 @@ export
 app-dir = app
 bot-dir = bot
 
-.PHONY help:
+.PHONY up:
 up:
 	docker compose -f docker-compose.yml up -d --build --timeout 60
 
