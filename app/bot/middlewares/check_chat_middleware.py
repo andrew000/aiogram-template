@@ -21,8 +21,8 @@ if TYPE_CHECKING:
 ALLOWED_CHAT_TYPES: frozenset[ChatType] = frozenset((ChatType.CHANNEL, ChatType.GROUP, ChatType.SUPERGROUP))
 
 
-async def _get_or_create_chat(chat: Chat, user: User, session: AsyncSession) -> DBChatModel:
-    stmt = select(DBChatModel).where(eq(DBChatModel.id, user.id))
+async def _get_or_create_chat(chat: Chat, session: AsyncSession) -> DBChatModel:
+    stmt = select(DBChatModel).where(eq(DBChatModel.id, chat.id))
     chat_model: DBChatModel | None = await session.scalar(stmt)
 
     if not chat_model:
@@ -75,7 +75,7 @@ async def _get_chat_model(
 
     async with db_session() as session:
         async with session.begin():
-            chat_model: DBChatModel = await _get_or_create_chat(chat, user, session)
+            chat_model: DBChatModel = await _get_or_create_chat(chat, session)
             chat_settings: DBChatSettingsModel = await _get_or_create_chat_settings(chat, user, session)
 
             await session.commit()
