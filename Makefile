@@ -54,7 +54,7 @@ mypy:
 
 .PHONY show-outdated:
 show-outdated:
-	uv run pcu .\pyproject.toml --extra lint --extra dev --extra uvloop
+	uv tree --outdated -d 1 --universal
 
 .PHONY uv-sync:
 uv-sync:
