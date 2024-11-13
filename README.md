@@ -3,6 +3,7 @@
 This is a template for creating Telegram bots using the aiogram library.
 
 ### Template uses:
+
 * SQLAlchemy + Alembic
 * PostgreSQL
 * Redis
@@ -10,6 +11,8 @@ This is a template for creating Telegram bots using the aiogram library.
 * Docker
 * i18n (Project Fluent)
 * uv
+
+***
 
 ## Installation
 
@@ -32,7 +35,7 @@ uv venv --python=3.12.7
 source .venv/bin/activate
 
 # Install dependencies
-make uv-sync
+make sync
 ```
 
 ### Step 3: Create `.env` file
@@ -48,6 +51,8 @@ cp .env.example .env
 ```shell
 make up
 ```
+
+***
 
 ## Explanation
 
@@ -179,25 +184,51 @@ By default, Caddy is disabled in the `docker-compose.yml` file. To enable Caddy,
 Bot may use webhooks. To enable webhooks, set `WEBHOOKS` environment variable to `True` in the `.env` file. Also, set
 `WEBHOOK_URL` and `WEBHOOK_SECRET_TOKEN` environment variables.
 
+Don't forget to uncomment the `caddy` service in the `docker-compose.yml` file.
+
+***
+
+## FAQ
+
+**Q:** Why PyCharm marks import with red color? #TODO: ADD IMAGE
+
+**A:** I use "unique" project structure, where `app` directory contains code, but root directory contains configuration
+files.
+
+In PyCharm, right-click on the `app` directory and select `Mark Directory as` -> `Sources Root`. Also,
+**unmark** project root directory `Unmark as Sources Root`. This will fix the problem.
+***
+
+**Q:** Why You import `sys` or `os` libs
+like [this](https://github.com/andrew000/aiogram-template/blob/6052d9bd2cbb9332620f5996bf6065a0b918d3bf/app/bot/__main__.py#L140)?
+
+**A:** _My inclinations make me do this to avoid some attack vector invented by my paranoia_
+***
+
+**Q:** Why not use `aiogram-cli`?
+
+**A:** _It's a good library, but I prefer to use my own code 🤷‍♂️_
+***
+
 ## Useful commands
 
 #### Update Dependencies
 
-First, run `make show-outdated` to check for outdated dependencies. Then, edit `pyproject.toml` file and run the
+First, run `make outdated` to check for outdated dependencies. Then, edit `pyproject.toml` file and run the
 following command to update dependencies:
 
 ```shell
-make show-outdated
+make outdated
 
 # Edit pyproject.toml
 
-make uv-sync
+make sync
 ```
 
 #### Check Dependencies Updates
 
 ```shell
-make show-outdated
+make outdated
 ```
 
 #### Linting

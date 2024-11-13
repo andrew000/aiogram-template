@@ -52,15 +52,15 @@ mypy:
 	echo "Running MyPy..."
 	uv run mypy --config-file pyproject.toml --package $(app-dir).$(bot-dir)
 
-.PHONY show-outdated:
-show-outdated:
-	uv tree --outdated -d 1 --universal
+.PHONY outdated:
+outdated:
+	uv tree --outdated --universal
 
-.PHONY uv-sync:
-uv-sync:
+.PHONY sync:
+sync:
 	uv sync --extra dev --extra lint --extra uvloop --link-mode=copy
 
-.PHONY freeze: uv-sync
+.PHONY freeze: sync
 freeze:
 	uv export --quiet --format requirements-txt --no-dev --extra uvloop --output-file $(app-dir)\requirements.txt
 
