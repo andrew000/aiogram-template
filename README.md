@@ -190,13 +190,19 @@ Don't forget to uncomment the `caddy` service in the `docker-compose.yml` file.
 
 ## FAQ
 
-**Q:** Why PyCharm marks import with red color? #TODO: ADD IMAGE
+**Q:** Why PyCharm marks import with red color?
+![image](https://github.com/user-attachments/assets/d424facd-342d-4215-b05d-0529d2273d28)
+
+![image](https://github.com/user-attachments/assets/f5030c90-320d-4a3a-a11a-97175a1a447a)
+
+![image](https://github.com/user-attachments/assets/9cca557a-3607-4019-9e94-4f4ffba86211)
 
 **A:** I use "unique" project structure, where `app` directory contains code, but root directory contains configuration
 files.
 
 In PyCharm, right-click on the `app` directory and select `Mark Directory as` -> `Sources Root`. Also,
 **unmark** project root directory `Unmark as Sources Root`. This will fix the problem.
+
 ***
 
 **Q:** Why You import `sys` or `os` libs
