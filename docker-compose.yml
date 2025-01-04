@@ -23,7 +23,7 @@ services:
     entrypoint: [ "python", "-m", "bot" ]
 
   database:
-    image: postgres:17.0
+    image: postgres:17.2
     shm_size: 1gb
 
     environment:
@@ -73,7 +73,7 @@ services:
     entrypoint: [ "redis-server" ]
 
 #  caddy:  # Uncomment if you want to use Caddy as a reverse proxy
-#    image: caddy:2.8.4
+#    image: caddy:2.9
 #
 #    networks:
 #      - aiogram_network

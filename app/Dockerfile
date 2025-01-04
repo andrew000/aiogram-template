@@ -1,4 +1,4 @@
-FROM python:3.12.7-slim AS builder
+FROM python:3.12.8-slim AS builder
 
 ENV PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
