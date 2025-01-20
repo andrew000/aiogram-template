@@ -5,7 +5,7 @@ requires-python = "==3.12.8"
 dependencies = [
     "aiogram-i18n==1.4",
     "aiogram==3.17.0",
-    "alembic==1.14.0",
+    "alembic==1.14.1",
     "asyncpg==0.30.0",
     "fluent-runtime==0.4.0",
     "msgspec==0.19.0",
@@ -23,7 +23,7 @@ dev = [
     "FTL-Extract==0.5.0",
     "isort==5.13.2",
     "pre-commit==4.0.1",
-    "ruff==0.9.1",
+    "ruff==0.9.2",
 ]
 lint = [
     "mypy==1.14.1",
