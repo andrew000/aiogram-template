@@ -12,7 +12,7 @@ dependencies = [
     "pydantic-settings==2.7.1",
     "redis[hiredis]==5.2.1",
     "sqlalchemy==2.0.37",
-    "tzdata==2024.2",
+    "tzdata==2025.1",
 ]
 
 [tool.uv]
@@ -22,8 +22,8 @@ package = false
 dev = [
     "FTL-Extract==0.5.0",
     "isort==5.13.2",
-    "pre-commit==4.0.1",
-    "ruff==0.9.2",
+    "pre-commit==4.1.0",
+    "ruff==0.9.4",
 ]
 lint = [
     "mypy==1.14.1",
