@@ -21,7 +21,7 @@ package = false
 [project.optional-dependencies]
 dev = [
     "FTL-Extract==0.5.0",
-    "isort==5.13.2",
+    "isort==6.0.0",
     "pre-commit==4.1.0",
     "ruff==0.9.4",
 ]
