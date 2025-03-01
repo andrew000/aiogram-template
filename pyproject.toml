@@ -1,17 +1,17 @@
 [project]
 name = "aiogram-template"
 version = "0.0.1"
-requires-python = "==3.12.8"
+requires-python = "==3.12.9"
 dependencies = [
     "aiogram-i18n==1.4",
-    "aiogram==3.17.0",
+    "aiogram==3.18.0",
     "alembic==1.14.1",
     "asyncpg==0.30.0",
-    "fluent-runtime==0.4.0",
+    "fluent.runtime==0.4.0",
     "msgspec==0.19.0",
-    "pydantic-settings==2.7.1",
+    "pydantic-settings==2.8.1",
     "redis[hiredis]==5.2.1",
-    "sqlalchemy==2.0.37",
+    "sqlalchemy==2.0.38",
     "tzdata==2025.1",
 ]
 
@@ -21,13 +21,13 @@ package = false
 [project.optional-dependencies]
 dev = [
     "FTL-Extract==0.5.0",
-    "isort==6.0.0",
+    "isort==6.0.1",
     "pre-commit==4.1.0",
-    "ruff==0.9.4",
+    "ruff==0.9.9",
 ]
 lint = [
-    "mypy==1.14.1",
-    "types-pytz==2024.2.0.20241221",
+    "mypy==1.15.0",
+    "types-pytz==2025.1.0.20250204",
 ]
 uvloop = [
     "uvloop==0.21.0; sys_platform == 'linux' or sys_platform == 'darwin'",

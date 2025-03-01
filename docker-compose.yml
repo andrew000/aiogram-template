@@ -23,7 +23,7 @@ services:
     entrypoint: [ "python", "-m", "bot" ]
 
   database:
-    image: postgres:17.2
+    image: postgres:17.4
     shm_size: 1gb
 
     environment:
