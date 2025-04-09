@@ -25,6 +25,7 @@ class RedisSettings(BaseSettings):
 class Settings(BaseSettings):
     model_config = SettingsConfigDict()
     dev: bool = False
+    test_server: bool = False
     developer_id: int
     webhooks: bool = False
     bot_token: SecretStr

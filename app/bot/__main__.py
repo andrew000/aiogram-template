@@ -11,7 +11,7 @@ import msgspec
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.client.session.aiohttp import AiohttpSession
-from aiogram.client.telegram import PRODUCTION
+from aiogram.client.telegram import PRODUCTION, TEST
 from aiogram.fsm.storage.base import DefaultKeyBuilder
 from aiogram.fsm.storage.memory import SimpleEventIsolation
 from aiogram.fsm.storage.redis import RedisStorage
@@ -81,7 +81,7 @@ async def main() -> None:
     # TelegramLocalBotAPIServer
     # api = TelegramAPIServer.from_base("http://telegram-bot-api:8081")
     # api = TelegramAPIServer.from_base("http://localhost:8081")
-    api = PRODUCTION
+    api = TEST if settings.test_server is True else PRODUCTION
 
     bot = Bot(
         token=settings.bot_token.get_secret_value(),

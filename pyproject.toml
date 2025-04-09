@@ -1,18 +1,18 @@
 [project]
 name = "aiogram-template"
 version = "0.0.1"
-requires-python = "==3.12.9"
+requires-python = "==3.12.10"
 dependencies = [
     "aiogram-i18n==1.4",
-    "aiogram==3.18.0",
-    "alembic==1.14.1",
+    "aiogram==3.19.0",
+    "alembic==1.15.2",
     "asyncpg==0.30.0",
     "fluent.runtime==0.4.0",
     "msgspec==0.19.0",
     "pydantic-settings==2.8.1",
     "redis[hiredis]==5.2.1",
-    "sqlalchemy==2.0.38",
-    "tzdata==2025.1",
+    "sqlalchemy==2.0.40",
+    "tzdata==2025.2",
 ]
 
 [tool.uv]
@@ -22,12 +22,12 @@ package = false
 dev = [
     "FTL-Extract==0.5.0",
     "isort==6.0.1",
-    "pre-commit==4.1.0",
-    "ruff==0.9.9",
+    "pre-commit==4.2.0",
+    "ruff==0.11.4",
 ]
 lint = [
     "mypy==1.15.0",
-    "types-pytz==2025.1.0.20250204",
+    "types-pytz==2025.2.0.20250326",
 ]
 uvloop = [
     "uvloop==0.21.0; sys_platform == 'linux' or sys_platform == 'darwin'",
@@ -69,13 +69,13 @@ ignore = [
     "C901",
     "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107", "D203", "D205", "D212",
     "ERA001",
-    "FA100", "FA102",
     "FBT001", "FBT002",
     "FIX002",
     "I001",
     "PLR0911", "PLR0912", "PLR0913", "PLR0915", "PLR5501",
     "PLW0120",
     "RUF001",
+    "TC006",
     "TD002", "TD003"
 ]
 
