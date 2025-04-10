@@ -30,7 +30,7 @@ repos:
       - id: "check-json"
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.11.4
+    rev: v0.11.5
     hooks:
       - id: ruff
         args: [ "--fix" ]

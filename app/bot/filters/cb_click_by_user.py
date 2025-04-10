@@ -32,7 +32,7 @@ class CallbackClickedByTargetUser[T: HasOwnerId](Filter):
             await query.answer("❌", show_alert=True)
             return False
 
-        return query.from_user.id == callback_data.owner_id
+        return True
 
 
 class RDMessageOwner(msgspec.Struct, kw_only=True, array_like=True):
