@@ -34,7 +34,7 @@ uvloop = [
 ]
 
 [tool.isort]
-py_version = 312
+py_version = 313
 src_paths = ["app"]
 line_length = 120
 multi_line_output = 3
@@ -86,7 +86,7 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.13"
 mypy_path = "app"
 plugins = [
     "pydantic.mypy",
