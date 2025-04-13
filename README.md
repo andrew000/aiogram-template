@@ -29,7 +29,7 @@ I recommend using [UV](https://docs.astral.sh/uv/) to manage your project.
 
 ```shell
 # Create virtual environment using UV
-uv venv --python=3.12
+uv venv --python=3.13
 
 # Activate virtual environment
 source .venv/bin/activate
