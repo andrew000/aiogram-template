@@ -64,9 +64,8 @@ The project structure is as follows:
 AIOGRAM-TEMPLATE
 ├───app (main application)
 │   ├───bot (bot)
+│   │   ├───Dockerfile (Dockerfile for the bot)
 │   ├───migrations (alembic migrations)
-│   ├───requirements.txt (auto-generated requirements file. Use `make freeze` to update)
-│   └───Dockerfile (Dockerfile for the bot)
 ├───caddy (Caddy web server)
 ├───psql (PostgreSQL database)
 │   ├───data (database data)
@@ -143,18 +142,6 @@ The project uses pre-commit hooks. To install pre-commit hooks, run the followin
 uv run pre-commit install
 ```
 
-Now, before each commit, pre-commit hooks will be executed. If any of the hooks fail, the commit will be canceled. Also,
-pre-commit generates requirements file `app/requirements.txt` and updates it on each commit. To update requirements file
-manually, run the following command:
-
-```shell
-make freeze
-```
-
-`requirements.txt` file is used in the Dockerfile to install dependencies.
-
-Make sure to commit the `requirements.txt` file.
-
 ### Docker
 
 The project uses Docker for deployment. To build and run the bot in Docker, run the following command:
@@ -229,6 +216,7 @@ make outdated
 
 # Edit pyproject.toml
 
+uv lock --upgrade
 make sync
 ```
 

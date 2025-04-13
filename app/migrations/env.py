@@ -2,10 +2,9 @@ import asyncio
 from logging.config import fileConfig
 
 from alembic import context
+from settings import Settings
 from sqlalchemy.engine import Connection
-
-from bot.settings import Settings
-from bot.storages.psql.base import Base, create_db_session_pool
+from storages.psql.base import Base, create_db_session_pool
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

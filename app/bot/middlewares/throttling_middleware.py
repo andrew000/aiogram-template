@@ -65,7 +65,7 @@ class ThrottlingMiddleware(BaseMiddleware):
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
-        event: Update,
+        event: Update,  # type: ignore[override]
         data: dict[str, Any],
     ) -> Any:
         user: User = data["event_from_user"]
@@ -94,7 +94,12 @@ class ThrottlingMiddleware(BaseMiddleware):
 
             return None
 
-        await self.ttl_cache.set(key=user.id, time_ms=throttle_time, value=throttle_time, throttle_key=throttle_key)
+        await self.ttl_cache.set(
+            key=user.id,
+            time_ms=throttle_time,
+            value=throttle_time,
+            throttle_key=throttle_key,
+        )
 
         if await self.leaky_bucket.is_limit_reached(user.id, bucket_decrement=bucket_decrement):
             if isinstance(event, CallbackQuery):

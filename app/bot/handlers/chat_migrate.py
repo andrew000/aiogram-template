@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from aiogram import F, Router
-
-from bot.storages.psql import DBChatModel
-from bot.storages.redis.chat import RDChatModel, RDChatSettingsModel
+from storages.psql import DBChatModel
+from storages.redis.chat import RDChatModel, RDChatSettingsModel
 
 if TYPE_CHECKING:
     from aiogram.types import Message
@@ -28,5 +27,5 @@ async def chat_migrate(msg: Message, db_session: async_sessionmaker[AsyncSession
 
             await session.commit()
 
-        await RDChatModel.delete(redis, msg.migrate_from_chat_id)
-        await RDChatSettingsModel.delete(redis, msg.migrate_from_chat_id)
+        await RDChatModel.delete(redis, cast(int, msg.migrate_from_chat_id))
+        await RDChatSettingsModel.delete(redis, cast(int, msg.migrate_from_chat_id))

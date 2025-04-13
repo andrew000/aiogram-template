@@ -163,3 +163,4 @@ cython_debug/
 /.idea/
 /psql/data/
 /redis/data/
+.env.*

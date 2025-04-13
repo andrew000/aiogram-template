@@ -1,6 +1,6 @@
 from datetime import UTC, datetime, timedelta
 from secrets import randbelow
-from typing import Final, Literal, Self
+from typing import Final, Literal, Self, cast
 
 import msgspec
 from aiogram import Bot
@@ -12,6 +12,7 @@ from aiogram.types import (
     ChatMemberMember,
     ChatMemberOwner,
     ChatMemberRestricted,
+    ResultChatMemberUnion,
 )
 from redis.asyncio.client import Redis
 from redis.typing import ExpiryT
@@ -207,11 +208,14 @@ class RDChatMemberModel(msgspec.Struct, kw_only=True, array_like=True):
 class RDChatBotModel(RDChatMemberModel):
     @classmethod
     async def get_or_create(cls, redis: Redis, chat_id: int, bot: Bot) -> Self:
-        bot_chat_member = await cls.get(redis, chat_id, bot.id)
+        bot_chat_member: Self | None = await cls.get(redis, chat_id, bot.id)
 
         if not bot_chat_member:
-            bot_chat_member = await bot.get_chat_member(chat_id, bot.id)
+            bot_chat_member: ResultChatMemberUnion = await bot.get_chat_member(chat_id, bot.id)
 
-            bot_chat_member = await cls.resolve(chat_id=chat_id, chat_member=bot_chat_member).save(redis)
+            bot_chat_member = await cls.resolve(
+                chat_id=chat_id,
+                chat_member=cast(ResultChatMemberUnion, bot_chat_member),
+            ).save(redis)
 
         return bot_chat_member

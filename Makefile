@@ -50,7 +50,7 @@ format:
 .PHONE mypy:
 mypy:
 	echo "Running MyPy..."
-	uv run mypy --config-file pyproject.toml --package $(app-dir).$(bot-dir)
+	uv run mypy --config-file pyproject.toml --explicit-package-bases $(app-dir)/$(bot-dir)
 
 .PHONY outdated:
 outdated:
@@ -58,11 +58,7 @@ outdated:
 
 .PHONY sync:
 sync:
-	uv sync --extra dev --extra lint --extra uvloop --link-mode=copy
-
-.PHONY freeze: sync
-freeze:
-	uv export --quiet --format requirements-txt --no-dev --extra uvloop --output-file $(app-dir)\requirements.txt
+	uv sync --extra dev --extra lint --link-mode=copy
 
 .PHONY create-revision:
 create-revision:

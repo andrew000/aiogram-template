@@ -13,10 +13,10 @@ RUN groupadd --system --gid=${GROUP_ID} ${USER_NAME} && \
     useradd --system --shell /bin/false --no-log-init --gid=${GROUP_ID} --uid=${USER_ID} ${USER_NAME} && \
     chown ${USER_NAME}:${USER_NAME} /app
 
-COPY --chown=${USER_NAME}:${USER_NAME} requirements.txt /app/
+COPY --chown=${USER_NAME}:${USER_NAME} pyproject.toml /app/
 
 RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
-    uv pip install --no-cache --system -r requirements.txt && \
+    uv sync --no-dev && \
     uv pip uninstall --system pip wheel
 
 COPY --chown=${USER_NAME}:${USER_NAME} . /app/

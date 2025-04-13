@@ -5,16 +5,14 @@ from typing import TYPE_CHECKING
 from aiogram import Bot, Router
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import JOIN_TRANSITION, MEMBER, ChatMemberUpdatedFilter
-
-from bot.errors.errors import TopicClosedError, resolve_exception
-from bot.storages.redis.chat_member import RDChatMemberModel
+from errors.errors import TopicClosedError, resolve_exception
+from storages.redis.chat_member import RDChatMemberModel
 
 if TYPE_CHECKING:
     from aiogram.types import ChatMemberUpdated
     from aiogram_i18n import I18nContext
     from redis.asyncio.client import Redis
-
-    from bot.storages.redis.chat import RDChatSettingsModel
+    from storages.redis.chat import RDChatSettingsModel
 
 router = Router()
 

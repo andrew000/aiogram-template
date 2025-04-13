@@ -4,13 +4,12 @@ from typing import Final, Literal, Self
 import msgspec
 from redis.asyncio import Redis
 from redis.typing import ExpiryT
-
-from bot.storages.psql.utils.alchemy_struct import AlchemyStruct
+from storages.psql.utils.alchemy_struct import AlchemyStruct
 
 ENCODER: Final[msgspec.msgpack.Encoder] = msgspec.msgpack.Encoder()
 
 
-class RDChatModel(msgspec.Struct, AlchemyStruct, kw_only=True, array_like=True):
+class RDChatModel(msgspec.Struct, AlchemyStruct["RDChatModel"], kw_only=True, array_like=True):
     id: int
     chat_type: Literal["group", "supergroup", "channel"]
     title: str | None = msgspec.field(default=None)

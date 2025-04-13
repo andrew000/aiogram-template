@@ -5,8 +5,10 @@ import logging
 from asyncio import CancelledError
 from functools import partial
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
+import errors
+import handlers
 import msgspec
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
@@ -20,14 +22,13 @@ from aiogram.webhook.security import DEFAULT_TELEGRAM_NETWORKS, IPFilter
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
 from aiohttp import web
-
-from bot import errors, handlers
-from bot.middlewares.check_chat_middleware import CheckChatMiddleware
-from bot.middlewares.check_user_middleware import CheckUserMiddleware
-from bot.middlewares.throttling_middleware import ThrottlingMiddleware
-from bot.settings import Settings
-from bot.storages.psql.base import close_db, create_db_session_pool, init_db
-from bot.utils.fsm_manager import FSMManager
+from aiohttp.typedefs import Middleware
+from middlewares.check_chat_middleware import CheckChatMiddleware
+from middlewares.check_user_middleware import CheckUserMiddleware
+from middlewares.throttling_middleware import ThrottlingMiddleware
+from settings import Settings
+from storages.psql.base import close_db, create_db_session_pool, init_db
+from utils.fsm_manager import FSMManager
 
 if TYPE_CHECKING:
     from redis.asyncio import Redis
@@ -52,7 +53,9 @@ async def startup(dispatcher: Dispatcher, bot: Bot, settings: Settings, redis: R
 
     await init_db(engine)
 
-    dispatcher.workflow_data.update({"db_session": db_session, "db_session_closer": partial(close_db, engine)})
+    dispatcher.workflow_data.update(
+        {"db_session": db_session, "db_session_closer": partial(close_db, engine)},
+    )
 
     dispatcher.message.middleware(ThrottlingMiddleware(redis))
     dispatcher.callback_query.middleware(ThrottlingMiddleware(redis))
@@ -108,7 +111,9 @@ async def main() -> None:
     dp.shutdown.register(shutdown)
 
     if settings.webhooks is True:
-        app = web.Application(middlewares=[ip_filter_middleware(IPFilter(DEFAULT_TELEGRAM_NETWORKS))])
+        app = web.Application(
+            middlewares=[cast(Middleware, ip_filter_middleware(IPFilter(DEFAULT_TELEGRAM_NETWORKS)))],
+        )
 
         SimpleRequestHandler(
             dispatcher=dp,

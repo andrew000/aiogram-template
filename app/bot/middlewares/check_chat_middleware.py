@@ -7,9 +7,8 @@ from aiogram.enums import ChatType
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.sql.operators import eq
-
-from bot.storages.psql.chat import DBChatModel, DBChatSettingsModel
-from bot.storages.redis.chat import RDChatModel, RDChatSettingsModel
+from storages.psql.chat import DBChatModel, DBChatSettingsModel
+from storages.redis.chat import RDChatModel, RDChatSettingsModel
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -80,20 +79,20 @@ async def _get_chat_model(
 
             await session.commit()
 
-        chat_model = RDChatModel.from_orm(chat_model)
-        chat_settings = RDChatSettingsModel.from_orm(chat_settings)
+        chat_model = RDChatModel.from_orm(cast(DBChatModel, chat_model))
+        chat_settings = RDChatSettingsModel.from_orm(cast(DBChatSettingsModel, chat_settings))
 
         await chat_model.save(redis)
         await chat_settings.save(redis)
 
-    return cast(RDChatModel, chat_model), cast(RDChatSettingsModel, chat_settings)
+    return chat_model, chat_settings
 
 
 class CheckChatMiddleware(BaseMiddleware):
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
-        event: Update,
+        event: Update,  # type: ignore[override]
         data: dict[str, Any],
     ) -> Any:
         chat: Chat = data.get("event_chat")

@@ -1,10 +1,10 @@
 services:
   bot:
     build:
-      context: app
+      context: app/bot
       dockerfile: Dockerfile
 
-    env_file: .env
+    env_file: .env.docker
 
     networks:
       - aiogram_network
@@ -20,7 +20,8 @@ services:
 
     restart: always
 
-    entrypoint: [ "python", "-m", "bot" ]
+    entrypoint: [ ".venv/bin/python", "__main__.py" ]
+#    entrypoint: [ "sleep", "infinity" ]
 
   database:
     image: postgres:17.4
@@ -92,3 +93,13 @@ services:
 
 networks:
   aiogram_network:
+
+secrets:
+    PSQL_USER:
+        file: .env.docker
+    PSQL_PASSWORD:
+        file: .env.docker
+    PSQL_DB:
+        file: .env.docker
+    REDIS_PASSWORD:
+        file: .env.docker

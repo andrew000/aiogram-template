@@ -1,14 +1,5 @@
 fail_fast: false
 repos:
-  - repo: local
-    hooks:
-      - id: uv-export
-        name: UV Export
-        description: "Runs uv export to update the requirements.txt file"
-        entry: make freeze
-        language: system
-        pass_filenames: false
-        always_run: true
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
     hooks:
