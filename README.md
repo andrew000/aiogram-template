@@ -200,7 +200,7 @@ Don't forget to uncomment the `caddy` service in the `docker-compose.yml` file.
 **A:** I use "unique" project structure, where `app` directory contains code, but root directory contains configuration
 files.
 
-In PyCharm, right-click on the `app` directory and select `Mark Directory as` -> `Sources Root`. Also,
+In PyCharm, right-click on the `bot` directory and select `Mark Directory as` -> `Sources Root`. Also,
 **unmark** project root directory `Unmark as Sources Root`. This will fix the problem.
 
 ![image](https://github.com/user-attachments/assets/f4acbd42-f4e7-4e1b-9e16-a40db71ac672)
