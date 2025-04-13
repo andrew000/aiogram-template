@@ -203,11 +203,11 @@ files.
 In PyCharm, right-click on the `app` directory and select `Mark Directory as` -> `Sources Root`. Also,
 **unmark** project root directory `Unmark as Sources Root`. This will fix the problem.
 
-![image](https://github.com/user-attachments/assets/d424facd-342d-4215-b05d-0529d2273d28)
+![image](https://github.com/user-attachments/assets/f4acbd42-f4e7-4e1b-9e16-a40db71ac672)
 
-![image](https://github.com/user-attachments/assets/f5030c90-320d-4a3a-a11a-97175a1a447a)
+![image](https://github.com/user-attachments/assets/01f4f030-46e0-4267-a5bc-4b05ae0b9015)
 
-![image](https://github.com/user-attachments/assets/9cca557a-3607-4019-9e94-4f4ffba86211)
+![image](https://github.com/user-attachments/assets/f2e02548-173b-4be6-944f-623ff7dc2207)
 
 ***
 
