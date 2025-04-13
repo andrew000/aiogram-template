@@ -19,4 +19,4 @@ RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
     uv sync --no-dev && \
     uv pip uninstall --system pip wheel
 
-COPY --chown=${USER_NAME}:${USER_NAME} . /app/
+COPY --chown=${USER_NAME}:${USER_NAME} bot/ /app/

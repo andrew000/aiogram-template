@@ -1,8 +1,8 @@
 services:
   bot:
     build:
-      context: app/bot
-      dockerfile: Dockerfile
+      context: app
+      dockerfile: Dockerfile-bot
 
     env_file: .env.docker
 
@@ -21,7 +21,29 @@ services:
     restart: always
 
     entrypoint: [ ".venv/bin/python", "__main__.py" ]
-#    entrypoint: [ "sleep", "infinity" ]
+
+  migrations:
+    # Do not run this container directly. Use `make` to run migrations.
+    build:
+      context: app
+      dockerfile: Dockerfile-migrations
+
+    env_file: .env.docker
+
+    networks:
+      - aiogram_network
+
+    user: migrator
+
+    stop_signal: SIGINT
+
+    volumes:
+      - ./app/migrations/versions:/migrations/versions
+
+    depends_on:
+      - database
+
+    restart: always
 
   database:
     image: postgres:17.4

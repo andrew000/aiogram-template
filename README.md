@@ -31,9 +31,6 @@ I recommend using [UV](https://docs.astral.sh/uv/) to manage your project.
 # Create virtual environment using UV
 uv venv --python=3.13
 
-# Activate virtual environment
-source .venv/bin/activate
-
 # Install dependencies
 make sync
 ```
@@ -43,13 +40,30 @@ make sync
 Create a `.env` file in the root of the project and fill it with the necessary data.
 
 ```shell
-cp .env.example .env
+cp .env.example .env.docker # for docker development
+cp .env.example .env # for local development
 ```
 
-### Step 4: Run the bot in Docker
+### Step 4: Deploy project
 
 ```shell
 make up
+```
+
+### Step 5: Run migrations
+
+Template already has initial migration. To apply it, run the following command:
+
+```shell
+make upgrade-revision revision=head
+```
+
+### Step 6: Bot is ready and running
+
+Bot is ready to use. You can check the logs using the following command:
+
+```shell
+docker compose logs -f
 ```
 
 ***
@@ -64,8 +78,10 @@ The project structure is as follows:
 AIOGRAM-TEMPLATE
 ├───app (main application)
 │   ├───bot (bot)
-│   │   ├───Dockerfile (Dockerfile for the bot)
 │   ├───migrations (alembic migrations)
+├───├───pyproject.toml (application configuration)
+│   ├───Dockerfile-bot (Dockerfile for the bot)
+│   └───Dockerfile-migrations (Dockerfile for the migrations)
 ├───caddy (Caddy web server)
 ├───psql (PostgreSQL database)
 │   ├───data (database data)
@@ -73,8 +89,8 @@ AIOGRAM-TEMPLATE
 ├───redis (Redis database)
 │   └───data (redis data)
 ├───pyproject.toml (project configuration)
-├───.env.example (example environment file)
 ├───docker-compose.yml (docker-compose configuration)
+├───.env.example (example environment file)
 ├───.pre-commit-config.yaml (pre-commit configuration)
 └───Makefile (make commands)
 ```
@@ -88,21 +104,23 @@ specific functionality. `handlers` are responsible for processing events, `middl
 
 Migration files are located in the `app/migrations` directory.
 
-I hate when app makes migrations automatically. It often causes problems. So I prefer to create and upgrade migrations
-manually. Additionally, I always add function, to compare in-code `migration_rev_id` with database `migration_rev_id`
-(function is not included in template). If they are different, the app will raise an error and exit.
+❗️ It is recommended to create migrations files before you push your code to the repository.
+
+❗️ Always check your migrations before apply them to the production database.
 
 To create initial migration, check if your models imported in the `app/bot/storages/psql/__init__.py` file and run the
-following command (Don't forget to run database container):
-
-Command will create initial migration file in the `app/migrations/versions` directory and create an empty table
-`alembic_version` in the database.
+following command:
 
 ```shell
 make create-init-revision
 ```
 
-To apply the migration, run the following command:
+To apply `head` migration, run the following command:
+```shell
+make upgrade-revision revision=head
+```
+
+To apply specific migration, run the following command:
 
 ```shell
 make upgrade-revision revision=<revision_id>
@@ -119,7 +137,7 @@ make current-revision
 
 ### Localization
 
-The bot supports localization. Localization files are located in the `app/bot/locales` directory. The bot uses the
+The Bot supports localization. Localization files are located in the `app/bot/locales` directory. The bot uses the
 `aiogram-i18n` library for localization and `FTL-Extract` for extracting FTL-keys from the code.
 
 To extract FTL-keys from the code, run the following command:

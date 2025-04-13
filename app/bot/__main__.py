@@ -27,7 +27,7 @@ from middlewares.check_chat_middleware import CheckChatMiddleware
 from middlewares.check_user_middleware import CheckUserMiddleware
 from middlewares.throttling_middleware import ThrottlingMiddleware
 from settings import Settings
-from storages.psql.base import close_db, create_db_session_pool, init_db
+from storages.psql.base import close_db, create_db_session_pool
 from utils.fsm_manager import FSMManager
 
 if TYPE_CHECKING:
@@ -50,8 +50,6 @@ async def startup(dispatcher: Dispatcher, bot: Bot, settings: Settings, redis: R
         )
 
     engine, db_session = await create_db_session_pool(settings)
-
-    await init_db(engine)
 
     dispatcher.workflow_data.update(
         {"db_session": db_session, "db_session_closer": partial(close_db, engine)},
