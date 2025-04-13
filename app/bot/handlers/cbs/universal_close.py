@@ -4,9 +4,8 @@ from typing import TYPE_CHECKING
 
 from aiogram import Router
 from aiogram.filters.callback_data import CallbackData
-
-from bot.filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
-from bot.utils.callback_data_prefix_enums import CallbackDataPrefix
+from filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
+from utils.callback_data_prefix_enums import CallbackDataPrefix
 
 if TYPE_CHECKING:
     from aiogram.types import CallbackQuery
@@ -16,7 +15,7 @@ if TYPE_CHECKING:
 router = Router()
 
 
-class UniversalWindowCloseCB(CallbackData, prefix=CallbackDataPrefix.universal_close):  # type: ignore[call-arg]
+class UniversalWindowCloseCB(CallbackData, prefix=CallbackDataPrefix.universal_close):
     pass
 
 

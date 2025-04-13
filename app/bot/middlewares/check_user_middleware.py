@@ -8,9 +8,8 @@ from aiogram.types import Chat, Message, TelegramObject, Update, User
 from sqlalchemy import select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.sql.operators import eq, ne
-
-from bot.storages.psql.user import DBUserModel, DBUserSettingsModel
-from bot.storages.redis.user import RDUserModel, RDUserSettingsModel
+from storages.psql.user import DBUserModel, DBUserSettingsModel
+from storages.redis.user import RDUserModel, RDUserSettingsModel
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -90,8 +89,10 @@ async def _get_user_model(
 
             await session.commit()
 
-        user_model: RDUserModel = RDUserModel.from_orm(user_model)
-        user_settings: RDUserSettingsModel = RDUserSettingsModel.from_orm(user_settings)
+        user_model: RDUserModel = RDUserModel.from_orm(cast(DBUserModel, user_model))
+        user_settings: RDUserSettingsModel = RDUserSettingsModel.from_orm(
+            cast(DBUserSettingsModel, user_settings),
+        )
 
         await cast(RDUserModel, user_model).save(redis)
         await cast(RDUserSettingsModel, user_settings).save(redis)
@@ -103,7 +104,7 @@ class CheckUserMiddleware(BaseMiddleware):
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
-        event: Update,
+        event: Update,  # type: ignore[override]
         data: dict[str, Any],
     ) -> Any:
         chat: Chat = data.get("event_chat")
@@ -127,7 +128,12 @@ class CheckUserMiddleware(BaseMiddleware):
                     and not msg.reply_to_message.from_user.is_bot
                     and msg.reply_to_message.from_user.id != TG_SERVICE_USER_ID
                 ):
-                    await _get_user_model(data["db_session"], data["redis"], msg.reply_to_message.from_user, chat)
+                    await _get_user_model(
+                        data["db_session"],
+                        data["redis"],
+                        msg.reply_to_message.from_user,
+                        chat,
+                    )
 
             case "callback_query" | "my_chat_member" | "chat_member" | "inline_query":
                 if user.is_bot is False and user.id != TG_SERVICE_USER_ID:

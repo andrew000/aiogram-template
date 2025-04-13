@@ -5,11 +5,10 @@ from typing import TYPE_CHECKING
 from aiogram import Router
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
-
-from bot.filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
-from bot.handlers.cbs.language_settings.keyboards import LanguageWindowCB
-from bot.handlers.cbs.universal_close import UniversalWindowCloseCB
-from bot.utils.callback_data_prefix_enums import CallbackDataPrefix
+from filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
+from handlers.cbs.language_settings.keyboards import LanguageWindowCB
+from handlers.cbs.universal_close import UniversalWindowCloseCB
+from utils.callback_data_prefix_enums import CallbackDataPrefix
 
 if TYPE_CHECKING:
     from aiogram_i18n import I18nContext
@@ -18,7 +17,7 @@ if TYPE_CHECKING:
 router = Router()
 
 
-class GOTOStartCB(CallbackData, prefix=CallbackDataPrefix.goto_start):  # type: ignore[call-arg]
+class GOTOStartCB(CallbackData, prefix=CallbackDataPrefix.goto_start):
     pass
 
 

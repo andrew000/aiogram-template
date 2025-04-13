@@ -4,13 +4,12 @@ from typing import Final, Self
 import msgspec.msgpack
 from redis.asyncio import Redis
 from redis.typing import ExpiryT
-
-from bot.storages.psql.utils.alchemy_struct import AlchemyStruct
+from storages.psql.utils.alchemy_struct import AlchemyStruct
 
 ENCODER: Final[msgspec.msgpack.Encoder] = msgspec.msgpack.Encoder()
 
 
-class RDUserModel(msgspec.Struct, AlchemyStruct, kw_only=True, array_like=True):
+class RDUserModel(msgspec.Struct, AlchemyStruct["RDUserModel"], kw_only=True, array_like=True):
     id: int
     username: str | None = msgspec.field(default=None)
     first_name: str

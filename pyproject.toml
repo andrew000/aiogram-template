@@ -3,20 +3,17 @@ name = "aiogram-template"
 version = "0.0.1"
 requires-python = "==3.13.3"
 dependencies = [
-    "aiogram-i18n==1.4",
-    "aiogram==3.19.0",
-    "alembic==1.15.2",
-    "asyncpg==0.30.0",
-    "fluent.runtime==0.4.0",
-    "msgspec==0.19.0",
-    "pydantic-settings==2.8.1",
-    "redis[hiredis]==5.2.1",
-    "sqlalchemy==2.0.40",
-    "tzdata==2025.2",
+    "app-workspace==0.0.1",
 ]
+
+[tool.uv.sources]
+app-workspace = { workspace = true }
 
 [tool.uv]
 package = false
+
+[tool.uv.workspace]
+members = ["app"]
 
 [project.optional-dependencies]
 dev = [
@@ -29,14 +26,11 @@ lint = [
     "mypy==1.15.0",
     "types-pytz==2025.2.0.20250326",
 ]
-uvloop = [
-    "uvloop==0.21.0; sys_platform == 'linux' or sys_platform == 'darwin'",
-]
 
 [tool.isort]
 py_version = 313
 src_paths = ["app"]
-line_length = 120
+line_length = 110
 multi_line_output = 3
 force_grid_wrap = 0
 include_trailing_comma = true
@@ -49,7 +43,7 @@ extend_skip_glob = ["app/bot/locales/*"]
 
 [tool.ruff]
 src = ["app"]
-line-length = 120
+line-length = 110
 exclude = [
     ".git",
     ".mypy_cache",
@@ -87,7 +81,8 @@ line-ending = "auto"
 
 [tool.mypy]
 python_version = "3.13"
-mypy_path = "app"
+mypy_path = "app/bot"
+packages = ["app"]
 plugins = [
     "pydantic.mypy",
     "sqlalchemy.ext.mypy.plugin",
@@ -99,10 +94,9 @@ disallow_incomplete_defs = true
 disallow_untyped_calls = true
 disallow_untyped_defs = true
 extra_checks = true
-follow_imports = "skip"
-follow_imports_for_stubs = false
+follow_imports = "normal"
+follow_imports_for_stubs = true
 ignore_missing_imports = false
-namespace_packages = true
 no_implicit_optional = true
 no_implicit_reexport = true
 pretty = true
@@ -114,7 +108,9 @@ warn_unused_configs = true
 warn_unused_ignores = true
 
 disable_error_code = [
+    "assignment",
     "no-redef",
+    "union-attr",
 ]
 
 exclude = [

@@ -3,15 +3,18 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from aiogram import Router
-from aiogram_i18n.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
+from handlers.cbs.language_settings.keyboards import (
+    LanguageWindowCB,
+    SelectLanguageCB,
+    select_language_keyboard,
+)
+from handlers.cbs.start import GOTOStartCB
 from sqlalchemy import update
 from sqlalchemy.sql.operators import eq
-
-from bot.filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
-from bot.handlers.cbs.language_settings.keyboards import LanguageWindowCB, SelectLanguageCB, select_language_keyboard
-from bot.handlers.cbs.start import GOTOStartCB
-from bot.storages.psql.user import DBUserSettingsModel
-from bot.storages.redis.user import RDUserSettingsModel
+from storages.psql.user import DBUserSettingsModel
+from storages.redis.user import RDUserSettingsModel
 
 if TYPE_CHECKING:
     from aiogram.types import CallbackQuery

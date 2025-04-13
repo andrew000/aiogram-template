@@ -4,10 +4,9 @@ from typing import TYPE_CHECKING
 
 from aiogram import Router
 from aiogram.filters import Command, or_f
-
-from bot.filters.cb_click_by_user import RDMessageOwner
-from bot.filters.lazy_filter import LF
-from bot.handlers.cbs.language_settings.keyboards import select_language_keyboard
+from filters.cb_click_by_user import RDMessageOwner
+from filters.lazy_filter import LF
+from handlers.cbs.language_settings.keyboards import select_language_keyboard
 
 if TYPE_CHECKING:
     from aiogram.types import Message

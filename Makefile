@@ -6,7 +6,7 @@ bot-dir = bot
 
 .PHONY up:
 up:
-	docker compose -f docker-compose.yml up -d --build --timeout 60
+	docker compose -f docker-compose.yml up -d --build --timeout 60 bot
 
 .PHONY down:
 down:
@@ -50,7 +50,7 @@ format:
 .PHONE mypy:
 mypy:
 	echo "Running MyPy..."
-	uv run mypy --config-file pyproject.toml --package $(app-dir).$(bot-dir)
+	uv run mypy --config-file pyproject.toml --explicit-package-bases $(app-dir)/$(bot-dir)
 
 .PHONY outdated:
 outdated:
@@ -58,28 +58,24 @@ outdated:
 
 .PHONY sync:
 sync:
-	uv sync --extra dev --extra lint --extra uvloop --link-mode=copy
-
-.PHONY freeze: sync
-freeze:
-	uv export --quiet --format requirements-txt --no-dev --extra uvloop --output-file $(app-dir)\requirements.txt
+	uv sync --extra dev --extra lint --link-mode=copy
 
 .PHONY create-revision:
 create-revision:
-	cd $(app-dir) && uv run alembic revision --autogenerate -m "$(message)"
+	docker compose run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini revision --autogenerate -m '$(message)'"
 
 .PHONY upgrade-revision:
 upgrade-revision:
-	cd $(app-dir) && uv run alembic upgrade "$(revision)"
+	docker compose run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini upgrade $(revision)"
 
 .PHONY downgrade-revision:
 downgrade-revision:
-	cd $(app-dir) && uv run alembic downgrade "$(revision)"
+	docker compose run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini downgrade $(revision)"
 
 .PHONY current-revision:
 current-revision:
-	cd $(app-dir) && uv run alembic current
+	docker compose run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini current"
 
 .PHONY create-init-revision:
 create-init-revision:
-	cd $(app-dir) && uv run alembic revision --autogenerate -m 'Initial' --rev-id 000000000000
+	docker compose run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini revision --autogenerate -m 'Initial' --rev-id 000000000000"

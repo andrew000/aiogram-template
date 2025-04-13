@@ -6,10 +6,9 @@ from typing import TYPE_CHECKING
 from aiogram import Router
 from aiogram.filters import CommandObject, CommandStart
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
-
-from bot.filters.cb_click_by_user import RDMessageOwner
-from bot.handlers.cbs.language_settings.keyboards import LanguageWindowCB
-from bot.handlers.cbs.universal_close import UniversalWindowCloseCB
+from filters.cb_click_by_user import RDMessageOwner
+from handlers.cbs.language_settings.keyboards import LanguageWindowCB
+from handlers.cbs.universal_close import UniversalWindowCloseCB
 
 if TYPE_CHECKING:
     from aiogram_i18n import I18nContext
@@ -20,7 +19,12 @@ logger = logging.getLogger(__name__)
 
 
 @router.message(CommandStart(deep_link=True))
-async def start_cmd_with_deep_link(msg: Message, command: CommandObject, i18n: I18nContext, redis: Redis) -> None:
+async def start_cmd_with_deep_link(
+    msg: Message,
+    command: CommandObject,
+    i18n: I18nContext,
+    redis: Redis,
+) -> None:
     args = command.args.split() if command.args else []
     deep_link = args[0]
 

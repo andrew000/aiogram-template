@@ -1,0 +1,24 @@
+FROM python:3.13.3-slim
+
+ENV PYTHONUNBUFFERED=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+ARG USER_ID=999
+ARG GROUP_ID=999
+ARG USER_NAME=migrator
+
+WORKDIR /migrations
+
+RUN groupadd --system --gid=${GROUP_ID} ${USER_NAME} && \
+    useradd --system --shell /bin/false --no-log-init --gid=${GROUP_ID} --uid=${USER_ID} ${USER_NAME} && \
+    chown ${USER_NAME}:${USER_NAME} /migrations
+
+USER ${USER_NAME}
+
+COPY --chown=${USER_NAME}:${USER_NAME} pyproject.toml /migrations/
+
+RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
+    uv --no-cache sync --no-dev --extra alembic
+
+COPY --chown=${USER_NAME}:${USER_NAME} bot/ /migrations/bot
+COPY --chown=${USER_NAME}:${USER_NAME} migrations/ /migrations/

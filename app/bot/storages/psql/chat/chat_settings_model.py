@@ -1,8 +1,7 @@
 from sqlalchemy import BigInteger, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import expression
-
-from bot.storages.psql.base import Base
+from storages.psql.base import Base
 
 
 class DBChatSettingsModel(Base):
