@@ -98,23 +98,23 @@ services:
 
     entrypoint: [ "redis-server" ]
 
-#  caddy:  # Uncomment if you want to use Caddy as a reverse proxy
-#    image: caddy:2.9.1
-#
-#    networks:
-#      - aiogram_network
-#
-#    ports:
-#      - "80:80"
-#      - "443:443"
-#
-#    volumes:
-#      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
-#      - ./caddy/data:/data
-#      - ./caddy/config:/config
-#      - ./caddy/public:/usr/share/caddy/
-#
-#    restart: always
+  caddy:  # Uncomment if you want to use Caddy as a reverse proxy
+    image: caddy:2.9.1
+
+    networks:
+      - aiogram_network
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/data:/data
+      - ./caddy/config:/config
+      - ./caddy/public:/usr/share/caddy/
+
+    restart: always
 
 networks:
   aiogram_network:
