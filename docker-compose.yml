@@ -20,7 +20,7 @@ services:
 
     restart: always
 
-    entrypoint: [ ".venv/bin/python", "__main__.py" ]
+    entrypoint: [ ".venv/bin/python", "main.py" ]
 
   migrations:
     # Do not run this container directly. Use `make` to run migrations.
