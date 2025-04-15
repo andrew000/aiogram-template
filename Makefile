@@ -6,11 +6,11 @@ bot-dir = bot
 
 .PHONY up:
 up:
-	docker compose -f docker-compose.yml up -d --build --timeout 60 bot
+	docker compose --env-file .env.docker -f docker-compose.yml up -d --build --timeout 60 bot
 
 .PHONY down:
 down:
-	docker compose -f docker-compose.yml down --timeout 60
+	docker compose --env-file .env.docker -f docker-compose.yml down --timeout 60
 
 .PHONY pull:
 pull:
