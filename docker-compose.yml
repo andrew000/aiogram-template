@@ -50,9 +50,12 @@ services:
     shm_size: 1gb
 
     environment:
-      - POSTGRES_USER=$PSQL_USER
-      - POSTGRES_PASSWORD=$PSQL_PASSWORD
-      - POSTGRES_DB=$PSQL_DB
+      POSTGRES_USER: $PSQL_USER
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres-passwd
+      POSTGRES_DB: $PSQL_DB
+
+    secrets:
+      - postgres-passwd
 
     networks:
       - aiogram_network
@@ -117,11 +120,5 @@ networks:
   aiogram_network:
 
 secrets:
-    PSQL_USER:
-        file: .env.docker
-    PSQL_PASSWORD:
-        file: .env.docker
-    PSQL_DB:
-        file: .env.docker
-    REDIS_PASSWORD:
-        file: .env.docker
+  postgres-passwd:
+    environment: PSQL_PASSWORD
