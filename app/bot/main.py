@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from asyncio import CancelledError
 from functools import partial
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
@@ -127,17 +126,7 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    try:
-        uvloop = __import__("uvloop")
-        loop_factory = uvloop.new_event_loop
-
-    except ModuleNotFoundError:
-        loop_factory = asyncio.new_event_loop
-        logger.info("uvloop not found, using default event loop")
-
-    try:
-        with asyncio.Runner(loop_factory=loop_factory) as runner:
-            runner.run(main())
-
-    except (CancelledError, KeyboardInterrupt):
-        __import__("sys").exit(0)
+    # Aiogram automatically sets the event loop policy to uvloop if available.
+    # I really don't like it, because it should be set by the developer.
+    # Developer decides which event loop to use.
+    asyncio.run(main())
