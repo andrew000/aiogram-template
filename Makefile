@@ -47,7 +47,7 @@ format:
 	echo "Running isort..."
 	uv run isort --settings-file pyproject.toml $(app-dir)
 
-.PHONE mypy:
+.PHONY mypy:
 mypy:
 	echo "Running MyPy..."
 	uv run mypy --config-file pyproject.toml --explicit-package-bases $(app-dir)/$(bot-dir)
