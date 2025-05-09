@@ -18,7 +18,12 @@ async def any_to_unhandled(chat_member: ChatMemberUpdated, bot: Bot, developer_i
     alert_id = uuid.uuid4()
 
     logger.warning(
-        "🚨 DETECTED ANY TO UNHANDLED\n%s -> %s.\nAlert id: %s\nUser id: %s\nMention: %s\nChat id: %s\n",
+        "🚨 DETECTED ANY TO UNHANDLED\n"
+        "%s -> %s.\n"
+        "Alert id: %s\n"
+        "User id: %s\n"
+        "Mention: %s\n"
+        "Chat id: %s\n",
         chat_member.old_chat_member,
         chat_member.new_chat_member,
         alert_id,

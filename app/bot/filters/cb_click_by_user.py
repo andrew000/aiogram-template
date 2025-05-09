@@ -119,7 +119,11 @@ class RDMessageMultipleOwners(msgspec.Struct, kw_only=True, array_like=True):
 
 class CallbackClickedByMultipleRedisUser(Filter):
     async def __call__(self, cb: CallbackQuery, i18n: I18nContext, redis: Redis) -> bool:
-        message_owners = await RDMessageMultipleOwners.get(redis, cb.message.chat.id, cb.message.message_id)
+        message_owners = await RDMessageMultipleOwners.get(
+            redis,
+            cb.message.chat.id,
+            cb.message.message_id,
+        )
         if not message_owners:
             await cb.message.edit_text(i18n.message.deprecated())
             return False

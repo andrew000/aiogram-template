@@ -34,7 +34,12 @@ def upgrade() -> None:
             server_default=sa.text("(now() AT TIME ZONE 'UTC'::text)"),
             nullable=False,
         ),
-        sa.Column("migrate_from_chat_id", sa.BigInteger(), server_default=sa.text("NULL"), nullable=True),
+        sa.Column(
+            "migrate_from_chat_id",
+            sa.BigInteger(),
+            server_default=sa.text("NULL"),
+            nullable=True,
+        ),
         sa.Column("migrate_datetime", sa.DateTime(), server_default=sa.text("NULL"), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
@@ -57,7 +62,12 @@ def upgrade() -> None:
     op.create_table(
         "chats_settings",
         sa.Column("id", sa.BigInteger(), autoincrement=False, nullable=False),
-        sa.Column("language_code", sa.String(length=2), server_default=sa.text("'en'"), nullable=False),
+        sa.Column(
+            "language_code",
+            sa.String(length=2),
+            server_default=sa.text("'en'"),
+            nullable=False,
+        ),
         sa.Column("timezone", sa.String(), nullable=True),
         sa.ForeignKeyConstraint(["id"], ["chats.id"], onupdate="CASCADE", deferrable=True),
         sa.PrimaryKeyConstraint("id"),
@@ -65,7 +75,12 @@ def upgrade() -> None:
     op.create_table(
         "users_settings",
         sa.Column("id", sa.BigInteger(), autoincrement=False, nullable=False),
-        sa.Column("language_code", sa.String(length=2), server_default=sa.text("'en'"), nullable=False),
+        sa.Column(
+            "language_code",
+            sa.String(length=2),
+            server_default=sa.text("'en'"),
+            nullable=False,
+        ),
         sa.Column("gender", sa.String(length=1), server_default=sa.text("'m'"), nullable=False),
         sa.Column("is_banned", sa.Boolean(), server_default=sa.text("false"), nullable=False),
         sa.ForeignKeyConstraint(["id"], ["users.id"], ondelete="CASCADE"),

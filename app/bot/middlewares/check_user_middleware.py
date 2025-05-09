@@ -23,11 +23,16 @@ TG_SERVICE_USER_ID: Final[int] = 777000
 
 async def _get_or_create_user(user: User, chat: Chat, session: AsyncSession) -> DBUserModel:
     if user.username:
-        stmt = select(DBUserModel).where(eq(DBUserModel.username, user.username), ne(DBUserModel.id, user.id))
+        stmt = select(DBUserModel).where(
+            eq(DBUserModel.username, user.username),
+            ne(DBUserModel.id, user.id),
+        )
         another_user: DBUserModel = await session.scalar(stmt)
 
         if another_user:
-            stmt = update(DBUserModel).where(eq(DBUserModel.id, another_user.id)).values(username=None)
+            stmt = (
+                update(DBUserModel).where(eq(DBUserModel.id, another_user.id)).values(username=None)
+            )
             await session.execute(stmt)
 
     stmt = select(DBUserModel).where(eq(DBUserModel.id, user.id))

@@ -16,7 +16,11 @@ router = Router()
 
 
 @router.message(F.migrate_from_chat_id)
-async def chat_migrate(msg: Message, db_session: async_sessionmaker[AsyncSession], redis: Redis) -> None:
+async def chat_migrate(
+    msg: Message,
+    db_session: async_sessionmaker[AsyncSession],
+    redis: Redis,
+) -> None:
     async with db_session() as session:
         async with session.begin():
             chat_model = await session.get(DBChatModel, msg.migrate_from_chat_id)

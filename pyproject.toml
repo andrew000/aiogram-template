@@ -30,7 +30,7 @@ lint = [
 [tool.isort]
 py_version = 313
 src_paths = ["app"]
-line_length = 110
+line_length = 100
 multi_line_output = 3
 force_grid_wrap = 0
 include_trailing_comma = true
@@ -43,7 +43,7 @@ extend_skip_glob = ["app/bot/locales/*"]
 
 [tool.ruff]
 src = ["app"]
-line-length = 110
+line-length = 100
 exclude = [
     ".git",
     ".mypy_cache",

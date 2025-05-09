@@ -12,7 +12,11 @@ class DBChatModel(Base):
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=False)
     chat_type: Mapped[str] = mapped_column(nullable=False)
-    title: Mapped[str] = mapped_column(nullable=True, default=None, server_default=expression.null())
+    title: Mapped[str] = mapped_column(
+        nullable=True,
+        default=None,
+        server_default=expression.null(),
+    )
     username: Mapped[str] = mapped_column(
         CITEXT,
         nullable=True,

@@ -16,7 +16,11 @@ from aiogram.client.telegram import PRODUCTION, TEST
 from aiogram.fsm.storage.base import DefaultKeyBuilder
 from aiogram.fsm.storage.memory import SimpleEventIsolation
 from aiogram.fsm.storage.redis import RedisStorage
-from aiogram.webhook.aiohttp_server import SimpleRequestHandler, ip_filter_middleware, setup_application
+from aiogram.webhook.aiohttp_server import (
+    SimpleRequestHandler,
+    ip_filter_middleware,
+    setup_application,
+)
 from aiogram.webhook.security import DEFAULT_TELEGRAM_NETWORKS, IPFilter
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
@@ -109,7 +113,9 @@ async def main() -> None:
 
     if settings.webhooks is True:
         app = web.Application(
-            middlewares=[cast(Middleware, ip_filter_middleware(IPFilter(DEFAULT_TELEGRAM_NETWORKS)))],
+            middlewares=[
+                cast(Middleware, ip_filter_middleware(IPFilter(DEFAULT_TELEGRAM_NETWORKS))),
+            ],
         )
 
         SimpleRequestHandler(

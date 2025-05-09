@@ -28,7 +28,13 @@ class TTLCache:
     async def get(self, key: KeyValueT, throttle_key: str = "-") -> bytes | None:
         return await self.redis.get(self.key(key, throttle_key))
 
-    async def set(self, key: KeyValueT, time_ms: ExpiryT, value: Any, throttle_key: str = "-") -> bool:
+    async def set(
+        self,
+        key: KeyValueT,
+        time_ms: ExpiryT,
+        value: Any,
+        throttle_key: str = "-",
+    ) -> bool:
         return await self.redis.psetex(self.key(key, throttle_key), time_ms, value)
 
 

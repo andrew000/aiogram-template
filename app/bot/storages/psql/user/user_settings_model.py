@@ -18,5 +18,9 @@ class DBUserSettingsModel(Base):
         nullable=False,
         server_default=expression.text("'en'"),
     )
-    gender: Mapped[str] = mapped_column(String(1), nullable=False, server_default=expression.text("'m'"))
+    gender: Mapped[str] = mapped_column(
+        String(1),
+        nullable=False,
+        server_default=expression.text("'m'"),
+    )
     is_banned: Mapped[bool] = mapped_column(nullable=False, server_default=expression.false())

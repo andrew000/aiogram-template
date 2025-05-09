@@ -13,7 +13,9 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.ERROR)
 
 file_handler = logging.FileHandler("errors.log", encoding="utf-8")
-formatter = logging.Formatter("%(levelname)s:%(name)s - %(asctime)s - on line `%(lineno)d`\n%(message)s\n")
+formatter = logging.Formatter(
+    "%(levelname)s:%(name)s - %(asctime)s - on line `%(lineno)d`\n%(message)s\n",
+)
 file_handler.setFormatter(formatter)
 file_handler.setLevel(logging.ERROR)
 logger.addHandler(file_handler)

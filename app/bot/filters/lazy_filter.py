@@ -10,7 +10,10 @@ if TYPE_CHECKING:
 
 
 class LazyFilter(Filter):
-    """I don't like `LazyFilter` provided by `aiogram-i18n`, so I've created my own version of it."""
+    """
+    I don't like `LazyFilter` provided by `aiogram-i18n`, so I've created my own version of
+    it.
+    """
 
     def __init__(self, key: str, casefold: bool = True, **__: Any) -> None:
         self.key = key  # FTL key
@@ -22,7 +25,9 @@ class LazyFilter(Filter):
         if self._is_initiated:
             return
 
-        self.values = frozenset({i18n.core.get(self.key, locale) for locale in i18n.core.available_locales})
+        self.values = frozenset(
+            {i18n.core.get(self.key, locale) for locale in i18n.core.available_locales},
+        )
 
         if self.casefold is True:
             self.values = frozenset({value.casefold() for value in self.values})
@@ -30,7 +35,9 @@ class LazyFilter(Filter):
         self._is_initiated = True
 
     async def __call__(self, event: Message, i18n: I18nContext) -> bool:
-        self.startup(i18n)  # Temporary solution, because of https://github.com/aiogram/i18n/issues/38
+        self.startup(
+            i18n,
+        )  # Temporary solution, because of https://github.com/aiogram/i18n/issues/38
 
         if not (text := (event.text or event.caption)):
             return False

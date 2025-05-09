@@ -74,7 +74,9 @@ async def language_selected_cb(
             inline_keyboard=[
                 [
                     InlineKeyboardButton(
-                        text=i18n.settings.select_language.goto_start(_path="cmds/user_settings.ftl"),
+                        text=i18n.settings.select_language.goto_start(
+                            _path="cmds/user_settings.ftl",
+                        ),
                         callback_data=GOTOStartCB().pack(),
                     ),
                 ],

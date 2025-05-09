@@ -17,7 +17,9 @@ if TYPE_CHECKING:
     from redis.asyncio.client import Redis
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-ALLOWED_CHAT_TYPES: frozenset[ChatType] = frozenset((ChatType.CHANNEL, ChatType.GROUP, ChatType.SUPERGROUP))
+ALLOWED_CHAT_TYPES: frozenset[ChatType] = frozenset(
+    (ChatType.CHANNEL, ChatType.GROUP, ChatType.SUPERGROUP),
+)
 
 
 async def _get_or_create_chat(chat: Chat, session: AsyncSession) -> DBChatModel:
@@ -45,7 +47,11 @@ async def _get_or_create_chat(chat: Chat, session: AsyncSession) -> DBChatModel:
     return cast(DBChatModel, chat_model)
 
 
-async def _get_or_create_chat_settings(chat: Chat, user: User, session: AsyncSession) -> DBChatSettingsModel:
+async def _get_or_create_chat_settings(
+    chat: Chat,
+    user: User,
+    session: AsyncSession,
+) -> DBChatSettingsModel:
     stmt = select(DBChatSettingsModel).where(eq(DBChatSettingsModel.id, chat.id))
     chat_settings_model: DBChatSettingsModel | None = await session.scalar(stmt)
 
@@ -75,7 +81,11 @@ async def _get_chat_model(
     async with db_session() as session:
         async with session.begin():
             chat_model: DBChatModel = await _get_or_create_chat(chat, session)
-            chat_settings: DBChatSettingsModel = await _get_or_create_chat_settings(chat, user, session)
+            chat_settings: DBChatSettingsModel = await _get_or_create_chat_settings(
+                chat,
+                user,
+                session,
+            )
 
             await session.commit()
 

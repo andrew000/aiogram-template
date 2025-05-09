@@ -37,7 +37,10 @@ async def my_chat_member_promoted_transition(
     i18n: I18nContext,
     redis: Redis,
 ) -> None:
-    bot_model = RDChatBotModel.resolve(chat_id=chat_member.chat.id, chat_member=chat_member.new_chat_member)
+    bot_model = RDChatBotModel.resolve(
+        chat_id=chat_member.chat.id,
+        chat_member=chat_member.new_chat_member,
+    )
 
     await bot_model.save(redis, timedelta(minutes=45 + randbelow(75 - 45 + 1)))
 
@@ -58,8 +61,14 @@ async def my_chat_member_promoted_transition(
     ChatMemberUpdatedFilter(ADMINISTRATOR >> ADMINISTRATOR),
     F.chat.type.in_({ChatType.GROUP, ChatType.SUPERGROUP}),
 )
-async def my_chat_member_administrator_transition(chat_member: ChatMemberUpdated, redis: Redis) -> None:
-    bot_model = RDChatBotModel.resolve(chat_id=chat_member.chat.id, chat_member=chat_member.new_chat_member)
+async def my_chat_member_administrator_transition(
+    chat_member: ChatMemberUpdated,
+    redis: Redis,
+) -> None:
+    bot_model = RDChatBotModel.resolve(
+        chat_id=chat_member.chat.id,
+        chat_member=chat_member.new_chat_member,
+    )
 
     await bot_model.save(redis, timedelta(minutes=45 + randbelow(75 - 45 + 1)))
 
@@ -76,7 +85,10 @@ async def my_chat_member_join_transition(
     i18n: I18nContext,
     redis: Redis,
 ) -> None:
-    bot_model = RDChatBotModel.resolve(chat_id=chat_member.chat.id, chat_member=chat_member.new_chat_member)
+    bot_model = RDChatBotModel.resolve(
+        chat_id=chat_member.chat.id,
+        chat_member=chat_member.new_chat_member,
+    )
 
     await bot_model.save(redis, timedelta(minutes=45 + randbelow(75 - 45 + 1)))
 
@@ -97,8 +109,14 @@ async def my_chat_member_join_transition(
     ChatMemberUpdatedFilter(+RESTRICTED >> (MEMBER | +RESTRICTED)),
     F.chat.type.in_({ChatType.GROUP, ChatType.SUPERGROUP}),
 )
-async def my_chat_member_unrestricted_transition(chat_member: ChatMemberUpdated, redis: Redis) -> None:
-    bot_model = RDChatBotModel.resolve(chat_id=chat_member.chat.id, chat_member=chat_member.new_chat_member)
+async def my_chat_member_unrestricted_transition(
+    chat_member: ChatMemberUpdated,
+    redis: Redis,
+) -> None:
+    bot_model = RDChatBotModel.resolve(
+        chat_id=chat_member.chat.id,
+        chat_member=chat_member.new_chat_member,
+    )
 
     await bot_model.save(redis, timedelta(minutes=45 + randbelow(75 - 45 + 1)))
 
@@ -115,7 +133,10 @@ async def my_chat_member_demoted_transition(
     bot: Bot,
     redis: Redis,
 ) -> None:
-    bot_model = RDChatBotModel.resolve(chat_id=chat_member.chat.id, chat_member=chat_member.new_chat_member)
+    bot_model = RDChatBotModel.resolve(
+        chat_id=chat_member.chat.id,
+        chat_member=chat_member.new_chat_member,
+    )
 
     await bot_model.save(redis, timedelta(minutes=45 + randbelow(75 - 45 + 1)))
 
@@ -132,7 +153,10 @@ async def my_chat_member_demoted_transition(
     F.chat.type.in_({ChatType.GROUP, ChatType.SUPERGROUP}),
 )
 async def my_chat_member_leave_transition(chat_member: ChatMemberUpdated, redis: Redis) -> None:
-    bot_model = RDChatBotModel.resolve(chat_id=chat_member.chat.id, chat_member=chat_member.new_chat_member)
+    bot_model = RDChatBotModel.resolve(
+        chat_id=chat_member.chat.id,
+        chat_member=chat_member.new_chat_member,
+    )
     await bot_model.save(redis, timedelta(minutes=45 + randbelow(75 - 45 + 1)))
 
     logger.info("Bot was kicked from chat %s", chat_member.chat.id)
