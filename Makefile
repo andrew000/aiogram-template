@@ -24,12 +24,11 @@ extract-locales:
 	'.\app\bot\locales' \
 	-l 'en' \
 	-l 'uk' \
-	-k 'i18n' \
-	-k 'L' \
-	-k 'LF' \
-	-k 'LazyProxy' \
-	-a 'core' \
-	--comment-junks
+	-K 'LF' \
+	-I 'core' \
+	--comment-junks \
+	--comment-keys-mode 'comment' \
+	--verbose
 
 .PHONY lint:
 lint:
