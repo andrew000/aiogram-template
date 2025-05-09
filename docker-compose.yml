@@ -46,7 +46,7 @@ services:
     restart: always
 
   database:
-    image: postgres:17.4
+    image: postgres:17.5
     shm_size: 1gb
 
     environment:
@@ -70,7 +70,7 @@ services:
     restart: always
 
   redis:
-    image: redis:7.4.2
+    image: redis:7.4.3
 
     command:
       - --port 6379
@@ -99,7 +99,7 @@ services:
     entrypoint: [ "redis-server" ]
 
   caddy:  # Uncomment if you want to use Caddy as a reverse proxy
-    image: caddy:2.9.1
+    image: caddy:2.10.0
 
     networks:
       - aiogram_network
