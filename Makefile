@@ -19,7 +19,7 @@ pull:
 
 .PHONY extract-locales:
 extract-locales:
-	uv run ftl_extract \
+	uv run fast-ftl-extract \
 	'.\app\bot' \
 	'.\app\bot\locales' \
 	-l 'en' \
