@@ -70,7 +70,7 @@ services:
     restart: always
 
   redis:
-    image: redis:7.4.3
+    image: redis:8.0.2
 
     command:
       - --port 6379
