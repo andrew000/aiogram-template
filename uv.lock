@@ -70,7 +70,7 @@ lint = [
 [package.metadata]
 requires-dist = [
     { name = "app-workspace", extras = ["alembic"], virtual = "app" },
-    { name = "ftl-extract", marker = "extra == 'dev'", specifier = "==0.9.0a3" },
+    { name = "ftl-extract", marker = "extra == 'dev'", specifier = "==0.9.0a4" },
     { name = "isort", marker = "extra == 'dev'", specifier = "==6.0.1" },
     { name = "mypy", marker = "extra == 'lint'", specifier = "==1.16.1" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = "==4.2.0" },
@@ -358,7 +358,7 @@ wheels = [
 
 [[package]]
 name = "ftl-extract"
-version = "0.9.0a3"
+version = "0.9.0a4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -366,13 +366,13 @@ dependencies = [
     { name = "typing-extensions" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7b/bc/66cb4e70861dab468d333e98400279d952bf3ec8632504589afaeb9da7a9/ftl_extract-0.9.0a3-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:28ee72b9fa06e028c33139f7f40375ace95c30a2cd3a97c66e0ab8d088ac19fe", size = 1741850, upload-time = "2025-07-01T14:12:07.87Z" },
-    { url = "https://files.pythonhosted.org/packages/00/a2/ec296fa6a908e0f35ff7014917a0c781e715bf62cbee27c4ac74c90e7206/ftl_extract-0.9.0a3-py3-none-macosx_11_0_arm64.whl", hash = "sha256:23ecfa7dc43df0c9086069383e78b1fe1d97b5c95023d6846ed620a5da124932", size = 1642479, upload-time = "2025-07-01T14:12:09.837Z" },
-    { url = "https://files.pythonhosted.org/packages/06/ef/85345169e9e51e69e515f1d8b0c0e81c2218bd0c35cf3ec5ac567dbf259e/ftl_extract-0.9.0a3-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:d6a8809a61680e5646201f3d50d8c88dd53cd9d1f8c353af0bbd1acb4d847beb", size = 1680877, upload-time = "2025-07-01T14:12:12.692Z" },
-    { url = "https://files.pythonhosted.org/packages/b4/83/37079575e2bcd60a74a74368e450cb20ed38b0a9694680b28f9d6361f1ee/ftl_extract-0.9.0a3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:f388410e6c00decac82c927e7095c42c719158a1f313a1bc38c15754848ced80", size = 1795260, upload-time = "2025-07-01T14:12:14.931Z" },
-    { url = "https://files.pythonhosted.org/packages/cb/36/d30824a6e0072112a8c5049271090a3fcb62d8b04e415d51d8b78a272043/ftl_extract-0.9.0a3-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:4fa831ea1d63b82832ebde41d7af79c8ff0d6c443806066ef86bf4c83fa2aab7", size = 1722872, upload-time = "2025-07-01T14:12:16.552Z" },
-    { url = "https://files.pythonhosted.org/packages/d6/2a/c8fd93d813e3314615a4c9c704c870b6e67f877c9fc756d5b6cc2d7389d4/ftl_extract-0.9.0a3-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:db5ca72f02bd75378fd986704dff104232494b3e27b51c957a1a291a9bf1029e", size = 1847392, upload-time = "2025-07-01T14:12:17.953Z" },
-    { url = "https://files.pythonhosted.org/packages/c6/88/c42917e9c9b089653d8b1ea35d6fe2fc8d841e9d05c67124da006e977254/ftl_extract-0.9.0a3-py3-none-win_amd64.whl", hash = "sha256:48e7dd131d30ba097022f30a620c6cc98a5d4298d6f9ccfc38971fc958b128bf", size = 1744912, upload-time = "2025-07-01T14:12:19.754Z" },
+    { url = "https://files.pythonhosted.org/packages/43/22/dffb2cbf95e8fa2225a39dba0b22f3445b64d1d8006715b3d445cfbea9dc/ftl_extract-0.9.0a4-py3-none-macosx_10_13_x86_64.whl", hash = "sha256:73c43601d12716efedc469f8962073077f9bece8e7b2801d8a2504828f15ccae", size = 1739225, upload-time = "2025-07-02T07:25:27.009Z" },
+    { url = "https://files.pythonhosted.org/packages/2d/ec/c567daa1668b0ad1623f1513a3dc0be3bf37f8ca0bc6ec1bf170296c8216/ftl_extract-0.9.0a4-py3-none-macosx_11_0_arm64.whl", hash = "sha256:bd011e6a13936a2e3f873cad9eaf5f46175a5faeceb0d36b0360a63852833af5", size = 1648901, upload-time = "2025-07-02T07:25:28.964Z" },
+    { url = "https://files.pythonhosted.org/packages/16/8c/3497051a3d67c2fd4f8739c5bc6fb108c37cf0d06ebade836a8081ab4c24/ftl_extract-0.9.0a4-py3-none-manylinux2014_aarch64.manylinux_2_17_aarch64.whl", hash = "sha256:966e1c1f2be31ea8d3c40e0febedfb38c3eec2fafa4525cbc04187de4ff87aae", size = 1680863, upload-time = "2025-07-02T07:25:30.806Z" },
+    { url = "https://files.pythonhosted.org/packages/94/21/bf47fa8c882508b620dadf94be1f065dd2e533b6494a3293f809dde1ee1a/ftl_extract-0.9.0a4-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl", hash = "sha256:949431af3a5dc6c6d055714947e73464b3ee9161247506171556e4e19a011aa3", size = 1795289, upload-time = "2025-07-02T07:25:32.693Z" },
+    { url = "https://files.pythonhosted.org/packages/38/26/3e9d9be7639aa067b83d4b879c92dc3b87c0993293bc21c46f83c747ec61/ftl_extract-0.9.0a4-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:9a646d3e8cc72f24a7df7b9ff7fcbd52b9a2546c1eceab25f377aaf883d86e45", size = 1722741, upload-time = "2025-07-02T07:25:34.169Z" },
+    { url = "https://files.pythonhosted.org/packages/d1/fb/feb619e753098c7db28de10376d3929c77b0de60a1b5f993292e0139f48c/ftl_extract-0.9.0a4-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:365abc37adbb1083c78c4be7a18ecd7d357abfa0e40325af57796510720c7b90", size = 1847410, upload-time = "2025-07-02T07:25:35.825Z" },
+    { url = "https://files.pythonhosted.org/packages/58/28/0d3423a3a42c9bd16df12a08a34875d032a2b0231559b93db1456131c1e7/ftl_extract-0.9.0a4-py3-none-win_amd64.whl", hash = "sha256:0dc427fb90438bca3640f5a33fd789d7d004e677b28e9bc7a3db45ad3e81b31f", size = 1744281, upload-time = "2025-07-02T07:25:37.732Z" },
 ]
 
 [[package]]
