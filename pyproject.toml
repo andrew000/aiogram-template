@@ -17,10 +17,10 @@ members = ["app"]
 
 [project.optional-dependencies]
 dev = [
-    "FTL-Extract==0.9.0a3",
+    "FTL-Extract==0.9.0a5",
     "isort==6.0.1",
     "pre-commit==4.2.0",
-    "ruff==0.12.1",
+    "ruff==0.12.2",
 ]
 lint = [
     "mypy==1.16.1",
