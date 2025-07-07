@@ -7,6 +7,7 @@ from aiogram.enums import ChatType
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.sql.operators import eq
+
 from storages.psql.chat import DBChatModel, DBChatSettingsModel
 from storages.redis.chat import RDChatModel, RDChatSettingsModel
 

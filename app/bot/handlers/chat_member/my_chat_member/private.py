@@ -8,6 +8,7 @@ from aiogram.enums import ChatType
 from aiogram.filters import KICKED, MEMBER, ChatMemberUpdatedFilter
 from sqlalchemy import update
 from sqlalchemy.sql.operators import eq
+
 from storages.psql.user import DBUserModel
 from storages.redis.user import RDUserModel
 

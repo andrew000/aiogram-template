@@ -4,6 +4,7 @@ from typing import Final, Literal, Self
 import msgspec
 from redis.asyncio import Redis
 from redis.typing import ExpiryT
+
 from storages.psql.utils.alchemy_struct import AlchemyStruct
 
 ENCODER: Final[msgspec.msgpack.Encoder] = msgspec.msgpack.Encoder()

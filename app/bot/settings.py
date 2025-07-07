@@ -7,6 +7,8 @@ from sqlalchemy import URL
 
 
 class PostgresSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="PSQL_")
+
     host: str
     port: int
     user: str
@@ -15,6 +17,8 @@ class PostgresSettings(BaseSettings):
 
 
 class RedisSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_prefix="REDIS_")
+
     host: str
     port: int
     user: str
@@ -24,6 +28,7 @@ class RedisSettings(BaseSettings):
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict()
+
     dev: bool = False
     test_server: bool = False
     developer_id: int
@@ -32,8 +37,8 @@ class Settings(BaseSettings):
     webhook_url: SecretStr
     webhook_secret_token: SecretStr
 
-    psql: PostgresSettings = PostgresSettings(_env_prefix="PSQL_")
-    redis: RedisSettings = RedisSettings(_env_prefix="REDIS_")
+    psql: PostgresSettings = PostgresSettings()
+    redis: RedisSettings = RedisSettings()
 
     def psql_dsn(self) -> URL:
         return URL.create(
@@ -49,7 +54,6 @@ class Settings(BaseSettings):
         return Redis.from_url(
             "redis://{username}:{password}@{host}:{port}/{db}".format(  # noqa: UP032
                 username=self.redis.user,
-                # password=self.redis.password.get_secret_value(),
                 password=urllib.parse.quote(self.redis.password.get_secret_value()),
                 host=self.redis.host,
                 port=self.redis.port,

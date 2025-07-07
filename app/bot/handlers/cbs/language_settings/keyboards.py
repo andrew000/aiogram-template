@@ -6,10 +6,11 @@ from typing import TYPE_CHECKING, cast
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+
 from utils.callback_data_prefix_enums import CallbackDataPrefix
 
 if TYPE_CHECKING:
-    from aiogram_i18n import I18nContext
+    from stub import I18nContext
 
 
 class PossibleLanguages(Enum):

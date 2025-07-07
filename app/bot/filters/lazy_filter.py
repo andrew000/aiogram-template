@@ -29,7 +29,7 @@ class LazyFilter(Filter):
             {i18n.core.get(self.key, locale) for locale in i18n.core.available_locales},
         )
 
-        if self.casefold is True:
+        if self.casefold:
             self.values = frozenset({value.casefold() for value in self.values})
 
         self._is_initiated = True
@@ -42,7 +42,7 @@ class LazyFilter(Filter):
         if not (text := (event.text or event.caption)):
             return False
 
-        if self.casefold is True:
+        if self.casefold:
             text = text.casefold()
 
         return text in self.values

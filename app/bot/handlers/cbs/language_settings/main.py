@@ -4,6 +4,9 @@ from typing import TYPE_CHECKING
 
 from aiogram import Router
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from sqlalchemy import update
+from sqlalchemy.sql.operators import eq
+
 from filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
 from handlers.cbs.language_settings.keyboards import (
     LanguageWindowCB,
@@ -11,16 +14,15 @@ from handlers.cbs.language_settings.keyboards import (
     select_language_keyboard,
 )
 from handlers.cbs.start import GOTOStartCB
-from sqlalchemy import update
-from sqlalchemy.sql.operators import eq
 from storages.psql.user import DBUserSettingsModel
 from storages.redis.user import RDUserSettingsModel
 
 if TYPE_CHECKING:
     from aiogram.types import CallbackQuery
-    from aiogram_i18n import I18nContext
     from redis.asyncio import Redis
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+
+    from stub import I18nContext
 
 router = Router()
 

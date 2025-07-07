@@ -4,14 +4,16 @@ from typing import TYPE_CHECKING
 
 from aiogram import Router
 from aiogram.filters import Command, or_f
+
 from filters.cb_click_by_user import RDMessageOwner
 from filters.lazy_filter import LF
 from handlers.cbs.language_settings.keyboards import select_language_keyboard
 
 if TYPE_CHECKING:
     from aiogram.types import Message
-    from aiogram_i18n import I18nContext
     from redis.asyncio import Redis
+
+    from stub import I18nContext
 
 router = Router()
 

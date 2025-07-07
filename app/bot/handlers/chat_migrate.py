@@ -4,6 +4,7 @@ from datetime import UTC, datetime
 from typing import TYPE_CHECKING, cast
 
 from aiogram import F, Router
+
 from storages.psql import DBChatModel
 from storages.redis.chat import RDChatModel, RDChatSettingsModel
 

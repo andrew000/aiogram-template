@@ -2,8 +2,9 @@ import asyncio
 from logging.config import fileConfig
 
 from alembic import context
-from settings import Settings
 from sqlalchemy.engine import Connection
+
+from settings import Settings
 from storages.psql.base import Base, create_db_session_pool
 
 # this is the Alembic Config object, which provides
@@ -66,7 +67,7 @@ async def run_async_migrations(settings: Settings) -> None:
     and associate a connection with the context.
 
     """
-    engine, async_session_maker = await create_db_session_pool(settings)
+    engine, _async_session_maker = await create_db_session_pool(settings)
 
     async with engine.connect() as connection:
         await connection.run_sync(do_run_migrations)

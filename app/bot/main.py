@@ -6,8 +6,6 @@ from functools import partial
 from pathlib import Path
 from typing import TYPE_CHECKING, cast
 
-import errors
-import handlers
 import msgspec
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
@@ -26,6 +24,9 @@ from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
 from aiohttp import web
 from aiohttp.typedefs import Middleware
+
+import errors
+import handlers
 from middlewares.check_chat_middleware import CheckChatMiddleware
 from middlewares.check_user_middleware import CheckUserMiddleware
 from middlewares.throttling_middleware import ThrottlingMiddleware
@@ -45,7 +46,7 @@ logger.setLevel(logging.INFO)
 async def startup(dispatcher: Dispatcher, bot: Bot, settings: Settings, redis: Redis) -> None:
     await bot.delete_webhook(drop_pending_updates=True)
 
-    if settings.dev is False:
+    if not settings.dev:
         await bot.set_webhook(
             url=settings.webhook_url.get_secret_value(),
             allowed_updates=dispatcher.resolve_used_update_types(),
@@ -111,7 +112,7 @@ async def main() -> None:
     dp.startup.register(startup)
     dp.shutdown.register(shutdown)
 
-    if settings.webhooks is True:
+    if settings.webhooks:
         app = web.Application(
             middlewares=[
                 cast(Middleware, ip_filter_middleware(IPFilter(DEFAULT_TELEGRAM_NETWORKS))),

@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from aiogram_i18n.managers.base import BaseManager
+
 from storages.redis.user.user_settings_model import RDUserSettingsModel
 
 if TYPE_CHECKING:

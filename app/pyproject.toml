@@ -16,5 +16,5 @@ dependencies = [
 
 [project.optional-dependencies]
 alembic = [
-    "alembic==1.16.2",
+    "alembic==1.16.3",
 ]

@@ -17,7 +17,7 @@ members = ["app"]
 
 [project.optional-dependencies]
 dev = [
-    "FTL-Extract==0.9.0a5",
+    "FTL-Extract==0.9.0a9",
     "isort==6.0.1",
     "pre-commit==4.2.0",
     "ruff==0.12.2",
@@ -40,6 +40,16 @@ sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 skip_gitignore = true
 extend_skip = ["__pycache__"]
 extend_skip_glob = ["app/bot/locales/*"]
+known_first_party = [
+    "errors",
+    "filters",
+    "handlers",
+    "middlewares",
+    "settings",
+    "storages",
+    "stub",
+    "utils"
+]
 
 [tool.ruff]
 src = ["app"]
@@ -50,7 +60,6 @@ exclude = [
     ".ruff_cache",
     "__pypackages__",
     "__pycache__",
-    "*.pyi",
     "venv",
     ".venv",
 ]
@@ -61,17 +70,25 @@ ignore = [
     "A003",
     "ANN002", "ANN003", "ANN401",
     "C901",
+    "COM812",
+    "CPY001",
     "D100", "D101", "D102", "D103", "D104", "D105", "D106", "D107", "D203", "D205", "D212",
+    "DOC201", "DOC501",
     "ERA001",
+    "FA100", "FA102",
     "FBT001", "FBT002",
     "FIX002",
     "I001",
-    "PLR0911", "PLR0912", "PLR0913", "PLR0915", "PLR5501",
+    "PLC2801",
+    "PLR0911", "PLR0912", "PLR0913", "PLR0914", "PLR0915", "PLR0917", "PLR1702", "PLR5501", "PLR6301",
     "PLW0120",
-    "RUF001",
+    "RUF001", "RUF029",
     "TC006",
     "TD002", "TD003"
 ]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"stub.pyi" = ["A002", "E501"]
 
 [tool.ruff.format]
 quote-style = "double"
@@ -109,6 +126,7 @@ warn_unused_ignores = true
 
 disable_error_code = [
     "assignment",
+    "attr-defined",
     "no-redef",
     "union-attr",
 ]

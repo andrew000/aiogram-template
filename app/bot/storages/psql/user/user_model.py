@@ -4,6 +4,7 @@ from sqlalchemy import BigInteger, Index
 from sqlalchemy.dialects.postgresql import CITEXT, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import expression
+
 from storages.psql.base import Base
 
 

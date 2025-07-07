@@ -30,6 +30,12 @@ extract-locales:
 	--comment-keys-mode 'comment' \
 	--verbose
 
+.PHONY stub:
+stub:
+	uv run ftl stub \
+	'.\app\bot\locales\en' \
+	'.\app\bot'
+
 .PHONY lint:
 lint:
 	echo "Running ruff..."

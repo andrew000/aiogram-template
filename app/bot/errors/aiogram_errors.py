@@ -23,4 +23,4 @@ logger.addHandler(file_handler)
 
 @router.errors()
 async def errors_handler(event: ErrorEvent) -> None:
-    logger.exception("Update: (%s)\nException: %s\n", event.update, event.exception)
+    logger.error("Update: (%s)\nException: %s\n", event.update, event.exception)

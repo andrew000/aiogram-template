@@ -10,9 +10,10 @@ if TYPE_CHECKING:
     from collections.abc import Sequence
 
     from aiogram.types import CallbackQuery
-    from aiogram_i18n import I18nContext
     from redis.asyncio import Redis
     from redis.typing import ExpiryT
+
+    from stub import I18nContext
 
 
 class HasOwnerId(Protocol):

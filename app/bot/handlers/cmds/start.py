@@ -6,13 +6,15 @@ from typing import TYPE_CHECKING
 from aiogram import Router
 from aiogram.filters import CommandObject, CommandStart
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
+
 from filters.cb_click_by_user import RDMessageOwner
 from handlers.cbs.language_settings.keyboards import LanguageWindowCB
 from handlers.cbs.universal_close import UniversalWindowCloseCB
 
 if TYPE_CHECKING:
-    from aiogram_i18n import I18nContext
     from redis.asyncio import Redis
+
+    from stub import I18nContext
 
 router = Router()
 logger = logging.getLogger(__name__)

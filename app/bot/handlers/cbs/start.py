@@ -5,14 +5,16 @@ from typing import TYPE_CHECKING
 from aiogram import Router
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
+
 from filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
 from handlers.cbs.language_settings.keyboards import LanguageWindowCB
 from handlers.cbs.universal_close import UniversalWindowCloseCB
 from utils.callback_data_prefix_enums import CallbackDataPrefix
 
 if TYPE_CHECKING:
-    from aiogram_i18n import I18nContext
     from redis.asyncio import Redis
+
+    from stub import I18nContext
 
 router = Router()
 

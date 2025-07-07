@@ -16,12 +16,14 @@ from aiogram.filters import (
     RESTRICTED,
     ChatMemberUpdatedFilter,
 )
+
 from storages.redis.chat_member import RDChatBotModel
 
 if TYPE_CHECKING:
     from aiogram.types import ChatMemberUpdated
-    from aiogram_i18n import I18nContext
     from redis.asyncio.client import Redis
+
+    from stub import I18nContext
 
 logger = logging.getLogger(__name__)
 router = Router()

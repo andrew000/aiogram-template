@@ -8,6 +8,7 @@ from aiogram.types import Chat, Message, TelegramObject, Update, User
 from sqlalchemy import select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.sql.operators import eq, ne
+
 from storages.psql.user import DBUserModel, DBUserSettingsModel
 from storages.redis.user import RDUserModel, RDUserSettingsModel
 
