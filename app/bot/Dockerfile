@@ -5,20 +5,19 @@ ENV PYTHONUNBUFFERED=1 \
 
 ARG USER_ID=999
 ARG GROUP_ID=999
-ARG USER_NAME=migrator
+ARG USER_NAME=bot
 
-WORKDIR /migrations
+WORKDIR /app
 
 RUN groupadd --system --gid=${GROUP_ID} ${USER_NAME} && \
     useradd --system --shell /bin/false --no-log-init --gid=${GROUP_ID} --uid=${USER_ID} ${USER_NAME} && \
-    chown ${USER_NAME}:${USER_NAME} /migrations
+    chown ${USER_NAME}:${USER_NAME} /app
 
 USER ${USER_NAME}
 
-COPY --chown=${USER_NAME}:${USER_NAME} pyproject.toml /migrations/
+COPY --chown=${USER_NAME}:${USER_NAME} pyproject.toml /app/
 
 RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
-    uv --no-cache sync --no-dev --extra alembic
+    uv --no-cache sync --no-dev
 
-COPY --chown=${USER_NAME}:${USER_NAME} bot/ /migrations/bot
-COPY --chown=${USER_NAME}:${USER_NAME} migrations/ /migrations/
+COPY --chown=${USER_NAME}:${USER_NAME} . /app/

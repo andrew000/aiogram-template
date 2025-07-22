@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED=1 \
 
 ARG USER_ID=999
 ARG GROUP_ID=999
-ARG USER_NAME=bot
+ARG USER_NAME=migrator
 
 WORKDIR /app
 
@@ -20,4 +20,4 @@ COPY --chown=${USER_NAME}:${USER_NAME} pyproject.toml /app/
 RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
     uv --no-cache sync --no-dev
 
-COPY --chown=${USER_NAME}:${USER_NAME} bot/ /app/
+COPY --chown=${USER_NAME}:${USER_NAME} . /app/

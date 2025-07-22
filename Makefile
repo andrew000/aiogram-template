@@ -12,6 +12,10 @@ up:
 down:
 	docker compose --env-file .env.docker -f docker-compose.yml down --timeout 60
 
+.PHONY build:
+build:
+	docker compose --env-file .env.docker -f docker-compose.yml build bot migrations
+
 .PHONY pull:
 pull:
 	git pull origin master
@@ -66,21 +70,21 @@ sync:
 	uv sync --extra dev --extra lint --link-mode=copy
 
 .PHONY create-revision:
-create-revision:
-	docker compose run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini revision --autogenerate -m '$(message)'"
+create-revision: build
+	docker compose --env-file .env.docker -f docker-compose.yml run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini revision --autogenerate -m '$(message)'"
 
 .PHONY upgrade-revision:
-upgrade-revision:
-	docker compose run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini upgrade $(revision)"
+upgrade-revision: build
+	docker compose --env-file .env.docker -f docker-compose.yml run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini upgrade $(revision)"
 
 .PHONY downgrade-revision:
-downgrade-revision:
-	docker compose run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini downgrade $(revision)"
+downgrade-revision: build
+	docker compose --env-file .env.docker -f docker-compose.yml run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini downgrade $(revision)"
 
 .PHONY current-revision:
-current-revision:
-	docker compose run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini current"
+current-revision: build
+	docker compose --env-file .env.docker -f docker-compose.yml run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini current"
 
 .PHONY create-init-revision:
-create-init-revision:
-	docker compose run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini revision --autogenerate -m 'Initial' --rev-id 000000000000"
+create-init-revision: build
+	docker compose --env-file .env.docker -f docker-compose.yml run --build --rm --user migrator migrations bash -c ".venv/bin/alembic --config alembic.ini revision --autogenerate -m 'Initial' --rev-id 000000000000"

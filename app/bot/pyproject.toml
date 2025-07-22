@@ -1,5 +1,5 @@
 [project]
-name = "app-workspace"
+name = "bot"
 version = "0.0.1"
 dependencies = [
     "aiogram-i18n==1.4",
@@ -14,7 +14,5 @@ dependencies = [
     "uvloop==0.21.0; sys_platform == 'linux' or sys_platform == 'darwin'"
 ]
 
-[project.optional-dependencies]
-alembic = [
-    "alembic==1.16.3",
-]
+[tool.uv]
+package = false

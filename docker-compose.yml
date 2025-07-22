@@ -1,8 +1,8 @@
 services:
   bot:
     build:
-      context: app
-      dockerfile: Dockerfile-bot
+      context: app/bot
+      dockerfile: Dockerfile
 
     env_file: .env.docker
 
@@ -25,8 +25,8 @@ services:
   migrations:
     # Do not run this container directly. Use `make` to run migrations.
     build:
-      context: app
-      dockerfile: Dockerfile-migrations
+      context: app/migrations
+      dockerfile: Dockerfile
 
     env_file: .env.docker
 
@@ -38,7 +38,9 @@ services:
     stop_signal: SIGINT
 
     volumes:
-      - ./app/migrations/versions:/migrations/versions
+      - ./app/migrations/versions:/app/versions
+      - ./app/bot/settings.py:/app/settings.py:ro
+      - ./app/bot/storages/psql:/app/storages/psql:ro
 
     depends_on:
       - database
@@ -47,7 +49,6 @@ services:
 
   database:
     image: postgres:17.5
-    shm_size: 1gb
 
     environment:
       POSTGRES_USER: $PSQL_USER
@@ -70,7 +71,7 @@ services:
     restart: always
 
   redis:
-    image: redis:8.0.2
+    image: redis:8.0.3
 
     command:
       - --port 6379
