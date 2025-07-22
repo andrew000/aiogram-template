@@ -67,7 +67,7 @@ outdated:
 
 .PHONY sync:
 sync:
-	uv sync --extra dev --extra lint --link-mode=copy
+	uv sync --extra dev --extra lint
 
 .PHONY create-revision:
 create-revision: build
