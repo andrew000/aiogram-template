@@ -42,30 +42,12 @@ endif
 
 .PHONY: up-db
 up-db:
-ifeq ($(DETECTED_OS),Windows)
 	docker compose \
 		--env-file .env.docker \
 		--file docker-compose.yml \
 		up \
 		-d \
 		--build \
-		--timeout 60 \
-		database redis
-else
-	docker compose \
-		--env-file .env.docker \
-		--file docker-compose.yml \
-		build \
-		--build-arg USER_ID=$(SUDO_UID) \
-		--build-arg GROUP_ID=$(SUDO_GID) \
-		--build-arg USER_NAME=$(SUDO_USER) \
-		database redis
-
-	docker compose \
-		--env-file .env.docker \
-		--file docker-compose.yml \
-		up \
-		-d \
 		--timeout 60 \
 		database redis
 endif
