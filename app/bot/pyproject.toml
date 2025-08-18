@@ -3,13 +3,13 @@ name = "bot"
 version = "0.0.1"
 dependencies = [
     "aiogram-i18n==1.4",
-    "aiogram==3.21.0",
+    "aiogram==3.22.0",
     "asyncpg==0.30.0",
     "fluent.runtime==0.4.0",
     "msgspec==0.19.0",
     "pydantic-settings==2.10.1",
-    "redis[hiredis]==6.2.0",
-    "sqlalchemy==2.0.41",
+    "redis[hiredis]==6.4.0",
+    "sqlalchemy==2.0.43",
     "tzdata==2025.2",
     "uvloop==0.21.0; sys_platform == 'linux' or sys_platform == 'darwin'"
 ]

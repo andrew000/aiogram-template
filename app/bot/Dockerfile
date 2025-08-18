@@ -1,17 +1,22 @@
-FROM python:3.13.5-slim
+FROM python:3.13.6-slim
 
 ENV PYTHONUNBUFFERED=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-ARG USER_ID=999
-ARG GROUP_ID=999
-ARG USER_NAME=bot
+ARG USER_ID=${USER_ID:-999}
+ARG GROUP_ID=${GROUP_ID:-999}
+ARG USER_NAME=${USER_NAME:-bot}
 
 WORKDIR /app
 
-RUN groupadd --system --gid=${GROUP_ID} ${USER_NAME} && \
-    useradd --system --shell /bin/false --no-log-init --gid=${GROUP_ID} --uid=${USER_ID} ${USER_NAME} && \
-    chown ${USER_NAME}:${USER_NAME} /app
+RUN if [ "$USER_NAME" != "root" ]; then \
+      echo "Creating non-root user: $USER_NAME" && \
+      groupadd --system --gid=${GROUP_ID} ${USER_NAME} && \
+      useradd --system --shell /bin/false --no-log-init --gid=${GROUP_ID} --uid=${USER_ID} ${USER_NAME} && \
+      chown ${USER_NAME}:${USER_NAME} /app ; \
+    else \
+      echo "Running as root, skipping user creation"; \
+    fi
 
 USER ${USER_NAME}
 
