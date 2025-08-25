@@ -20,7 +20,7 @@ ifeq ($(DETECTED_OS),Windows)
 		-d \
 		--build \
 		--timeout 60 \
-		bot controller
+		bot
 else
 	docker compose \
 		--env-file .env.docker \
@@ -29,7 +29,7 @@ else
 		--build-arg USER_ID=$(SUDO_UID) \
 		--build-arg GROUP_ID=$(SUDO_GID) \
 		--build-arg USER_NAME=$(SUDO_USER) \
-		bot controller
+		bot
 
 	docker compose \
 		--env-file .env.docker \
@@ -37,7 +37,7 @@ else
 		up \
 		-d \
 		--timeout 60 \
-		bot controller
+		bot
 endif
 
 .PHONY: up-db
