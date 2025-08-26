@@ -25,7 +25,7 @@ class Base(DeclarativeBase):
         return f"{self.__tablename__}({values})"
 
 
-async def create_db_session_pool(
+async def create_db_pool(
     settings: Settings,
 ) -> tuple[AsyncEngine, async_sessionmaker[AsyncSession]]:
     engine: AsyncEngine = create_async_engine(
@@ -38,5 +38,5 @@ async def create_db_session_pool(
     return engine, async_sessionmaker(engine, expire_on_commit=False)
 
 
-async def close_db(engine: AsyncEngine) -> None:
+async def close_db_pool(engine: AsyncEngine) -> None:
     await engine.dispose()

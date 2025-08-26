@@ -1,4 +1,4 @@
-from .user_model import RDUserModel
-from .user_settings_model import RDUserSettingsModel
+from .user_model import UserRD
+from .user_settings_model import UserSettingsRD
 
-__all__ = ("RDUserModel", "RDUserSettingsModel")
+__all__ = ("UserRD", "UserSettingsRD")

@@ -31,7 +31,7 @@ from middlewares.check_chat_middleware import CheckChatMiddleware
 from middlewares.check_user_middleware import CheckUserMiddleware
 from middlewares.throttling_middleware import ThrottlingMiddleware
 from settings import Settings
-from storages.psql.base import close_db, create_db_session_pool
+from storages.psql.base import close_db_pool, create_db_pool
 from utils.fsm_manager import FSMManager
 
 if TYPE_CHECKING:
@@ -53,10 +53,10 @@ async def startup(dispatcher: Dispatcher, bot: Bot, settings: Settings, redis: R
             secret_token=settings.webhook_secret_token.get_secret_value(),
         )
 
-    engine, db_session = await create_db_session_pool(settings)
+    engine, db_pool = await create_db_pool(settings)
 
     dispatcher.workflow_data.update(
-        {"db_session": db_session, "db_session_closer": partial(close_db, engine)},
+        {"db_pool": db_pool, "db_pool_closer": partial(close_db_pool, engine)},
     )
 
     dispatcher.message.middleware(ThrottlingMiddleware(redis))
@@ -76,7 +76,7 @@ async def startup(dispatcher: Dispatcher, bot: Bot, settings: Settings, redis: R
 
 
 async def shutdown(dispatcher: Dispatcher) -> None:
-    await dispatcher["db_session_closer"]()
+    await dispatcher["db_pool_closer"]()
     logger.info("Bot stopped")
 
 

@@ -6,7 +6,7 @@ from aiogram import Router
 from aiogram.filters.callback_data import CallbackData
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
-from filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
+from filters.cb_click_by_user import CallbackClickedByRedisUser, MsgOwner
 from handlers.cbs.language_settings.keyboards import LanguageWindowCB
 from handlers.cbs.universal_close import UniversalWindowCloseCB
 from utils.callback_data_prefix_enums import CallbackDataPrefix
@@ -46,7 +46,7 @@ async def start_cb(cb: CallbackQuery, i18n: I18nContext, redis: Redis) -> None:
         disable_web_page_preview=True,
     )
 
-    await RDMessageOwner.set(
+    await MsgOwner.set(
         redis=redis,
         chat_id=cb.message.chat.id,
         message_id=cb.message.message_id,

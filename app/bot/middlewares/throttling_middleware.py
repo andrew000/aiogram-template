@@ -1,11 +1,21 @@
 from __future__ import annotations
 
+from contextlib import suppress
 from datetime import timedelta
 from typing import TYPE_CHECKING, Any, Final, TypeVar
 
 from aiogram import BaseMiddleware
 from aiogram.dispatcher.flags import get_flag
-from aiogram.types import CallbackQuery, ChatMemberUpdated, TelegramObject, Update, User
+from aiogram.types import (
+    CallbackQuery,
+    ChatMemberUpdated,
+    Message,
+    ReactionTypeEmoji,
+    TelegramObject,
+    User,
+)
+
+from errors.errors import MessageToReactNotFoundError
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -71,7 +81,7 @@ class ThrottlingMiddleware(BaseMiddleware):
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
-        event: Update,  # type: ignore[override]
+        event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
         user: User = data["event_from_user"]
@@ -87,8 +97,14 @@ class ThrottlingMiddleware(BaseMiddleware):
             throttle_time = int(throttle_time.total_seconds() * 1000)  # Convert to milliseconds
 
         if await self.ttl_cache.get(user.id, throttle_key):
-            if isinstance(event, CallbackQuery):
-                await event.answer("⏳ Too fast!", show_alert=True)
+            match event:
+                case CallbackQuery():
+                    await event.answer("⏳ Too fast!", show_alert=True)
+                case Message():
+                    with suppress(MessageToReactNotFoundError):
+                        await event.react(reaction=[ReactionTypeEmoji(emoji="🤔")])
+                case _:
+                    pass
 
             if throttle_key == "-":
                 await self.ttl_cache.set(
@@ -101,15 +117,18 @@ class ThrottlingMiddleware(BaseMiddleware):
             return None
 
         await self.ttl_cache.set(
-            key=user.id,
-            time_ms=throttle_time,
-            value=throttle_time,
-            throttle_key=throttle_key,
+            key=user.id, time_ms=throttle_time, value=throttle_time, throttle_key=throttle_key
         )
 
         if await self.leaky_bucket.is_limit_reached(user.id, bucket_decrement=bucket_decrement):
-            if isinstance(event, CallbackQuery):
-                await event.answer("🪣 Too fast!", show_alert=True)
+            match event:
+                case CallbackQuery():
+                    await event.answer("🪣 Too fast!", show_alert=True)
+                case Message():
+                    with suppress(MessageToReactNotFoundError):
+                        await event.react(reaction=[ReactionTypeEmoji(emoji="🗿")])
+                case _:
+                    pass
 
             return None
 

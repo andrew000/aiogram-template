@@ -1,4 +1,4 @@
-from .chat_model import RDChatModel
-from .chat_settings_model import RDChatSettingsModel
+from .chat_model import ChatModelRD
+from .chat_settings_model import ChatSettingsModelRD
 
-__all__ = ("RDChatModel", "RDChatSettingsModel")
+__all__ = ("ChatModelRD", "ChatSettingsModelRD")

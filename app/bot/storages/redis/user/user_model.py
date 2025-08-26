@@ -10,7 +10,7 @@ from storages.psql.utils.alchemy_struct import AlchemyStruct
 ENCODER: Final[msgspec.msgpack.Encoder] = msgspec.msgpack.Encoder()
 
 
-class RDUserModel(msgspec.Struct, AlchemyStruct["RDUserModel"], kw_only=True, array_like=True):
+class UserRD(msgspec.Struct, AlchemyStruct["UserRD"], kw_only=True, array_like=True):
     id: int
     username: str | None = msgspec.field(default=None)
     first_name: str

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from aiogram_i18n.managers.base import BaseManager
 
-from storages.redis.user.user_settings_model import RDUserSettingsModel
+from storages.redis.user.user_settings_model import UserSettingsRD
 
 if TYPE_CHECKING:
     from aiogram.types import User
@@ -22,13 +22,13 @@ class FSMManager(BaseManager):
         self,
         event_from_user: User,
         redis: Redis,
-        user_settings: RDUserSettingsModel | None = None,
+        user_settings: UserSettingsRD | None = None,
     ) -> str:
         if user_settings:
             locale: str = user_settings.language_code
 
         else:
-            user_settings = await RDUserSettingsModel.get(redis, event_from_user.id)
+            user_settings = await UserSettingsRD.get(redis, event_from_user.id)
 
             if user_settings:
                 locale: str = user_settings.language_code

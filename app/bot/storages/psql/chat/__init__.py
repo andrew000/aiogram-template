@@ -1,4 +1,4 @@
-from .chat_model import DBChatModel
-from .chat_settings_model import DBChatSettingsModel
+from .chat_model import ChatModel
+from .chat_settings_model import ChatSettingsModel
 
-__all__ = ("DBChatModel", "DBChatSettingsModel")
+__all__ = ("ChatModel", "ChatSettingsModel")

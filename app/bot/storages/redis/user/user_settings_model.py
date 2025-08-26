@@ -10,9 +10,9 @@ from storages.psql.utils.alchemy_struct import AlchemyStruct
 ENCODER: Final[msgspec.msgpack.Encoder] = msgspec.msgpack.Encoder()
 
 
-class RDUserSettingsModel(
+class UserSettingsRD(
     msgspec.Struct,
-    AlchemyStruct["RDUserSettingsModel"],
+    AlchemyStruct["UserSettingsRD"],
     kw_only=True,
     array_like=True,
 ):

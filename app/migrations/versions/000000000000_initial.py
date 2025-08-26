@@ -3,7 +3,7 @@ Initial.
 
 Revision ID: 000000000000
 Revises:
-Create Date: 2025-04-13 19:51:58.981199+00:00
+Create Date: 2025-08-26 09:55:53.352384+00:00
 
 """
 
@@ -25,24 +25,35 @@ def upgrade() -> None:
     op.create_table(
         "chats",
         sa.Column("id", sa.BigInteger(), autoincrement=False, nullable=False),
-        sa.Column("chat_type", sa.String(), nullable=False),
+        sa.Column(
+            "chat_type",
+            postgresql.ENUM(
+                "SENDER", "PRIVATE", "GROUP", "SUPERGROUP", "CHANNEL", name="chat_type"
+            ),
+            nullable=False,
+        ),
         sa.Column("title", sa.String(), server_default=sa.text("NULL"), nullable=True),
         sa.Column("username", postgresql.CITEXT(), server_default=sa.text("NULL"), nullable=True),
+        sa.Column("member_count", sa.BigInteger(), server_default=sa.text("0"), nullable=False),
+        sa.Column("invite_link", sa.String(), server_default=sa.text("NULL"), nullable=True),
         sa.Column(
             "registration_datetime",
-            sa.DateTime(),
+            postgresql.TIMESTAMP(precision=0),
             server_default=sa.text("(now() AT TIME ZONE 'UTC'::text)"),
             nullable=False,
         ),
         sa.Column(
-            "migrate_from_chat_id",
-            sa.BigInteger(),
+            "migrate_from_chat_id", sa.BigInteger(), server_default=sa.text("NULL"), nullable=True
+        ),
+        sa.Column(
+            "migrate_datetime",
+            postgresql.TIMESTAMP(precision=0),
             server_default=sa.text("NULL"),
             nullable=True,
         ),
-        sa.Column("migrate_datetime", sa.DateTime(), server_default=sa.text("NULL"), nullable=True),
         sa.PrimaryKeyConstraint("id"),
     )
+    op.create_index(op.f("ix_chats_username"), "chats", ["username"], unique=True)
     op.create_table(
         "users",
         sa.Column("id", sa.BigInteger(), autoincrement=False, nullable=False),
@@ -56,17 +67,21 @@ def upgrade() -> None:
             nullable=False,
         ),
         sa.Column("pm_active", sa.Boolean(), server_default=sa.text("false"), nullable=False),
+        sa.Column(
+            "last_active",
+            postgresql.TIMESTAMP(precision=0),
+            server_default=sa.text("(now() AT TIME ZONE 'UTC'::text)"),
+            nullable=False,
+        ),
         sa.PrimaryKeyConstraint("id"),
     )
+    op.create_index(op.f("ix_users_last_active"), "users", ["last_active"], unique=False)
     op.create_index(op.f("ix_users_username"), "users", ["username"], unique=True)
     op.create_table(
         "chats_settings",
         sa.Column("id", sa.BigInteger(), autoincrement=False, nullable=False),
         sa.Column(
-            "language_code",
-            sa.String(length=2),
-            server_default=sa.text("'en'"),
-            nullable=False,
+            "language_code", sa.String(length=2), server_default=sa.text("'en'"), nullable=False
         ),
         sa.Column("timezone", sa.String(), nullable=True),
         sa.ForeignKeyConstraint(["id"], ["chats.id"], onupdate="CASCADE", deferrable=True),
@@ -76,10 +91,7 @@ def upgrade() -> None:
         "users_settings",
         sa.Column("id", sa.BigInteger(), autoincrement=False, nullable=False),
         sa.Column(
-            "language_code",
-            sa.String(length=2),
-            server_default=sa.text("'en'"),
-            nullable=False,
+            "language_code", sa.String(length=2), server_default=sa.text("'en'"), nullable=False
         ),
         sa.Column("gender", sa.String(length=1), server_default=sa.text("'m'"), nullable=False),
         sa.Column("is_banned", sa.Boolean(), server_default=sa.text("false"), nullable=False),
@@ -94,6 +106,8 @@ def downgrade() -> None:
     op.drop_table("users_settings")
     op.drop_table("chats_settings")
     op.drop_index(op.f("ix_users_username"), table_name="users")
+    op.drop_index(op.f("ix_users_last_active"), table_name="users")
     op.drop_table("users")
+    op.drop_index(op.f("ix_chats_username"), table_name="chats")
     op.drop_table("chats")
     # ### end Alembic commands ###

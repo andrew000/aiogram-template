@@ -8,7 +8,7 @@ from sqlalchemy.sql import expression
 from storages.psql.base import Base
 
 
-class DBUserModel(Base):
+class UserModel(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=False)
@@ -21,5 +21,10 @@ class DBUserModel(Base):
         server_default=expression.text("(now() AT TIME ZONE 'UTC'::text)"),
     )
     pm_active: Mapped[bool] = mapped_column(nullable=False, server_default=expression.false())
+    last_active: Mapped[datetime] = mapped_column(
+        TIMESTAMP(timezone=False, precision=0),
+        nullable=False,
+        server_default=expression.text("(now() AT TIME ZONE 'UTC'::text)"),
+    )
 
-    __table_args__ = (Index(None, "username", unique=True),)
+    __table_args__ = (Index(None, "username", unique=True), Index(None, "last_active"))

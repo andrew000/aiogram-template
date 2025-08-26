@@ -36,7 +36,7 @@ class CallbackClickedByTargetUser[T: HasOwnerId](Filter):
         return True
 
 
-class RDMessageOwner(msgspec.Struct, kw_only=True, array_like=True):
+class MsgOwner(msgspec.Struct, kw_only=True, array_like=True):
     owner_id: int
 
     @classmethod
@@ -72,9 +72,14 @@ class RDMessageOwner(msgspec.Struct, kw_only=True, array_like=True):
 
 class CallbackClickedByRedisUser(Filter):
     async def __call__(self, cb: CallbackQuery, i18n: I18nContext, redis: Redis) -> bool:
-        message_owner = await RDMessageOwner.get(redis, cb.message.chat.id, cb.message.message_id)
+        message_owner = await MsgOwner.get(
+            redis=redis, chat_id=cb.message.chat.id, message_id=cb.message.message_id
+        )
         if not message_owner:
-            await cb.message.edit_text(i18n.message.deprecated())
+            if cb.message.text:
+                await cb.message.edit_text(i18n.message.deprecated())
+            else:
+                await cb.message.edit_caption(caption=i18n.message.deprecated())
             return False
 
         if cb.from_user.id != message_owner.owner_id:
@@ -84,7 +89,7 @@ class CallbackClickedByRedisUser(Filter):
         return True
 
 
-class RDMessageMultipleOwners(msgspec.Struct, kw_only=True, array_like=True):
+class MsgMultipleOwners(msgspec.Struct, kw_only=True, array_like=True):
     owner_ids: frozenset[int]
 
     @classmethod
@@ -120,13 +125,14 @@ class RDMessageMultipleOwners(msgspec.Struct, kw_only=True, array_like=True):
 
 class CallbackClickedByMultipleRedisUser(Filter):
     async def __call__(self, cb: CallbackQuery, i18n: I18nContext, redis: Redis) -> bool:
-        message_owners = await RDMessageMultipleOwners.get(
-            redis,
-            cb.message.chat.id,
-            cb.message.message_id,
+        message_owners = await MsgMultipleOwners.get(
+            redis=redis, chat_id=cb.message.chat.id, message_id=cb.message.message_id
         )
         if not message_owners:
-            await cb.message.edit_text(i18n.message.deprecated())
+            if cb.message.text:
+                await cb.message.edit_text(i18n.message.deprecated())
+            else:
+                await cb.message.edit_caption(caption=i18n.message.deprecated())
             return False
 
         if cb.from_user.id not in message_owners.owner_ids:

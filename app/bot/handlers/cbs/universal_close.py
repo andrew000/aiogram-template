@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from aiogram import Router
 from aiogram.filters.callback_data import CallbackData
 
-from filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
+from filters.cb_click_by_user import CallbackClickedByRedisUser, MsgOwner
 from utils.callback_data_prefix_enums import CallbackDataPrefix
 
 if TYPE_CHECKING:
@@ -25,7 +25,7 @@ class UniversalWindowCloseCB(CallbackData, prefix=CallbackDataPrefix.universal_c
 async def universal_close_cb(cb: CallbackQuery, i18n: I18nContext, redis: Redis) -> None:
     await cb.message.edit_text(i18n.window.closed())
 
-    await RDMessageOwner.delete(
+    await MsgOwner.delete(
         redis=redis,
         chat_id=cb.message.chat.id,
         message_id=cb.message.message_id,

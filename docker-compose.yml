@@ -7,7 +7,7 @@ services:
     env_file: .env.docker
 
     networks:
-      - aiogram_network
+      - aiogram
 
     stop_signal: SIGINT
 
@@ -29,7 +29,7 @@ services:
     env_file: .env.docker
 
     networks:
-      - aiogram_network
+      - aiogram
 
     stop_signal: SIGINT
 
@@ -55,10 +55,10 @@ services:
       - postgres-passwd
 
     networks:
-      - aiogram_network
+      - aiogram
 
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:$PSQL_EXTERNAL_PORT:5432"
 
     volumes:
       - ./psql/data:/var/lib/postgresql/data
@@ -67,7 +67,7 @@ services:
     restart: always
 
   redis:
-    image: redis:8.2.0
+    image: redis:8.2.1
 
     command:
       - --port 6379
@@ -83,10 +83,10 @@ services:
       - --always-show-logo yes
 
     networks:
-      - aiogram_network
+      - aiogram
 
     ports:
-      - "127.0.0.1:6379:6379"
+      - "127.0.0.1:$REDIS_EXTERNAL_PORT:6379"
 
     volumes:
       - ./redis/data:/data
@@ -96,10 +96,10 @@ services:
     entrypoint: [ "redis-server" ]
 
   caddy:  # Uncomment if you want to use Caddy as a reverse proxy
-    image: caddy:2.10.0
+    image: caddy:2.10.2
 
     networks:
-      - aiogram_network
+      - aiogram
 
     ports:
       - "80:80"
@@ -114,7 +114,7 @@ services:
     restart: always
 
 networks:
-  aiogram_network:
+  aiogram:
 
 secrets:
   postgres-passwd:

@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
-from typing import Final, Literal, Self
+from typing import Final, Self
 
 import msgspec
+from aiogram.enums import ChatType
 from redis.asyncio import Redis
 from redis.typing import ExpiryT
 
@@ -10,9 +11,9 @@ from storages.psql.utils.alchemy_struct import AlchemyStruct
 ENCODER: Final[msgspec.msgpack.Encoder] = msgspec.msgpack.Encoder()
 
 
-class RDChatModel(msgspec.Struct, AlchemyStruct["RDChatModel"], kw_only=True, array_like=True):
+class ChatModelRD(msgspec.Struct, AlchemyStruct["ChatModelRD"], kw_only=True, array_like=True):
     id: int
-    chat_type: Literal["group", "supergroup", "channel"]
+    chat_type: ChatType
     title: str | None = msgspec.field(default=None)
     username: str | None = msgspec.field(default=None)
     registration_datetime: datetime

@@ -5,7 +5,7 @@ from sqlalchemy.sql import expression
 from storages.psql.base import Base
 
 
-class DBUserSettingsModel(Base):
+class UserSettingsModel(Base):
     __tablename__ = "users_settings"
 
     id: Mapped[int] = mapped_column(

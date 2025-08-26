@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any, Final, cast
 
 from aiogram import BaseMiddleware
@@ -9,8 +10,8 @@ from sqlalchemy import select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.sql.operators import eq, ne
 
-from storages.psql.user import DBUserModel, DBUserSettingsModel
-from storages.redis.user import RDUserModel, RDUserSettingsModel
+from storages.psql.user import UserModel, UserSettingsModel
+from storages.redis.user import UserRD, UserSettingsRD
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -22,26 +23,23 @@ if TYPE_CHECKING:
 TG_SERVICE_USER_ID: Final[int] = 777000
 
 
-async def _get_or_create_user(user: User, chat: Chat, session: AsyncSession) -> DBUserModel:
+async def _create_user(*, user: User, chat: Chat, session: AsyncSession) -> UserModel:
     if user.username:
-        stmt = select(DBUserModel).where(
-            eq(DBUserModel.username, user.username),
-            ne(DBUserModel.id, user.id),
+        stmt = select(UserModel).where(
+            eq(UserModel.username, user.username), ne(UserModel.id, user.id)
         )
-        another_user: DBUserModel = await session.scalar(stmt)
+        another_user: UserModel = await session.scalar(stmt)
 
         if another_user:
-            stmt = (
-                update(DBUserModel).where(eq(DBUserModel.id, another_user.id)).values(username=None)
-            )
+            stmt = update(UserModel).where(eq(UserModel.id, another_user.id)).values(username=None)
             await session.execute(stmt)
 
-    stmt = select(DBUserModel).where(eq(DBUserModel.id, user.id))
-    user_model: DBUserModel | None = await session.scalar(stmt)
+    stmt = select(UserModel).where(eq(UserModel.id, user.id))
+    user_model: UserModel | None = await session.scalar(stmt)
 
     if not user_model:
         stmt = (
-            insert(DBUserModel)
+            insert(UserModel)
             .values(
                 id=user.id,
                 username=user.username,
@@ -49,7 +47,16 @@ async def _get_or_create_user(user: User, chat: Chat, session: AsyncSession) -> 
                 last_name=user.last_name,
                 pm_active=chat.type == ChatType.PRIVATE,
             )
-            .returning(DBUserModel)
+            .on_conflict_do_update(
+                index_elements=["id"],
+                set_={
+                    "username": user.username,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "last_active": datetime.now(tz=UTC).replace(tzinfo=None),
+                },
+            )
+            .returning(UserModel)
         )
         user_model = await session.scalar(stmt)
 
@@ -57,73 +64,77 @@ async def _get_or_create_user(user: User, chat: Chat, session: AsyncSession) -> 
         user_model.username = user.username
         user_model.first_name = user.first_name
         user_model.last_name = user.last_name
+        user_model.last_active = datetime.now(tz=UTC).replace(tzinfo=None)
 
-    return cast(DBUserModel, user_model)
+    return cast(UserModel, user_model)
 
 
-async def _get_or_create_user_settings(user: User, session: AsyncSession) -> DBUserSettingsModel:
-    stmt = select(DBUserSettingsModel).where(eq(DBUserSettingsModel.id, user.id))
-    user_settings_model: DBUserSettingsModel | None = await session.scalar(stmt)
-
-    if not user_settings_model:
-        stmt = (
-            insert(DBUserSettingsModel)
-            .values(id=user.id, language_code=user.language_code or "uk")
-            .returning(DBUserSettingsModel)
+async def _create_user_settings(*, user_id: int, session: AsyncSession) -> UserSettingsModel:
+    stmt = (
+        insert(UserSettingsModel)
+        .values(id=user_id)
+        .on_conflict_do_update(
+            index_elements=["id"], set_={"language_code": UserSettingsModel.language_code}
         )
-        user_settings_model = await session.scalar(stmt)
-
-    return cast(DBUserSettingsModel, user_settings_model)
+        .returning(UserSettingsModel)
+    )
+    return cast(UserSettingsModel, await session.scalar(stmt))
 
 
 async def _get_user_model(
-    db_session: async_sessionmaker[AsyncSession],
+    *,
+    db_pool: async_sessionmaker[AsyncSession],
     redis: Redis,
     user: User,
     chat: Chat,
-) -> tuple[RDUserModel, RDUserSettingsModel]:
-    user_model: RDUserModel | None = await RDUserModel.get(redis, user.id)
-    user_settings: RDUserSettingsModel | None = await RDUserSettingsModel.get(redis, user.id)
+) -> tuple[UserRD, UserSettingsRD]:
+    user_model: UserRD | None = await UserRD.get(redis, user.id)
+    user_settings: UserSettingsRD | None = await UserSettingsRD.get(redis, user.id)
 
     if user_model and user_settings:
         return user_model, user_settings
 
-    async with db_session() as session:
+    async with db_pool() as session:
         async with session.begin():
-            user_model: DBUserModel = await _get_or_create_user(user, chat, session)
-            user_settings: DBUserSettingsModel = await _get_or_create_user_settings(user, session)
+            user_model: UserModel = await _create_user(user=user, chat=chat, session=session)
+            user_settings: UserSettingsModel = await _create_user_settings(
+                user_id=user.id, session=session
+            )
 
             await session.commit()
 
-        user_model: RDUserModel = RDUserModel.from_orm(cast(DBUserModel, user_model))
-        user_settings: RDUserSettingsModel = RDUserSettingsModel.from_orm(
-            cast(DBUserSettingsModel, user_settings),
+        user_model: UserRD = UserRD.from_orm(cast(UserModel, user_model))
+        user_settings: UserSettingsRD = UserSettingsRD.from_orm(
+            cast(UserSettingsModel, user_settings),
         )
 
-        await cast(RDUserModel, user_model).save(redis)
-        await cast(RDUserSettingsModel, user_settings).save(redis)
+        await cast(UserRD, user_model).save(redis)
+        await cast(UserSettingsRD, user_settings).save(redis)
 
-    return cast(RDUserModel, user_model), cast(RDUserSettingsModel, user_settings)
+    return cast(UserRD, user_model), cast(UserSettingsRD, user_settings)
 
 
 class CheckUserMiddleware(BaseMiddleware):
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
-        event: Update,  # type: ignore[override]
+        event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
-        chat: Chat = data.get("event_chat")
-        user: User = data.get("event_from_user")
+        chat: Chat = data["event_chat"]
+        user: User = data["event_from_user"]
+
+        if TYPE_CHECKING:
+            assert isinstance(event, Update)
 
         match event.event_type:
             case "message":
                 if user.is_bot is False and user.id != TG_SERVICE_USER_ID:
                     data["user_model"], data["user_settings"] = await _get_user_model(
-                        data["db_session"],
-                        data["redis"],
-                        user,
-                        chat,
+                        db_pool=data["db_pool"],
+                        redis=data["redis"],
+                        user=user,
+                        chat=chat,
                     )
 
                 msg: Message = cast(Message, event.event)
@@ -134,20 +145,20 @@ class CheckUserMiddleware(BaseMiddleware):
                     and not msg.reply_to_message.from_user.is_bot
                     and msg.reply_to_message.from_user.id != TG_SERVICE_USER_ID
                 ):
-                    await _get_user_model(
-                        data["db_session"],
-                        data["redis"],
-                        msg.reply_to_message.from_user,
-                        chat,
+                    data["reply_user_model"], data["reply_user_settings"] = await _get_user_model(
+                        db_pool=data["db_pool"],
+                        redis=data["redis"],
+                        user=msg.reply_to_message.from_user,
+                        chat=chat,
                     )
 
             case "callback_query" | "my_chat_member" | "chat_member" | "inline_query":
                 if user.is_bot is False and user.id != TG_SERVICE_USER_ID:
                     data["user_model"], data["user_settings"] = await _get_user_model(
-                        data["db_session"],
-                        data["redis"],
-                        user,
-                        chat,
+                        db_pool=data["db_pool"],
+                        redis=data["redis"],
+                        user=user,
+                        chat=chat,
                     )
 
             case _:

@@ -5,7 +5,7 @@ from sqlalchemy.sql import expression
 from storages.psql.base import Base
 
 
-class DBChatSettingsModel(Base):
+class ChatSettingsModel(Base):
     __tablename__ = "chats_settings"
 
     id: Mapped[int] = mapped_column(

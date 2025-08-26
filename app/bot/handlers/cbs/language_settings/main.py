@@ -7,15 +7,15 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from sqlalchemy import update
 from sqlalchemy.sql.operators import eq
 
-from filters.cb_click_by_user import CallbackClickedByRedisUser, RDMessageOwner
+from filters.cb_click_by_user import CallbackClickedByRedisUser, MsgOwner
 from handlers.cbs.language_settings.keyboards import (
     LanguageWindowCB,
     SelectLanguageCB,
     select_language_keyboard,
 )
 from handlers.cbs.start import GOTOStartCB
-from storages.psql.user import DBUserSettingsModel
-from storages.redis.user import RDUserSettingsModel
+from storages.psql.user import UserSettingsModel
+from storages.redis.user import UserSettingsRD
 
 if TYPE_CHECKING:
     from aiogram.types import CallbackQuery
@@ -38,7 +38,7 @@ async def language_window_cb(
         reply_markup=select_language_keyboard(i18n),
     )
 
-    await RDMessageOwner.set(
+    await MsgOwner.set(
         redis=redis,
         chat_id=cb.message.chat.id,
         message_id=cb.message.message_id,
@@ -51,19 +51,19 @@ async def language_selected_cb(
     cb: CallbackQuery,
     callback_data: SelectLanguageCB,
     i18n: I18nContext,
-    db_session: async_sessionmaker[AsyncSession],
+    db_pool: async_sessionmaker[AsyncSession],
     redis: Redis,
 ) -> None:
-    async with db_session() as session:
+    async with db_pool() as session:
         stmt = (
-            update(DBUserSettingsModel)
-            .where(eq(DBUserSettingsModel.id, cb.from_user.id))
+            update(UserSettingsModel)
+            .where(eq(UserSettingsModel.id, cb.from_user.id))
             .values(language_code=callback_data.language.value)
         )
         await session.execute(stmt)
         await session.commit()
 
-    await RDUserSettingsModel.delete(redis, cb.from_user.id)
+    await UserSettingsRD.delete(redis, cb.from_user.id)
 
     await i18n.set_locale(callback_data.language.value)
 

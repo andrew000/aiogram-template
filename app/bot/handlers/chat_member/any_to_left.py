@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from aiogram.types import ChatMemberUpdated
     from redis.asyncio.client import Redis
 
-    from storages.redis.chat import RDChatSettingsModel
+    from storages.redis.chat import ChatSettingsModelRD
     from stub import I18nContext
 
 router = Router()
@@ -25,7 +25,7 @@ async def leave_transition(
     bot: Bot,
     i18n: I18nContext,
     redis: Redis,
-    chat_settings: RDChatSettingsModel,
+    chat_settings: ChatSettingsModelRD,
 ) -> None:
     chat_user_model = RDChatMemberModel.resolve(chat_member.chat.id, chat_member.new_chat_member)
     await chat_user_model.save(redis)

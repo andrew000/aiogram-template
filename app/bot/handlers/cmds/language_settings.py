@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from aiogram import Router
 from aiogram.filters import Command, or_f
 
-from filters.cb_click_by_user import RDMessageOwner
+from filters.cb_click_by_user import MsgOwner
 from filters.lazy_filter import LF
 from handlers.cbs.language_settings.keyboards import select_language_keyboard
 
@@ -31,7 +31,7 @@ async def language_cmd(msg: Message, i18n: I18nContext, redis: Redis) -> None:
         reply_markup=select_language_keyboard(i18n),
     )
 
-    await RDMessageOwner.set(
+    await MsgOwner.set(
         redis=redis,
         chat_id=msg.chat.id,
         message_id=sent.message_id,

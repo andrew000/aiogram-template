@@ -10,11 +10,8 @@ from storages.psql.utils.alchemy_struct import AlchemyStruct
 ENCODER: Final[msgspec.msgpack.Encoder] = msgspec.msgpack.Encoder()
 
 
-class RDChatSettingsModel(
-    msgspec.Struct,
-    AlchemyStruct["RDChatSettingsModel"],
-    kw_only=True,
-    array_like=True,
+class ChatSettingsModelRD(
+    msgspec.Struct, AlchemyStruct["ChatSettingsModelRD"], kw_only=True, array_like=True
 ):
     id: int
     language_code: str
