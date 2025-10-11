@@ -1,7 +1,7 @@
 [project]
 name = "aiogram-template"
 version = "0.0.1"
-requires-python = "==3.13.6"
+requires-python = "==3.13.8"
 dependencies = [
     "bot",
     "migrations"
@@ -27,9 +27,9 @@ dev = [
     "pre-commit==4.3.0",
 ]
 lint = [
-    "isort==6.0.1",
-    "ruff==0.12.10",
-    "mypy==1.17.1",
+    "isort==7.0.0",
+    "ruff==0.14.0",
+    "mypy==1.18.2",
     "types-pytz==2025.2.0.20250809",
 ]
 

@@ -3,12 +3,12 @@ name = "migrations"
 version = "0.0.1"
 dependencies = [
     "aiogram-i18n==1.4",
-    "alembic==1.16.4",
+    "alembic==1.17.0",
     "asyncpg==0.30.0",
     "msgspec==0.19.0",
-    "pydantic-settings==2.10.1",
+    "pydantic-settings==2.11.0",
     "redis[hiredis]==6.4.0",
-    "sqlalchemy==2.0.43",
+    "sqlalchemy==2.0.44",
 ]
 
 [tool.uv]
