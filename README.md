@@ -6,6 +6,7 @@ This is a template for creating Telegram bots using the aiogram library.
 
 ### Template uses:
 
+* aiogram 3
 * SQLAlchemy + Alembic
 * PostgreSQL
 * Redis
@@ -80,10 +81,21 @@ The project structure is as follows:
 AIOGRAM-TEMPLATE
 ├───app (main application)
 │   ├───bot (bot)
+│   │   ├───errors (error handlers)
+│   │   ├───filters (custom filters)
+│   │   ├───handlers (event handlers)
+│   │   ├───locales (localization files)
+│   │   ├───main.py (bot entrypoint)
+│   │   ├───middlewares (event middlewares)
+│   │   ├───pyproject.toml (bot workspace configuration)
+│   │   ├───settings.py (bot settings)
+│   │   ├───storages (database storages)
+│   │   └───utils (utility functions)
 │   ├───migrations (alembic migrations)
-├───├───pyproject.toml (application configuration)
-│   ├───Dockerfile-bot (Dockerfile for the bot)
-│   └───Dockerfile-migrations (Dockerfile for the migrations)
+│   │   ├───alembic.ini (alembic configuration)
+│   │   ├───env.py (alembic environment)
+│   │   ├───pyproject.toml (alembic workspace configuration)
+│   │   └───versions (migration files)
 ├───caddy (Caddy web server)
 ├───psql (PostgreSQL database)
 │   ├───data (database data)

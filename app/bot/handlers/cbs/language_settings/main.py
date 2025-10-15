@@ -8,14 +8,11 @@ from sqlalchemy import update
 from sqlalchemy.sql.operators import eq
 
 from filters.cb_click_by_user import CallbackClickedByRedisUser, MsgOwner
-from handlers.cbs.language_settings.keyboards import (
-    LanguageWindowCB,
-    SelectLanguageCB,
-    select_language_keyboard,
-)
+from handlers.cbs.language_settings.keyboards import select_language_keyboard
 from handlers.cbs.start import GOTOStartCB
 from storages.psql.user import UserSettingsModel
 from storages.redis.user import UserSettingsRD
+from utils.callback_datas import LanguageWindowCB, SelectLanguageCB
 
 if TYPE_CHECKING:
     from aiogram.types import CallbackQuery

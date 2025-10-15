@@ -1,29 +1,14 @@
 from __future__ import annotations
 
-from enum import Enum
 from typing import TYPE_CHECKING, cast
 
-from aiogram.filters.callback_data import CallbackData
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from utils.callback_data_prefix_enums import CallbackDataPrefix
+from utils.callback_datas import PossibleLanguages, SelectLanguageCB
 
 if TYPE_CHECKING:
     from stub import I18nContext
-
-
-class PossibleLanguages(Enum):
-    en = "en"  # English
-    uk = "uk"  # Ukrainian
-
-
-class LanguageWindowCB(CallbackData, prefix=CallbackDataPrefix.language_window):
-    pass
-
-
-class SelectLanguageCB(CallbackData, prefix=CallbackDataPrefix.select_language):
-    language: PossibleLanguages
 
 
 def select_language_keyboard(i18n: I18nContext) -> InlineKeyboardMarkup:

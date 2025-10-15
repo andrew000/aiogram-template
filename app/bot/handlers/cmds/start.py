@@ -8,8 +8,8 @@ from aiogram.filters import CommandObject, CommandStart
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from filters.cb_click_by_user import MsgOwner
-from handlers.cbs.language_settings.keyboards import LanguageWindowCB
 from handlers.cbs.universal_close import UniversalWindowCloseCB
+from utils.callback_datas import LanguageWindowCB
 
 if TYPE_CHECKING:
     from redis.asyncio import Redis

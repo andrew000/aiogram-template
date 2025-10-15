@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from typing import TYPE_CHECKING, Protocol, Self
+from typing import TYPE_CHECKING, Self
 
 import msgspec
 from aiogram.filters import Filter
@@ -14,17 +14,14 @@ if TYPE_CHECKING:
     from redis.typing import ExpiryT
 
     from stub import I18nContext
+    from utils.callback_datas import OwnerCallbackData
 
 
-class HasOwnerId(Protocol):
-    owner_id: int
-
-
-class CallbackClickedByTargetUser[T: HasOwnerId](Filter):
+class CallbackClickedByTargetUser(Filter):
     async def __call__(
         self,
         query: CallbackQuery,
-        callback_data: T | None = None,
+        callback_data: OwnerCallbackData | None = None,
     ) -> bool:
         if not callback_data or not hasattr(callback_data, "owner_id"):
             return False

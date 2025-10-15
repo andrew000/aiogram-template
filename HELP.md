@@ -219,7 +219,6 @@ It's a good library, but I prefer to use my own code 🤷‍♂️
     - `REDIS_PASSWORD`: Redis password (if using authentication).
     - `WEBHOOKS`: Set to `True` if using webhooks, otherwise False.
     - `WEBHOOK_URL` and `WEBHOOK_SECRET_TOKEN`: Required if webhooks are enabled.
-    - Other variables like DEFAULT_LOCALE for i18n (default is `en`).
 5. Save the file. Avoid committing `.env` to version control - add it to `.gitignore` if not already.
 
 </details>

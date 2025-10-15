@@ -7,9 +7,9 @@ from aiogram.filters.callback_data import CallbackData
 from aiogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 
 from filters.cb_click_by_user import CallbackClickedByRedisUser, MsgOwner
-from handlers.cbs.language_settings.keyboards import LanguageWindowCB
 from handlers.cbs.universal_close import UniversalWindowCloseCB
 from utils.callback_data_prefix_enums import CallbackDataPrefix
+from utils.callback_datas import LanguageWindowCB
 
 if TYPE_CHECKING:
     from redis.asyncio import Redis
