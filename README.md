@@ -2,6 +2,8 @@
 
 This is a template for creating Telegram bots using the aiogram library.
 
+#### ❗️ Read [HELP.md](HELP.md) if something is unclear ❗️
+
 ### Template uses:
 
 * SQLAlchemy + Alembic
@@ -190,74 +192,3 @@ Bot may use webhooks. To enable webhooks, set `WEBHOOKS` environment variable to
 `WEBHOOK_URL` and `WEBHOOK_SECRET_TOKEN` environment variables.
 
 Don't forget to uncomment the `caddy` service in the `docker-compose.yml` file.
-
-***
-
-## FAQ
-
-**Q:** Why PyCharm marks import with red color?
-
-**A:** I use "unique" project structure, where `app` directory contains code, but root directory contains configuration
-files.
-
-In PyCharm, right-click on the `bot` directory and select `Mark Directory as` -> `Sources Root`. Also,
-**unmark** project root directory `Unmark as Sources Root`. This will fix the problem.
-
-![image](https://github.com/user-attachments/assets/f4acbd42-f4e7-4e1b-9e16-a40db71ac672)
-
-![image](https://github.com/user-attachments/assets/01f4f030-46e0-4267-a5bc-4b05ae0b9015)
-
-![image](https://github.com/user-attachments/assets/f2e02548-173b-4be6-944f-623ff7dc2207)
-
-***
-
-**Q:** Why You import `sys` or `os` libs
-like [this](https://github.com/andrew000/aiogram-template/blob/6052d9bd2cbb9332620f5996bf6065a0b918d3bf/app/bot/__main__.py#L140)?
-
-**A:** _My inclinations make me do this to avoid some attack vector invented by my paranoia_
-***
-
-**Q:** Why not use `aiogram-cli`?
-
-**A:** _It's a good library, but I prefer to use my own code 🤷‍♂️_
-***
-
-## Useful commands
-
-#### Update Dependencies
-
-First, run `make outdated` to check for outdated dependencies. Then, edit `pyproject.toml` file and run the
-following command to update dependencies:
-
-```shell
-make outdated
-
-# Edit pyproject.toml
-
-uv lock --upgrade
-make sync
-```
-
-#### Check Dependencies Updates
-
-```shell
-make outdated
-```
-
-#### Linting
-
-```shell
-make lint
-```
-
-#### MyPy
-
-```shell
-make mypy
-```
-
-#### Formatting
-
-```shell
-make format
-```
