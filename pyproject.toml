@@ -23,7 +23,7 @@ build-backend = "uv_build"
 
 [project.optional-dependencies]
 dev = [
-    "FTL-Extract==0.9.0a10",
+    "FTL-Extract==0.9.0",
     "pre-commit==4.3.0",
 ]
 lint = [
