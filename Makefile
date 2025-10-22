@@ -123,7 +123,7 @@ stub:
 .PHONY: lint
 lint:
 	echo "Running ruff..."
-	uv run ruff check --config pyproject.toml --diff $(app-dir)
+	uv run ruff check --config pyproject.toml --show-fixes --preview $(app-dir)
 
 .PHONY: format
 format:
@@ -157,27 +157,35 @@ create-revision: build
 		run \
 		--rm \
 		migrations \
-		bash -c ".venv/bin/alembic --config alembic.ini revision --autogenerate -m '$(message)'"
+		bash -c ".venv/bin/alembic --config alembic.ini revision --autogenerate -m '$(msg)'"
 
 .PHONY: upgrade-revision
 upgrade-revision: build
+	$(eval POS_ARG := $(word 1, $(filter-out $@, $(MAKECMDGOALS))))
+	$(eval REVISION := $(or $(rev), $(POS_ARG), head))
+	@echo "Running upgrade to revision: $(REVISION)"
+
 	docker compose \
 		--env-file .env.docker \
 		--file docker-compose.yml \
 		run \
 		--rm \
 		migrations \
-		bash -c ".venv/bin/alembic --config alembic.ini upgrade $(revision)"
+		bash -c ".venv/bin/alembic --config alembic.ini upgrade $(REVISION)"
 
 .PHONY: downgrade-revision
 downgrade-revision: build
+	$(eval POS_ARG := $(word 1, $(filter-out $@, $(MAKECMDGOALS))))
+	$(eval REVISION := $(or $(rev), $(POS_ARG), -1))
+	@echo "Running downgrade to revision: $(REVISION)"
+
 	docker compose \
 		--env-file .env.docker \
 		--file docker-compose.yml \
 		run \
 		--rm \
 		migrations \
-		bash -c ".venv/bin/alembic --config alembic.ini downgrade $(revision)"
+		bash -c ".venv/bin/alembic --config alembic.ini downgrade $(REVISION)"
 
 .PHONY: current-revision
 current-revision: build
@@ -198,3 +206,6 @@ create-init-revision: build
 		--rm \
 		migrations \
 		bash -c ".venv/bin/alembic --config alembic.ini revision --autogenerate -m 'Initial' --rev-id 000000000000"
+
+%::
+	@exit 0
