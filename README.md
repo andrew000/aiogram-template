@@ -58,7 +58,7 @@ make up
 Template already has initial migration. To apply it, run the following command:
 
 ```shell
-make upgrade-revision revision=head
+make upgrade-revision
 ```
 
 ### Step 6: Bot is ready and running
@@ -131,19 +131,19 @@ make create-init-revision
 
 To apply `head` migration, run the following command:
 ```shell
-make upgrade-revision revision=head
+make upgrade-revision
 ```
 
 To apply specific migration, run the following command:
 
 ```shell
-make upgrade-revision revision=<revision_id>
+make upgrade-revision revision=<rev_id>
 ```
 
-`revision_id` - id of the migration in the `app/migrations/versions` directory. Initial migration id is
+`rev_id` - id of the migration in the `app/migrations/versions` directory. Initial migration id is
 `000000000000`.
 
-To check current migration `revision_id` in the database, run the following command:
+To check current migration `rev_id` in the database, run the following command:
 
 ```shell
 make current-revision

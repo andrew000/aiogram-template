@@ -144,7 +144,7 @@ outdated:
 
 .PHONY: sync
 sync:
-	uv sync --extra dev --extra lint
+	uv sync --all-extras
 
 .PHONY: create-revision
 create-revision: build

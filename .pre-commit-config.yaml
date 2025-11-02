@@ -1,7 +1,7 @@
 fail_fast: false
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: "trailing-whitespace"
       - id: "check-case-conflict"
@@ -21,7 +21,7 @@ repos:
       - id: "check-json"
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.14.0
+    rev: v0.14.3
     hooks:
       - id: ruff
         args: [ "--fix" ]
