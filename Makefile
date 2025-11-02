@@ -76,10 +76,7 @@ ifeq ($(DETECTED_OS),Windows)
 	docker compose \
 		--env-file .env.docker \
 		--file docker-compose.yml \
-		up \
-		-d \
-		--build \
-		--timeout 60 \
+		build \
 		bot migrations
 else
 	docker compose \
