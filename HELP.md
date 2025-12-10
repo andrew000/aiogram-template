@@ -9,40 +9,40 @@
 
 #### Update Dependencies
 
-First, run `make outdated` to check for outdated dependencies. Then, edit `pyproject.toml` file and run the
+First, run `just outdated` to check for outdated dependencies. Then, edit `pyproject.toml` file and run the
 following command to update dependencies:
 
 ```shell
-make outdated
+just outdated
 
 # Edit pyproject.toml
 
 uv lock --upgrade
-make sync
+just sync
 ```
 
 #### Check Dependencies Updates
 
 ```shell
-make outdated
+just outdated
 ```
 
 #### Linting
 
 ```shell
-make lint
+just lint
 ```
 
 #### MyPy
 
 ```shell
-make mypy
+just mypy
 ```
 
 #### Formatting
 
 ```shell
-make format
+just format
 ```
 
 </details>
@@ -50,51 +50,11 @@ make format
 ***
 
 <details>
-  <summary>💢 The term 'make' is not recognized as the name of a cmdlet, function, script file, or operable program.</summary>
+  <summary>💢 The term 'just' is not recognized as the name of a cmdlet, function, script file, or operable program.</summary>
 
-#### ⚠️ You, as developer, **MUST** have `make` installed on your system to use `Makefile` commands. 
+#### ⚠️ You, as developer, **MUST** have `just` installed on your system to use `Justfile` commands.
 
-#### [Windows] Answer:
-
-1. Open PowerShell as Administrator.
-2. Install Chocolatey by running the following command:
-   ```powershell
-   Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-   ```
-3. Close and reopen PowerShell with administrative privileges.
-4. Install Make by running the following command:
-   ```powershell
-   choco install make
-   ```
-5. Verify the installation by running:
-   ```powershell
-   make --version
-   ```
-6. If the command is still not recognized, ensure that the Make installation path is added to your system's PATH
-   environment variable.
-   ```powershell
-   $currentPath = [System.Environment]::GetEnvironmentVariable('PATH', 'Machine')
-   [System.Environment]::SetEnvironmentVariable('PATH', $currentPath + ';C:\Program Files (x86)\GnuWin32\bin', 'Machine')
-   ```
-7. Restart PowerShell and try running `make` again.
-
-#### [Linux] Answer:
-
-1. Open your terminal.
-2. Install Make using your package manager.
-3. ```bash
-   # For Debian/Ubuntu-based systems
-   sudo apt update
-   sudo apt install make -y
-   ```
-   ```bash
-   # Fedora
-   sudo dnf install make -y
-   ```
-4. Verify the installation by running:
-   ```bash
-   make --version
-   ```
+#### Installation: https://just.systems/man/en/introduction.html
 
 </details>
 

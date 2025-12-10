@@ -28,14 +28,15 @@ cd aiogram-template
 
 ### Step 2: Install dependencies
 
-I recommend using [UV](https://docs.astral.sh/uv/) to manage your project.
+1. Install [JUST](https://just.systems/man/en/introduction.html) to manage project commands.
+2. Install [UV](https://docs.astral.sh/uv/) to manage your project.
 
 ```shell
 # Create virtual environment using UV
 uv venv --python=3.13
 
 # Install dependencies
-make sync
+just sync
 ```
 
 ### Step 3: Create `.env` file
@@ -50,7 +51,7 @@ cp .env.example .env # for local development
 ### Step 4: Deploy project
 
 ```shell
-make up
+just up
 ```
 
 ### Step 5: Run migrations
@@ -58,7 +59,7 @@ make up
 Template already has initial migration. To apply it, run the following command:
 
 ```shell
-make upgrade-revision
+just upgrade-revision head
 ```
 
 ### Step 6: Bot is ready and running
@@ -106,7 +107,7 @@ AIOGRAM-TEMPLATE
 ├───docker-compose.yml (docker-compose configuration)
 ├───.env.example (example environment file)
 ├───.pre-commit-config.yaml (pre-commit configuration)
-└───Makefile (make commands)
+└───Justfile (just commands)
 ```
 
 The bot is located in the `app/bot` directory. The bot is divided into modules, each of which is responsible for a
@@ -126,27 +127,27 @@ To create initial migration, check if your models imported in the `app/bot/stora
 following command:
 
 ```shell
-make create-init-revision
+just create-init-revision
 ```
 
 To apply `head` migration, run the following command:
 ```shell
-make upgrade-revision
+just upgrade-revision head
 ```
 
 To apply specific migration, run the following command:
 
 ```shell
-make upgrade-revision revision=<rev_id>
+just upgrade-revision <revision_id>
 ```
 
-`rev_id` - id of the migration in the `app/migrations/versions` directory. Initial migration id is
+`revision_id` - id of the migration in the `app/migrations/versions` directory. Initial migration id is
 `000000000000`.
 
-To check current migration `rev_id` in the database, run the following command:
+To check current migration `revision_id` in the database, run the following command:
 
 ```shell
-make current-revision
+just current-revision
 ```
 
 ### Localization
@@ -157,11 +158,11 @@ The Bot supports localization. Localization files are located in the `app/bot/lo
 To extract FTL-keys from the code, run the following command:
 
 ```shell
-make extract-locales
+just extract-locales
 ```
 
 After extracting FTL-keys, you can find new directories and files in the `app/bot/locales` directory. To add or remove
-locales for extraction, edit `Makefile`
+locales for extraction, edit `Justfile`
 
 I recommend to make a submodule from `app/bot/locales` directory. It will allow you to control locales versions and
 publish them (without code exposing) for translations help by other people.
@@ -179,7 +180,7 @@ uv run pre-commit install
 The project uses Docker for deployment. To build and run the bot in Docker, run the following command:
 
 ```shell
-make up
+just up
 ```
 
 Yes, little command to run large project. It will build and run the bot, PostgreSQL, Redis, and Caddy containers.
@@ -187,7 +188,7 @@ Yes, little command to run large project. It will build and run the bot, Postgre
 To gracefully stop the bot and remove containers, run the following command:
 
 ```shell
-make down
+just down
 ```
 
 ### Caddy

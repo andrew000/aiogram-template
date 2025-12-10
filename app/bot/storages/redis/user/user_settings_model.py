@@ -5,6 +5,7 @@ import msgspec
 from redis.asyncio import Redis
 from redis.typing import ExpiryT
 
+from storages.psql.user.user_settings_model import Gender
 from storages.psql.utils.alchemy_struct import AlchemyStruct
 
 ENCODER: Final[msgspec.msgpack.Encoder] = msgspec.msgpack.Encoder()
@@ -18,7 +19,7 @@ class UserSettingsRD(
 ):
     id: int
     language_code: str = msgspec.field(default="en")
-    gender: str = msgspec.field(default="m")
+    gender: Gender = msgspec.field(default=Gender.M)
     is_banned: bool = msgspec.field(default=False)
 
     @classmethod

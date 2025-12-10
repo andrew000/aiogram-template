@@ -44,7 +44,7 @@ services:
     restart: always
 
   database:
-    image: postgres:17.6
+    image: postgres:17.7
 
     environment:
       POSTGRES_USER: $PSQL_USER
@@ -67,7 +67,7 @@ services:
     restart: always
 
   redis:
-    image: redis:8.2.2
+    image: redis:8.4.0
 
     command:
       - --port 6379

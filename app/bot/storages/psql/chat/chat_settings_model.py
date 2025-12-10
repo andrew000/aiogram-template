@@ -16,7 +16,6 @@ class ChatSettingsModel(Base):
     )
     language_code: Mapped[str] = mapped_column(
         String(2),
-        nullable=False,
         server_default=expression.text("'en'"),
     )  # language_code is set from User.language_code, which add bot to group
-    timezone: Mapped[str] = mapped_column(String, nullable=True)
+    timezone: Mapped[str | None] = mapped_column(String)

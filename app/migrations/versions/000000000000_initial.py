@@ -3,7 +3,7 @@ Initial.
 
 Revision ID: 000000000000
 Revises:
-Create Date: 2025-08-26 09:55:53.352384+00:00
+Create Date: 2025-12-10 11:43:10.177595+00:00
 
 """
 
@@ -27,9 +27,7 @@ def upgrade() -> None:
         sa.Column("id", sa.BigInteger(), autoincrement=False, nullable=False),
         sa.Column(
             "chat_type",
-            postgresql.ENUM(
-                "SENDER", "PRIVATE", "GROUP", "SUPERGROUP", "CHANNEL", name="chat_type"
-            ),
+            sa.Enum("SENDER", "PRIVATE", "GROUP", "SUPERGROUP", "CHANNEL", name="chattype"),
             nullable=False,
         ),
         sa.Column("title", sa.String(), server_default=sa.text("NULL"), nullable=True),
@@ -93,7 +91,12 @@ def upgrade() -> None:
         sa.Column(
             "language_code", sa.String(length=2), server_default=sa.text("'en'"), nullable=False
         ),
-        sa.Column("gender", sa.String(length=1), server_default=sa.text("'m'"), nullable=False),
+        sa.Column(
+            "gender",
+            sa.Enum("M", "F", name="gender"),
+            server_default=sa.text("'M'"),
+            nullable=False,
+        ),
         sa.Column("is_banned", sa.Boolean(), server_default=sa.text("false"), nullable=False),
         sa.ForeignKeyConstraint(["id"], ["users.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),

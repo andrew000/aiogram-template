@@ -31,19 +31,6 @@ example.com {
 		level INFO
 	}
 
-	log {
-		output file /var/log/caddy/example.com.log {
-			roll_size 100MiB
-		}
-		format filter {
-			wrap json
-			fields {
-				request>headers>X-Telegram-Bot-Api-Secret-Token delete
-			}
-		}
-		level INFO
-	}
-
 	@tg_bot_api {
 		method POST
 		path /webhook/*
