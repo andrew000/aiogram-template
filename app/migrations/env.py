@@ -1,6 +1,7 @@
 import asyncio
 from logging.config import fileConfig
 
+import alembic_postgresql_enum
 from alembic import context
 from sqlalchemy.engine import Connection
 
@@ -29,31 +30,6 @@ target_metadata = Base.metadata
 # ... etc.
 
 
-def run_migrations_offline() -> None:
-    """
-    Run migrations in 'offline' mode.
-
-    This configures the context with just a URL
-    and not an Engine, though an Engine is acceptable
-    here as well.  By skipping the Engine creation
-    we don't even need a DBAPI to be available.
-
-    Calls to context.execute() here emit the given string to the
-    script output.
-
-    """
-    url = config.get_main_option("sqlalchemy.url")
-    context.configure(
-        url=url,
-        target_metadata=target_metadata,
-        literal_binds=True,
-        dialect_opts={"paramstyle": "named"},
-    )
-
-    with context.begin_transaction():
-        context.run_migrations()
-
-
 def do_run_migrations(connection: Connection) -> None:
     context.configure(connection=connection, target_metadata=target_metadata)
 
@@ -62,11 +38,8 @@ def do_run_migrations(connection: Connection) -> None:
 
 
 async def run_async_migrations(settings: Settings) -> None:
-    """
-    In this scenario we need to create an Engine
-    and associate a connection with the context.
+    alembic_postgresql_enum.set_configuration(alembic_postgresql_enum.Config())
 
-    """
     engine, _async_session_maker = await create_db_pool(settings)
 
     async with engine.connect() as connection:
@@ -76,7 +49,12 @@ async def run_async_migrations(settings: Settings) -> None:
 
 
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode."""
+    settings = Settings()
+    asyncio.run(run_async_migrations(settings))
+
+
+def run_migrations_offline() -> None:
+    """Nah, just run online migrations in async mode."""
     settings = Settings()
     asyncio.run(run_async_migrations(settings))
 
