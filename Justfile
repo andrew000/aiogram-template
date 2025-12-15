@@ -16,7 +16,7 @@ _up-windows:
       -d \
       --build \
       --timeout 60 \
-      bot controller
+      bot
 
 _up-unix:
     docker compose \
@@ -26,7 +26,7 @@ _up-unix:
       --build-arg USER_ID=$(id -u) \
       --build-arg GROUP_ID=$(id -g) \
       --build-arg USER_NAME=$(whoami) \
-      bot controller
+      bot
 
     docker compose \
       --env-file .env.docker \
@@ -34,7 +34,7 @@ _up-unix:
       up \
       -d \
       --timeout 60 \
-      bot controller
+      bot
 
 up-db:
     just _up-db-{{platform}}
