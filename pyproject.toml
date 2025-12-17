@@ -24,12 +24,12 @@ build-backend = "uv_build"
 [project.optional-dependencies]
 dev = [
     "FTL-Extract==0.9.0",
-    "pre-commit==4.5.0",
+    "pre-commit==4.5.1",
 ]
 lint = [
     "isort==7.0.0",
     "ruff==0.14.9",
-    "mypy==1.19.0",
+    "mypy==1.19.1",
     "types-pytz==2025.2.0.20251108",
 ]
 
