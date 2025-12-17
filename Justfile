@@ -1,5 +1,5 @@
 set shell := ["bash", "-c"]
-set windows-shell := ["pwsh.exe", "-NoLogo", "-Command"]
+set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 
 app-dir := "app"
 bot-dir := "bot"
