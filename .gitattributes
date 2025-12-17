@@ -1,0 +1,4 @@
+* text=auto
+
+*.py     text diff=python
+*.pyi    text diff=python
