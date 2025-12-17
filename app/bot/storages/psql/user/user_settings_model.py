@@ -23,6 +23,6 @@ class UserSettingsModel(Base):
     )
     language_code: Mapped[str] = mapped_column(String(2), server_default=expression.text("'en'"))
     gender: Mapped[Gender] = mapped_column(
-        server_default=expression.text(f"{Gender.M.value.upper()}")
+        server_default=expression.text(f"'{Gender.M.value.upper()}'")
     )
     is_banned: Mapped[bool] = mapped_column(server_default=expression.false())

@@ -3,7 +3,7 @@ Initial.
 
 Revision ID: 000000000000
 Revises:
-Create Date: 2025-12-12 07:30:36.823825+00:00
+Create Date: 2025-12-17 07:04:37.740419+00:00
 
 """
 
@@ -106,7 +106,7 @@ def upgrade() -> None:
         sa.Column(
             "gender",
             postgresql.ENUM("M", "F", name="gender", create_type=False),
-            server_default=sa.text("M"),
+            server_default=sa.text("'M'"),
             nullable=False,
         ),
         sa.Column("is_banned", sa.Boolean(), server_default=sa.text("false"), nullable=False),
