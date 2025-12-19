@@ -1,15 +1,16 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import ClassVar, TypeVar
+from typing import Protocol, runtime_checkable
 
 from aiogram.filters.callback_data import CallbackData
 
 from utils.callback_data_prefix_enums import CallbackDataPrefix
 
-# Type that is a subclass of CallbackData and has an owner_id attribute of type int
-OwnerCallbackData = TypeVar("OwnerCallbackData", bound=CallbackData)
-OwnerCallbackData.owner_id = ClassVar[int]
+
+@runtime_checkable
+class OwnerCallbackData(Protocol):
+    owner_id: int
 
 
 class PossibleLanguages(Enum):

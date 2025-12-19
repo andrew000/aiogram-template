@@ -4,9 +4,8 @@ from datetime import UTC, datetime
 from typing import TYPE_CHECKING, cast
 
 from aiogram import F, Router
-
-from storages.psql import ChatModel
-from storages.redis.chat import ChatModelRD, ChatSettingsModelRD
+from db.psql.chat import ChatModel
+from db.redis.chat import ChatModelRD, ChatSettingsModelRD
 
 if TYPE_CHECKING:
     from aiogram.types import Message

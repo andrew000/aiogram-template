@@ -3,11 +3,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from aiogram_i18n.managers.base import BaseManager
-
-from storages.redis.user.user_settings_model import UserSettingsRD
+from domain.user.repo import CachedUserSettingsRepository
+from domain.user.service import CachedUserSettingsService
 
 if TYPE_CHECKING:
     from aiogram.types import User
+    from domain.user.dto import UserSettingsReadDTO
     from redis.asyncio import Redis
 
 
@@ -22,19 +23,24 @@ class FSMManager(BaseManager):
         self,
         event_from_user: User,
         redis: Redis,
-        user_settings: UserSettingsRD | None = None,
+        user_settings_dto: UserSettingsReadDTO | None = None,
     ) -> str:
-        if user_settings:
-            locale: str = user_settings.language_code
+        if user_settings_dto:
+            locale: str = user_settings_dto.language_code
 
         else:
-            user_settings = await UserSettingsRD.get(redis, event_from_user.id)
+            cached_user_settings_service = CachedUserSettingsService(
+                repo=CachedUserSettingsRepository(redis=redis)
+            )
+            cached_user_settings_dto: (
+                UserSettingsReadDTO | None
+            ) = await cached_user_settings_service.get(user_id=event_from_user.id)
 
-            if user_settings:
-                locale: str = user_settings.language_code
+            if cached_user_settings_dto:
+                locale: str = cached_user_settings_dto.language_code
 
             else:
-                locale: str = self.default_locale
+                locale: str = self.default_locale or "en"
 
         return locale
 

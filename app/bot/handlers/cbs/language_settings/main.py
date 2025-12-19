@@ -4,14 +4,14 @@ from typing import TYPE_CHECKING
 
 from aiogram import Router
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from db.psql.user.models import UserSettingsModel
+from db.redis.user import CachedUserSettingsRD
 from sqlalchemy import update
 from sqlalchemy.sql.operators import eq
 
 from filters.cb_click_by_user import CallbackClickedByRedisUser, MsgOwner
 from handlers.cbs.language_settings.keyboards import select_language_keyboard
 from handlers.cbs.start import GOTOStartCB
-from storages.psql.user import UserSettingsModel
-from storages.redis.user import UserSettingsRD
 from utils.callback_datas import LanguageWindowCB, SelectLanguageCB
 
 if TYPE_CHECKING:
@@ -60,7 +60,7 @@ async def language_selected_cb(
         await session.execute(stmt)
         await session.commit()
 
-    await UserSettingsRD.delete(redis, cb.from_user.id)
+    await CachedUserSettingsRD.delete(redis, cb.from_user.id)
 
     await i18n.set_locale(callback_data.language.value)
 

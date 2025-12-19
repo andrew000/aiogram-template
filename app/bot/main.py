@@ -23,6 +23,7 @@ from aiogram.webhook.security import DEFAULT_TELEGRAM_NETWORKS, IPFilter
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
 from aiohttp import web
+from db.psql.base import close_db_pool, create_db_pool
 
 import errors
 import handlers
@@ -30,7 +31,6 @@ from middlewares.check_chat_middleware import CheckChatMiddleware
 from middlewares.check_user_middleware import CheckUserMiddleware
 from middlewares.throttling_middleware import ThrottlingMiddleware
 from settings import Settings
-from storages.psql.base import close_db_pool, create_db_pool
 from utils.fsm_manager import FSMManager
 
 if TYPE_CHECKING:
@@ -112,7 +112,7 @@ async def main() -> None:
 
     if settings.webhooks:
         app = web.Application(
-            middlewares=[ip_filter_middleware(IPFilter(DEFAULT_TELEGRAM_NETWORKS))],
+            middlewares=[ip_filter_middleware(IPFilter(DEFAULT_TELEGRAM_NETWORKS))],  # type: ignore[list-item]
         )
 
         SimpleRequestHandler(

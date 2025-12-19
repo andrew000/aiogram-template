@@ -1,17 +1,23 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any, Final, cast
 
 from aiogram import BaseMiddleware
 from aiogram.enums import ChatType
 from aiogram.types import Chat, Message, TelegramObject, Update, User
-from sqlalchemy import select, update
-from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy.sql.operators import eq, ne
-
-from storages.psql.user import UserModel, UserSettingsModel
-from storages.redis.user import UserRD, UserSettingsRD
+from domain.user.dto import UserCreateDTO, UserReadDTO, UserSettingsCreateDTO, UserSettingsReadDTO
+from domain.user.repo import (
+    CachedUserRepository,
+    CachedUserSettingsRepository,
+    UserRepository,
+    UserSettingsRepository,
+)
+from domain.user.service import (
+    CachedUserService,
+    CachedUserSettingsService,
+    UserService,
+    UserSettingsService,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
@@ -19,108 +25,67 @@ if TYPE_CHECKING:
     from redis.asyncio.client import Redis
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+    from utils.aiogram_data import AiogramData
+
 # 777000 is Telegram's user id of service messages
 TG_SERVICE_USER_ID: Final[int] = 777000
 
 
-async def _create_user(*, user: User, chat: Chat, session: AsyncSession) -> UserModel:
-    if user.username:
-        stmt = select(UserModel).where(
-            eq(UserModel.username, user.username), ne(UserModel.id, user.id)
-        )
-        another_user: UserModel = await session.scalar(stmt)
-
-        if another_user:
-            stmt = update(UserModel).where(eq(UserModel.id, another_user.id)).values(username=None)
-            await session.execute(stmt)
-
-    stmt = select(UserModel).where(eq(UserModel.id, user.id))
-    user_model: UserModel | None = await session.scalar(stmt)
-
-    if not user_model:
-        stmt = (
-            insert(UserModel)
-            .values(
-                id=user.id,
-                username=user.username,
-                first_name=user.first_name,
-                last_name=user.last_name,
-                pm_active=chat.type == ChatType.PRIVATE,
-            )
-            .on_conflict_do_update(
-                index_elements=["id"],
-                set_={
-                    "username": user.username,
-                    "first_name": user.first_name,
-                    "last_name": user.last_name,
-                    "last_active": datetime.now(tz=UTC).replace(tzinfo=None),
-                },
-            )
-            .returning(UserModel)
-        )
-        user_model = await session.scalar(stmt)
-
-    else:
-        user_model.username = user.username
-        user_model.first_name = user.first_name
-        user_model.last_name = user.last_name
-        user_model.last_active = datetime.now(tz=UTC).replace(tzinfo=None)
-
-    return cast(UserModel, user_model)
-
-
-async def _create_user_settings(*, user_id: int, session: AsyncSession) -> UserSettingsModel:
-    stmt = (
-        insert(UserSettingsModel)
-        .values(id=user_id)
-        .on_conflict_do_update(
-            index_elements=["id"], set_={"language_code": UserSettingsModel.language_code}
-        )
-        .returning(UserSettingsModel)
-    )
-    return cast(UserSettingsModel, await session.scalar(stmt))
-
-
-async def _get_user_model(
+async def _get_user(
     *,
     db_pool: async_sessionmaker[AsyncSession],
     redis: Redis,
     user: User,
     chat: Chat,
-) -> tuple[UserRD, UserSettingsRD]:
-    user_model: UserRD | None = await UserRD.get(redis, user.id)
-    user_settings: UserSettingsRD | None = await UserSettingsRD.get(redis, user.id)
+) -> tuple[UserReadDTO, UserSettingsReadDTO]:
+    cached_user_service = CachedUserService(repo=CachedUserRepository(redis=redis))
+    cached_user_dto: UserReadDTO | None = await cached_user_service.get_user_by_id(user_id=user.id)
 
-    if user_model and user_settings:
-        return user_model, user_settings
+    cached_user_settings_service = CachedUserSettingsService(
+        repo=CachedUserSettingsRepository(redis=redis)
+    )
+    cached_user_settings_dto: UserSettingsReadDTO | None = await cached_user_settings_service.get(
+        user_id=user.id
+    )
+
+    if cached_user_dto and cached_user_settings_dto:
+        return cached_user_dto, cached_user_settings_dto
 
     async with db_pool() as session:
         async with session.begin():
-            user_model: UserModel = await _create_user(user=user, chat=chat, session=session)
-            user_settings: UserSettingsModel = await _create_user_settings(
-                user_id=user.id, session=session
+            user_service = UserService(repo=UserRepository(session=session))
+            user_dto = await user_service.upsert(
+                user_dto=UserCreateDTO(
+                    id=user.id,
+                    username=user.username,
+                    first_name=user.first_name,
+                    last_name=user.last_name,
+                    pm_active=chat.type == ChatType.PRIVATE,
+                )
             )
 
-            await session.commit()
+            user_settings_service = UserSettingsService(
+                repo=UserSettingsRepository(session=session)
+            )
+            user_settings_dto = await user_settings_service.upsert(
+                user_settings_dto=UserSettingsCreateDTO(id=user.id)
+            )
 
-        user_model: UserRD = UserRD.from_orm(cast(UserModel, user_model))
-        user_settings: UserSettingsRD = UserSettingsRD.from_orm(
-            cast(UserSettingsModel, user_settings),
+        cached_user_dto: UserReadDTO = await cached_user_service.upsert(user_dto=user_dto)
+        cached_user_settings_dto: UserSettingsReadDTO = await cached_user_settings_service.upsert(
+            user_settings_dto=user_settings_dto
         )
 
-        await cast(UserRD, user_model).save(redis)
-        await cast(UserSettingsRD, user_settings).save(redis)
-
-    return cast(UserRD, user_model), cast(UserSettingsRD, user_settings)
+    return cached_user_dto, cached_user_settings_dto
 
 
 class CheckUserMiddleware(BaseMiddleware):
     async def __call__(
         self,
-        handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
+        handler: Callable[[TelegramObject, AiogramData], Awaitable[Any]],
         event: TelegramObject,
-        data: dict[str, Any],
-    ) -> Any:
+        data: AiogramData,
+    ) -> Any:  # ty:ignore[invalid-method-override]
         chat: Chat = data["event_chat"]
         user: User = data["event_from_user"]
 
@@ -130,7 +95,7 @@ class CheckUserMiddleware(BaseMiddleware):
         match event.event_type:
             case "message":
                 if user.is_bot is False and user.id != TG_SERVICE_USER_ID:
-                    data["user_model"], data["user_settings"] = await _get_user_model(
+                    data["user_dto"], data["user_settings_dto"] = await _get_user(
                         db_pool=data["db_pool"],
                         redis=data["redis"],
                         user=user,
@@ -145,7 +110,7 @@ class CheckUserMiddleware(BaseMiddleware):
                     and not msg.reply_to_message.from_user.is_bot
                     and msg.reply_to_message.from_user.id != TG_SERVICE_USER_ID
                 ):
-                    data["reply_user_model"], data["reply_user_settings"] = await _get_user_model(
+                    data["reply_user_dto"], data["reply_user_settings_dto"] = await _get_user(
                         db_pool=data["db_pool"],
                         redis=data["redis"],
                         user=msg.reply_to_message.from_user,
@@ -154,7 +119,7 @@ class CheckUserMiddleware(BaseMiddleware):
 
             case "callback_query" | "my_chat_member" | "chat_member" | "inline_query":
                 if user.is_bot is False and user.id != TG_SERVICE_USER_ID:
-                    data["user_model"], data["user_settings"] = await _get_user_model(
+                    data["user_dto"], data["user_settings_dto"] = await _get_user(
                         db_pool=data["db_pool"],
                         redis=data["redis"],
                         user=user,
