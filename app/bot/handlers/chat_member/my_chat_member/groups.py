@@ -16,8 +16,7 @@ from aiogram.filters import (
     RESTRICTED,
     ChatMemberUpdatedFilter,
 )
-
-from storages.redis.chat_member import RDChatBotModel
+from db.redis.chat_member import RDChatBotModel
 
 if TYPE_CHECKING:
     from aiogram.types import ChatMemberUpdated

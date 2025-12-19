@@ -36,7 +36,7 @@ services:
     volumes:
       - ./app/migrations/versions:/app/versions
       - ./app/bot/settings.py:/app/settings.py:ro
-      - ./app/bot/storages/psql:/app/storages/psql:ro
+      - ./app/bot/db/psql:/app/db/psql:ro
 
     depends_on:
       - database

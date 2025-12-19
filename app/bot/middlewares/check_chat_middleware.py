@@ -1,160 +1,137 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, Any
 
 from aiogram import BaseMiddleware
 from aiogram.enums import ChatType
-from sqlalchemy import select, update
-from sqlalchemy.dialects.postgresql import insert
-from sqlalchemy.sql.operators import eq, ne
+from aiogram.exceptions import TelegramAPIError
+from domain.chat.dto import ChatCreateDTO, ChatSettingsCreateDTO
+from domain.chat.repo import (
+    CachedChatRepository,
+    CachedChatSettingsRepository,
+    ChatRepository,
+    ChatSettingsRepository,
+)
+from domain.chat.service import (
+    CachedChatService,
+    CachedChatSettingsService,
+    ChatService,
+    ChatSettingsService,
+)
 
-from storages.psql.chat import ChatModel, ChatSettingsModel
-from storages.redis.chat import ChatModelRD, ChatSettingsModelRD
+from errors.errors import ChannelPrivateError, resolve_exception
 
 if TYPE_CHECKING:
     from collections.abc import Awaitable, Callable
 
     from aiogram.types import Chat, TelegramObject, Update
+    from domain.chat.dto import ChatReadDTO, ChatSettingsReadDTO
     from redis.asyncio.client import Redis
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
+
+    from utils.aiogram_data import AiogramData
 
 ALLOWED_CHAT_TYPES: frozenset[ChatType] = frozenset(
     (ChatType.GROUP, ChatType.SUPERGROUP),
 )
 
 
-async def _create_chat(chat: Chat, session: AsyncSession) -> ChatModel:
-    if chat.username:
-        stmt = select(ChatModel).where(
-            eq(ChatModel.username, chat.username), ne(ChatModel.id, chat.id)
-        )
-        another_chat: ChatModel | None = await session.scalar(stmt)
-
-        if another_chat:
-            stmt = update(ChatModel).where(eq(ChatModel.id, another_chat.id)).values(username=None)
-            await session.execute(stmt)
-
-    stmt = select(ChatModel).where(eq(ChatModel.id, chat.id))
-    chat_model: ChatModel | None = await session.scalar(stmt)
-
-    if not chat_model:
-        stmt = (
-            insert(ChatModel)
-            .values(
-                id=chat.id,
-                chat_type=ChatType(chat.type),
-                title=chat.title,
-                username=chat.username,
-                member_count=(member_count := await chat.get_member_count()),
-            )
-            .on_conflict_do_update(
-                index_elements=["id"],
-                set_={
-                    "chat_type": ChatType(chat.type),
-                    "title": chat.title,
-                    "username": chat.username,
-                    "member_count": member_count,
-                },
-            )
-            .returning(ChatModel)
-        )
-        chat_model = await session.scalar(stmt)
-
-    else:
-        chat_model.title = chat.title
-        chat_model.username = chat.username
-        chat_model.member_count = await chat.get_member_count()
-
-    return cast(ChatModel, chat_model)
-
-
-async def _create_chat_settings(
-    chat_id: int,
-    session: AsyncSession,
-) -> ChatSettingsModel:
-    stmt = select(ChatSettingsModel).where(eq(ChatSettingsModel.id, chat_id))
-    chat_settings_model: ChatSettingsModel | None = await session.scalar(stmt)
-
-    if not chat_settings_model:
-        stmt = (
-            insert(ChatSettingsModel)
-            .values(id=chat_id, language_code="en")
-            .returning(ChatSettingsModel)
-        )
-        chat_settings_model = await session.scalar(stmt)
-
-    return cast(ChatSettingsModel, chat_settings_model)
-
-
-async def _get_chat_model(
+async def _get_chat(
+    *,
     db_pool: async_sessionmaker[AsyncSession],
     redis: Redis,
     chat: Chat,
-) -> tuple[ChatModelRD, ChatSettingsModelRD]:
-    chat_model: ChatModelRD | None = await ChatModelRD.get(redis, chat.id)
-    chat_settings: ChatSettingsModelRD | None = await ChatSettingsModelRD.get(redis, chat.id)
+) -> tuple[ChatReadDTO, ChatSettingsReadDTO]:
+    # chat_model: ChatModelRD | None = await ChatModelRD.get(redis, chat.id)
+    # chat_settings: ChatSettingsModelRD | None = await ChatSettingsModelRD.get(redis, chat.id)
 
-    if chat_model and chat_settings:
-        return chat_model, chat_settings
+    cached_chat_service = CachedChatService(repo=CachedChatRepository(redis=redis))
+    cached_chat_dto: ChatReadDTO | None = await cached_chat_service.get_chat_by_id(chat_id=chat.id)
+
+    cached_chat_settings_service = CachedChatSettingsService(
+        repo=CachedChatSettingsRepository(redis=redis)
+    )
+    cached_chat_settings_dto: ChatSettingsReadDTO | None = await cached_chat_settings_service.get(
+        chat_id=chat.id
+    )
+
+    if cached_chat_dto and cached_chat_settings_dto:
+        return cached_chat_dto, cached_chat_settings_dto
+
+    member_count = 0
+
+    try:
+        member_count = await chat.get_member_count()
+    except TelegramAPIError as e:
+        match resolve_exception(e):
+            case ChannelPrivateError():
+                pass
+            case _:
+                raise
 
     async with db_pool() as session:
         async with session.begin():
-            chat_model: ChatModel = await _create_chat(chat=chat, session=session)
-            chat_settings: ChatSettingsModel = await _create_chat_settings(
-                chat_id=chat.id, session=session
+            chat_service = ChatService(repo=ChatRepository(session=session))
+            chat_dto = await chat_service.upsert(
+                chat_dto=ChatCreateDTO(
+                    id=chat.id,
+                    chat_type=ChatType(chat.type),
+                    title=chat.title,
+                    username=chat.username,
+                    member_count=member_count,
+                )
             )
 
-            await session.commit()
+            chat_settings_service = ChatSettingsService(
+                repo=ChatSettingsRepository(session=session)
+            )
+            chat_settings_dto = await chat_settings_service.upsert(
+                chat_settings_dto=ChatSettingsCreateDTO(id=chat.id)
+            )
 
-        chat_model = ChatModelRD.from_orm(cast(ChatModel, chat_model))
-        chat_settings = ChatSettingsModelRD.from_orm(cast(ChatSettingsModel, chat_settings))
+        cached_chat_dto: ChatReadDTO = await cached_chat_service.upsert(chat_dto=chat_dto)
+        cached_chat_settings_dto: ChatSettingsReadDTO = await cached_chat_settings_service.upsert(
+            chat_settings_dto=chat_settings_dto
+        )
 
-        await chat_model.save(redis)
-        await chat_settings.save(redis)
-
-    return chat_model, chat_settings
+    return cached_chat_dto, cached_chat_settings_dto
 
 
 class CheckChatMiddleware(BaseMiddleware):
     async def __call__(
         self,
-        handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
+        handler: Callable[[TelegramObject, AiogramData], Awaitable[Any]],
         event: TelegramObject,
-        data: dict[str, Any],
-    ) -> Any:
+        data: AiogramData,
+    ) -> Any:  # ty:ignore[invalid-method-override]
         chat: Chat = data["event_chat"]
 
         if TYPE_CHECKING:
             assert isinstance(event, Update)
 
-        match event.event_type:
-            case "message":
-                if chat.type in ALLOWED_CHAT_TYPES:
-                    if (
-                        event.message.migrate_to_chat_id
-                        or event.message.group_chat_created
-                        or event.message.supergroup_chat_created
-                    ):
-                        return None
+        if event.message and chat.type in ALLOWED_CHAT_TYPES:
+            if (
+                event.message.migrate_to_chat_id
+                or event.message.group_chat_created
+                or event.message.supergroup_chat_created
+            ):
+                return None
 
-                    if event.message.migrate_from_chat_id:
-                        return await handler(event, data)
+            if event.message.migrate_from_chat_id:
+                return await handler(event, data)
 
-                    data["chat_model"], data["chat_settings"] = await _get_chat_model(
-                        db_pool=data["db_pool"],
-                        redis=data["redis"],
-                        chat=chat,
-                    )
+            data["chat_dto"], data["chat_settings_dto"] = await _get_chat(
+                db_pool=data["db_pool"],
+                redis=data["redis"],
+                chat=chat,
+            )
 
-            case "callback_query" | "my_chat_member" | "chat_member":
-                if chat.type in ALLOWED_CHAT_TYPES:
-                    data["chat_model"], data["chat_settings"] = await _get_chat_model(
-                        db_pool=data["db_pool"],
-                        redis=data["redis"],
-                        chat=chat,
-                    )
-
-            case _:
-                pass
+        elif event.callback_query or event.my_chat_member or event.chat_member:
+            if chat.type in ALLOWED_CHAT_TYPES:
+                data["chat_dto"], data["chat_settings_dto"] = await _get_chat(
+                    db_pool=data["db_pool"],
+                    redis=data["redis"],
+                    chat=chat,
+                )
 
         return await handler(event, data)

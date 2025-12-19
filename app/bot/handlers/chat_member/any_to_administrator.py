@@ -4,8 +4,7 @@ from typing import TYPE_CHECKING
 
 from aiogram import Router
 from aiogram.filters import ADMINISTRATOR, CREATOR, PROMOTED_TRANSITION, ChatMemberUpdatedFilter
-
-from storages.redis.chat_member import RDChatMemberModel
+from db.redis.chat_member import RDChatMemberModel
 
 if TYPE_CHECKING:
     from aiogram.types import ChatMemberUpdated

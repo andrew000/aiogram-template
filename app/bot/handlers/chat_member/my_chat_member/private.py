@@ -6,11 +6,10 @@ from typing import TYPE_CHECKING
 from aiogram import F, Router
 from aiogram.enums import ChatType
 from aiogram.filters import KICKED, MEMBER, ChatMemberUpdatedFilter
+from db.psql.user import UserModel
+from db.redis.user import CachedUserRD
 from sqlalchemy import update
 from sqlalchemy.sql.operators import eq
-
-from storages.psql.user import UserModel
-from storages.redis.user import UserRD
 
 if TYPE_CHECKING:
     from aiogram.types import ChatMemberUpdated
@@ -37,7 +36,7 @@ async def my_chat_member_private_member(
         user_model: UserModel = await session.scalar(stmt)
         await session.commit()
 
-        user_model: UserRD = UserRD.from_orm(user_model)
+        user_model: CachedUserRD = CachedUserRD.from_orm(user_model)
         await user_model.save(redis)
 
     logger.info("Bot was whitelisted by user %s", chat_member.from_user.id)
@@ -59,7 +58,7 @@ async def my_chat_member_private_kicked(
         user_model: UserModel = await session.scalar(stmt)
         await session.commit()
 
-        user_model: UserRD = UserRD.from_orm(user_model)
+        user_model: CachedUserRD = CachedUserRD.from_orm(user_model)
         await user_model.save(redis)
 
     logger.info("Bot was blacklisted by user %s", chat_member.from_user.id)

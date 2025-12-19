@@ -99,7 +99,7 @@ pull:
     git submodule update --init --recursive
 
 extract-locales:
-    uv run fast-ftl-extract \
+    uv run ftl extract \
       './app/bot' \
       './app/bot/locales' \
       -l 'en' \
@@ -108,7 +108,7 @@ extract-locales:
       -I 'core' \
       --comment-junks \
       --comment-keys-mode 'comment' \
-      --verbose
+      --fast
 
 stub:
     uv run ftl stub \
@@ -118,6 +118,9 @@ stub:
 lint:
     echo "Running ruff..."
     uv run ruff check {{ app-dir }} --show-fixes --preview
+
+    echo "Running ty..."
+    uv run ty check {{ app-dir }}/{{ bot-dir }}
 
 format:
     echo "Running ruff check with --fix..."

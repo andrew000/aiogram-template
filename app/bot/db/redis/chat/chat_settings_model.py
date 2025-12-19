@@ -1,24 +1,21 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Final, Self
 
 import msgspec
-from aiogram.enums import ChatType
 from redis.asyncio import Redis
 from redis.typing import ExpiryT
 
-from storages.psql.utils.alchemy_struct import AlchemyStruct
+from utils.alchemy_struct import AlchemyStruct
 
 ENCODER: Final[msgspec.msgpack.Encoder] = msgspec.msgpack.Encoder()
 
 
-class ChatModelRD(msgspec.Struct, AlchemyStruct["ChatModelRD"], kw_only=True, array_like=True):
+class ChatSettingsModelRD(
+    msgspec.Struct, AlchemyStruct["ChatSettingsModelRD"], kw_only=True, array_like=True
+):
     id: int
-    chat_type: ChatType
-    title: str | None = msgspec.field(default=None)
-    username: str | None = msgspec.field(default=None)
-    registration_datetime: datetime
-    migrate_from_chat_id: int | None = msgspec.field(default=None)
-    migrate_datetime: datetime | None = msgspec.field(default=None)
+    language_code: str
+    timezone: str | None = msgspec.field(default=None)
 
     @classmethod
     def key(cls, chat_id: int | str) -> str:
@@ -31,7 +28,7 @@ class ChatModelRD(msgspec.Struct, AlchemyStruct["ChatModelRD"], kw_only=True, ar
             return msgspec.msgpack.decode(data, type=cls)
         return None
 
-    async def save(self, redis: Redis, ttl: ExpiryT = timedelta(days=1)) -> int:
+    async def save(self, redis: Redis, ttl: ExpiryT = timedelta(days=1)) -> bool:
         return await redis.setex(self.key(self.id), ttl, ENCODER.encode(self))
 
     @classmethod

@@ -3,10 +3,10 @@ from logging.config import fileConfig
 
 import alembic_postgresql_enum
 from alembic import context
+from db.psql.base import Base, create_db_pool
 from sqlalchemy.engine import Connection
 
 from settings import Settings
-from storages.psql.base import Base, create_db_pool
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

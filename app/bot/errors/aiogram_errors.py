@@ -23,4 +23,4 @@ logger.addHandler(file_handler)
 
 @router.errors()
 async def errors_handler(event: ErrorEvent) -> None:
-    logger.error("Update: (%s)\nException: %s\n", event.update, event.exception)
+    logger.exception("Aiogram Exception: %s", event.exception, stack_info=True)
