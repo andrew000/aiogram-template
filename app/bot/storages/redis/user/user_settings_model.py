@@ -19,7 +19,7 @@ class UserSettingsRD(
 ):
     id: int
     language_code: str = msgspec.field(default="en")
-    gender: Gender = msgspec.field(default=Gender.M)
+    gender: Gender = msgspec.field(default=Gender.m)
     is_banned: bool = msgspec.field(default=False)
 
     @classmethod

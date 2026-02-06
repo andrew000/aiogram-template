@@ -44,7 +44,7 @@ services:
     restart: always
 
   database:
-    image: postgres:17.7
+    image: postgres:18.1
 
     environment:
       POSTGRES_USER: $PSQL_USER
@@ -61,7 +61,7 @@ services:
       - "127.0.0.1:$PSQL_EXTERNAL_PORT:5432"
 
     volumes:
-      - ./psql/data:/var/lib/postgresql/data
+      - ./psql/data/18:/var/lib/postgresql/18/docker
       - ./psql/db-init-scripts:/docker-entrypoint-initdb.d:ro
 
     restart: always
@@ -96,7 +96,7 @@ services:
     entrypoint: [ "redis-server" ]
 
   caddy:  # Uncomment if you want to use Caddy as a reverse proxy
-    image: caddy:2.10.2
+    image: caddy:2.11
 
     networks:
       - aiogram

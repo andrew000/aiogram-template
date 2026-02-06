@@ -8,8 +8,8 @@ from storages.psql.base import Base
 
 
 class Gender(StrEnum):
-    M = auto()
-    F = auto()
+    m = auto()
+    f = auto()
 
 
 class UserSettingsModel(Base):
@@ -22,7 +22,5 @@ class UserSettingsModel(Base):
         autoincrement=False,
     )
     language_code: Mapped[str] = mapped_column(String(2), server_default=expression.text("'en'"))
-    gender: Mapped[Gender] = mapped_column(
-        server_default=expression.text(f"'{Gender.M.value.upper()}'")
-    )
+    gender: Mapped[Gender] = mapped_column(server_default=expression.text(f"'{Gender.m}'"))
     is_banned: Mapped[bool] = mapped_column(server_default=expression.false())
