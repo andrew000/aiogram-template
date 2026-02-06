@@ -1,10 +1,10 @@
 [project]
 name = "aiogram-template"
 version = "0.0.1"
-requires-python = "==3.13.11"
+requires-python = "==3.14.3"
 dependencies = [
     "bot",
-    "migrations"
+    "migrations",
 ]
 
 [tool.uv.sources]
@@ -23,13 +23,13 @@ build-backend = "uv_build"
 
 [project.optional-dependencies]
 dev = [
-    "FTL-Extract==0.9.0",
+    "FTL-Extract==0.10.0a2",
     "pre-commit==4.5.1",
 ]
 lint = [
     "isort==7.0.0",
-    "ruff==0.14.10",
     "mypy==1.19.1",
+    "ruff==0.15.0",
     "types-pytz==2025.2.0.20251108",
 ]
 
@@ -74,7 +74,7 @@ exclude = [
 select = ["ALL"]
 ignore = [
     "A003",
-    "ANN002", "ANN003", "ANN401",
+    "ANN002", "ANN003", "ANN204", "ANN401",
     "C901",
     "COM812",
     "CPY001",
@@ -85,11 +85,12 @@ ignore = [
     "FBT001", "FBT002",
     "FIX002",
     "I001",
+    "LOG004",
     "PLC2801",
     "PLR0911", "PLR0912", "PLR0913", "PLR0914", "PLR0915", "PLR0917", "PLR1702", "PLR5501", "PLR6301",
     "PLW0120",
-    "RUF001", "RUF029",
-    "TC006",
+    "RUF001", "RUF029", "RUF067",
+    "TC002", "TC003", "TC006",
     "TD002", "TD003"
 ]
 

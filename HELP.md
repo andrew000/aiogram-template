@@ -9,7 +9,8 @@
 
 #### Update Dependencies
 
-First, run `just outdated` to check for outdated dependencies. Then, edit `pyproject.toml` file and run the
+First, run `just outdated` to check for outdated dependencies. Then, edit `pyproject.toml` file and
+run the
 following command to update dependencies:
 
 ```shell
@@ -98,9 +99,11 @@ just format
 
 #### [Windows] Answer:
 
-1. Download Docker Desktop from the official Docker website: https://www.docker.com/products/docker-desktop
+1. Download Docker Desktop from the official Docker
+   website: https://www.docker.com/products/docker-desktop
 2. Run the installer and follow the on-screen instructions.
-3. After installation, Docker Desktop should start automatically. If not, you can start it from the Start menu.
+3. After installation, Docker Desktop should start automatically. If not, you can start it from the
+   Start menu.
 4. Verify the installation by opening PowerShell and running:
    ```powershell
    docker --version
@@ -133,9 +136,11 @@ just format
 <details>
     <summary>❓ Why PyCharm marks import with red color?</summary>
 
-I use "unique" project structure, where app directory contains code, but root directory contains configuration files.
+I use "unique" project structure, where app directory contains code, but root directory contains
+configuration files.
 
-In PyCharm, right-click on the bot directory and select Mark Directory as -> Sources Root. Also, unmark project root
+In PyCharm, right-click on the bot directory and select Mark Directory as -> Sources Root. Also,
+unmark project root
 directory Unmark as Sources Root. This will fix the problem.
 
 ![image](https://github.com/user-attachments/assets/f4acbd42-f4e7-4e1b-9e16-a40db71ac672)
@@ -169,17 +174,19 @@ It's a good library, but I prefer to use my own code 🤷‍♂️
 
 1. After cloning the repository, navigate to the project root.
 2. Copy the example file based on your development environment:
-    - For Docker: `cp .env.example .env.docker`
     - For local: `cp env.example .env`
 
 3. Open the new `.env` file in a text editor.
 4. Fill in the required variables:
+    - `DEV`: Set to `True` for development environment, `False` for production. (If set to True -
+      all connections will be to `localhost`)
     - `BOT_TOKEN`: Your Telegram bot token from BotFather.
     - `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`: PostgreSQL credentials.
     - `REDIS_PASSWORD`: Redis password (if using authentication).
     - `WEBHOOKS`: Set to `True` if using webhooks, otherwise False.
     - `WEBHOOK_URL` and `WEBHOOK_SECRET_TOKEN`: Required if webhooks are enabled.
-5. Save the file. Avoid committing `.env` to version control - add it to `.gitignore` if not already.
+5. Save the file. Avoid committing `.env` to version control - add it to `.gitignore` if not
+   already.
 
 </details>
 
@@ -196,4 +203,3 @@ It's a good library, but I prefer to use my own code 🤷‍♂️
 </details>
 
 ***
-

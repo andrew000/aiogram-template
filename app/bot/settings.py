@@ -40,22 +40,22 @@ class Settings(BaseSettings):
     psql: PostgresSettings = PostgresSettings()
     redis: RedisSettings = RedisSettings()
 
-    def psql_dsn(self) -> URL:
+    def psql_dsn(self, is_migration: bool = False) -> URL:
         return URL.create(
             drivername="postgresql+asyncpg",
             username=self.psql.user,
             password=self.psql.password.get_secret_value(),
-            host=self.psql.host,
+            host=self.psql.host if is_migration or not self.dev else "localhost",
             port=self.psql.port,
             database=self.psql.db,
         )
 
     async def redis_dsn(self) -> Redis:
         return Redis.from_url(
-            "redis://{username}:{password}@{host}:{port}/{db}".format(  # noqa: UP032
+            "redis://{username}:{password}@{host}:{port}/{db}".format(
                 username=self.redis.user,
                 password=urllib.parse.quote(self.redis.password.get_secret_value()),
-                host=self.redis.host,
+                host=self.redis.host if not self.dev else "localhost",
                 port=self.redis.port,
                 db=self.redis.db,
             ),

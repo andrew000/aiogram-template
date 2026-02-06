@@ -10,7 +10,7 @@ up:
 
 _up-windows:
     docker compose \
-      --env-file .env.docker \
+      --env-file .env \
       --file docker-compose.yml \
       up \
       -d \
@@ -20,7 +20,7 @@ _up-windows:
 
 _up-unix:
     docker compose \
-      --env-file .env.docker \
+      --env-file .env \
       --file docker-compose.yml \
       build \
       --build-arg USER_ID=$(id -u) \
@@ -29,7 +29,7 @@ _up-unix:
       bot
 
     docker compose \
-      --env-file .env.docker \
+      --env-file .env \
       --file docker-compose.yml \
       up \
       -d \
@@ -41,7 +41,7 @@ up-db:
 
 _up-db-windows:
     docker compose \
-      --env-file .env.docker \
+      --env-file .env \
       --file docker-compose.yml \
       up \
       -d \
@@ -51,7 +51,7 @@ _up-db-windows:
 
 _up-db-unix:
     docker compose \
-      --env-file .env.docker \
+      --env-file .env \
       --file docker-compose.yml \
       build \
       --build-arg USER_ID=$(id -u) \
@@ -60,7 +60,7 @@ _up-db-unix:
       database redis
 
     docker compose \
-      --env-file .env.docker \
+      --env-file .env \
       --file docker-compose.yml \
       up \
       -d \
@@ -72,14 +72,14 @@ build:
 
 _build-windows:
     docker compose \
-      --env-file .env.docker \
+      --env-file .env \
       --file docker-compose.yml \
       build \
       bot migrations
 
 _build-unix:
     docker compose \
-      --env-file .env.docker \
+      --env-file .env \
       --file docker-compose.yml \
       build \
       --build-arg USER_ID=$(id -u) \
@@ -89,7 +89,7 @@ _build-unix:
 
 down:
     docker compose \
-      --env-file .env.docker \
+      --env-file .env \
       --file docker-compose.yml \
       down \
       --timeout 60
@@ -134,14 +134,14 @@ mypy:
     uv run mypy --explicit-package-bases {{ app-dir }}/{{ bot-dir }}
 
 outdated:
-    uv tree --universal --outdated
+    uv tree --universal --outdated --depth 1
 
 sync:
     uv sync --all-extras
 
 create-revision message: build
     docker compose \
-        --env-file .env.docker \
+        --env-file .env \
         --file docker-compose.yml \
         run \
         --rm \
@@ -150,7 +150,7 @@ create-revision message: build
 
 upgrade-revision revision: build
     docker compose \
-        --env-file .env.docker \
+        --env-file .env \
         --file docker-compose.yml \
         run \
         --rm \
@@ -159,7 +159,7 @@ upgrade-revision revision: build
 
 downgrade-revision revision: build
     docker compose \
-        --env-file .env.docker \
+        --env-file .env \
         --file docker-compose.yml \
         run \
         --rm \
@@ -168,7 +168,7 @@ downgrade-revision revision: build
 
 current-revision: build
     docker compose \
-        --env-file .env.docker \
+        --env-file .env \
         --file docker-compose.yml \
         run \
         --rm \
@@ -177,7 +177,7 @@ current-revision: build
 
 create-init-revision: build
     docker compose \
-        --env-file .env.docker \
+        --env-file .env \
         --file docker-compose.yml \
         run \
         --rm \

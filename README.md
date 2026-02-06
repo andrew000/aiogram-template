@@ -41,11 +41,11 @@ just sync
 
 ### Step 3: Create `.env` file
 
-Create a `.env` file in the root of the project and fill it with the necessary data.
+Create a `.env` file in the root of the project and fill it with the necessary data. Set `DEV=True`
+for development mode.
 
 ```shell
-cp .env.example .env.docker # for docker development
-cp .env.example .env # for local development
+cp .env.example .env
 ```
 
 ### Step 4: Deploy project
@@ -110,9 +110,12 @@ AIOGRAM-TEMPLATE
 └───Justfile (just commands)
 ```
 
-The bot is located in the `app/bot` directory. The bot is divided into modules, each of which is responsible for a
-specific functionality. `handlers` are responsible for processing events, `middlewares` for preprocessing events,
-`storages` for declaring models and working with the database, `locales` for localization, `filters` for own filters,
+The bot is located in the `app/bot` directory. The bot is divided into modules, each of which is
+responsible for a
+specific functionality. `handlers` are responsible for processing events, `middlewares` for
+preprocessing events,
+`storages` for declaring models and working with the database, `locales` for localization, `filters`
+for own filters,
 `errors` for error handling.
 
 ### Migrations
@@ -123,7 +126,8 @@ Migration files are located in the `app/migrations` directory.
 
 ❗️ Always check your migrations before apply them to the production database.
 
-To create initial migration, check if your models imported in the `app/bot/storages/psql/__init__.py` file and run the
+To create initial migration, check if your models imported in the
+`app/bot/storages/psql/__init__.py` file and run the
 following command:
 
 ```shell
@@ -131,6 +135,7 @@ just create-init-revision
 ```
 
 To apply `head` migration, run the following command:
+
 ```shell
 just upgrade-revision head
 ```
@@ -141,7 +146,8 @@ To apply specific migration, run the following command:
 just upgrade-revision <revision_id>
 ```
 
-`revision_id` - id of the migration in the `app/migrations/versions` directory. Initial migration id is
+`revision_id` - id of the migration in the `app/migrations/versions` directory. Initial migration id
+is
 `000000000000`.
 
 To check current migration `revision_id` in the database, run the following command:
@@ -152,7 +158,8 @@ just current-revision
 
 ### Localization
 
-The Bot supports localization. Localization files are located in the `app/bot/locales` directory. The bot uses the
+The Bot supports localization. Localization files are located in the `app/bot/locales` directory.
+The bot uses the
 `aiogram-i18n` library for localization and `FTL-Extract` for extracting FTL-keys from the code.
 
 To extract FTL-keys from the code, run the following command:
@@ -161,10 +168,12 @@ To extract FTL-keys from the code, run the following command:
 just extract-locales
 ```
 
-After extracting FTL-keys, you can find new directories and files in the `app/bot/locales` directory. To add or remove
+After extracting FTL-keys, you can find new directories and files in the `app/bot/locales`
+directory. To add or remove
 locales for extraction, edit `Justfile`
 
-I recommend to make a submodule from `app/bot/locales` directory. It will allow you to control locales versions and
+I recommend to make a submodule from `app/bot/locales` directory. It will allow you to control
+locales versions and
 publish them (without code exposing) for translations help by other people.
 
 ### Pre-commit
@@ -177,13 +186,15 @@ uv run pre-commit install
 
 ### Docker
 
-The project uses Docker for deployment. To build and run the bot in Docker, run the following command:
+The project uses Docker for deployment. To build and run the bot in Docker, run the following
+command:
 
 ```shell
 just up
 ```
 
-Yes, little command to run large project. It will build and run the bot, PostgreSQL, Redis, and Caddy containers.
+Yes, little command to run large project. It will build and run the bot, PostgreSQL, Redis, and
+Caddy containers.
 
 To gracefully stop the bot and remove containers, run the following command:
 
@@ -193,15 +204,18 @@ just down
 
 ### Caddy
 
-The project uses Caddy as a web server. Caddy can automatically get and renew SSL certificates. To configure Caddy, edit
+The project uses Caddy as a web server. Caddy can automatically get and renew SSL certificates. To
+configure Caddy, edit
 the `Caddyfile` file in the `caddy` directory. `public` directory is used to store static files.
 
-By default, Caddy is disabled in the `docker-compose.yml` file. To enable Caddy, uncomment the `caddy` service in the
+By default, Caddy is disabled in the `docker-compose.yml` file. To enable Caddy, uncomment the
+`caddy` service in the
 `docker-compose.yml` file.
 
 ### Webhooks
 
-Bot may use webhooks. To enable webhooks, set `WEBHOOKS` environment variable to `True` in the `.env` file. Also, set
+Bot may use webhooks. To enable webhooks, set `WEBHOOKS` environment variable to `True` in the
+`.env` file. Also, set
 `WEBHOOK_URL` and `WEBHOOK_SECRET_TOKEN` environment variables.
 
 Don't forget to uncomment the `caddy` service in the `docker-compose.yml` file.
