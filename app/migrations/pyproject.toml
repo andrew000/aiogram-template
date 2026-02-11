@@ -8,7 +8,7 @@ dependencies = [
     "asyncpg==0.31.0",
     "msgspec==0.20.0",
     "pydantic-settings==2.12.0",
-    "redis[hiredis]==7.1.0",
+    "redis[hiredis]==7.1.1",
     "sqlalchemy==2.0.46",
 ]
 

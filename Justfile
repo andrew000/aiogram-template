@@ -3,12 +3,9 @@ set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 
 app-dir := "app"
 bot-dir := "bot"
-platform := if os_family() == "windows" { "windows" } else { "unix" }
 
+[windows]
 up:
-    just _up-{{platform}}
-
-_up-windows:
     docker compose \
       --env-file .env \
       --file docker-compose.yml \
@@ -18,7 +15,8 @@ _up-windows:
       --timeout 60 \
       bot
 
-_up-unix:
+[unix]
+up:
     docker compose \
       --env-file .env \
       --file docker-compose.yml \
@@ -36,10 +34,8 @@ _up-unix:
       --timeout 60 \
       bot
 
+[windows]
 up-db:
-    just _up-db-{{platform}}
-
-_up-db-windows:
     docker compose \
       --env-file .env \
       --file docker-compose.yml \
@@ -49,7 +45,8 @@ _up-db-windows:
       --timeout 60 \
       database redis
 
-_up-db-unix:
+[unix]
+up-db:
     docker compose \
       --env-file .env \
       --file docker-compose.yml \
@@ -67,17 +64,16 @@ _up-db-unix:
       --timeout 60 \
       database redis
 
+[windows]
 build:
-    just _build-{{platform}}
-
-_build-windows:
     docker compose \
       --env-file .env \
       --file docker-compose.yml \
       build \
       bot migrations
 
-_build-unix:
+[unix]
+build:
     docker compose \
       --env-file .env \
       --file docker-compose.yml \
@@ -134,7 +130,7 @@ mypy:
     uv run mypy --explicit-package-bases {{ app-dir }}/{{ bot-dir }}
 
 outdated:
-    uv tree --universal --outdated --depth 1
+    uv tree --universal --outdated --depth 2
 
 sync:
     uv sync --all-extras
