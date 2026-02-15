@@ -29,12 +29,12 @@ dev = [
 lint = [
     "isort==7.0.0",
     "mypy==1.19.1",
-    "ruff==0.15.0",
+    "ruff==0.15.1",
     "types-pytz==2025.2.0.20251108",
 ]
 
 [tool.isort]
-py_version = 313
+py_version = 314
 src_paths = ["app"]
 line_length = 100
 multi_line_output = 3
@@ -104,7 +104,7 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.mypy]
-python_version = "3.13"
+python_version = "3.14"
 mypy_path = "app/bot"
 packages = ["app"]
 plugins = [
