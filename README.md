@@ -33,7 +33,7 @@ cd aiogram-template
 
 ```shell
 # Create virtual environment using UV
-uv venv --python=3.13
+uv venv --python=3.14
 
 # Install dependencies
 just sync
