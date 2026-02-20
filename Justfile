@@ -95,7 +95,7 @@ pull:
     git submodule update --init --recursive
 
 extract-locales:
-    uv run fast-ftl-extract \
+    uv run ftl extract \
       './app/bot' \
       './app/bot/locales' \
       -l 'en' \
@@ -104,6 +104,7 @@ extract-locales:
       -I 'core' \
       --comment-junks \
       --comment-keys-mode 'comment' \
+      --fast \
       --verbose
 
 stub:
