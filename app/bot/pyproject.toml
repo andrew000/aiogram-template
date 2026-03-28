@@ -2,14 +2,14 @@
 name = "bot"
 version = "0.0.1"
 dependencies = [
-    "aiogram-i18n==1.4",
-    "aiogram==3.25.0",
+    "aiogram-i18n==1.5",
+    "aiogram==3.26.0",
     "asyncpg==0.31.0",
     "fluent.runtime==0.4.0",
     "msgspec==0.20.0",
-    "pydantic-settings==2.12.0",
-    "redis[hiredis]==7.1.1",
-    "sqlalchemy==2.0.46",
+    "pydantic-settings==2.13.1",
+    "redis[hiredis]==7.4.0",
+    "sqlalchemy==2.0.48",
     "tzdata==2025.3",
     "uvloop==0.22.1; sys_platform == 'linux' or sys_platform == 'darwin'"
 ]

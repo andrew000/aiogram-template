@@ -44,7 +44,7 @@ services:
     restart: always
 
   database:
-    image: postgres:18.1
+    image: postgres:18.3
 
     environment:
       POSTGRES_USER: $PSQL_USER
@@ -67,7 +67,7 @@ services:
     restart: always
 
   redis:
-    image: redis:8.4.0
+    image: redis:8.6.2
 
     command:
       - --port 6379
@@ -96,7 +96,7 @@ services:
     entrypoint: [ "redis-server" ]
 
   caddy:  # Uncomment if you want to use Caddy as a reverse proxy
-    image: caddy:2.11
+    image: caddy:2.11.2
 
     networks:
       - aiogram

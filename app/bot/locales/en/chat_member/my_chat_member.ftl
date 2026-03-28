@@ -1,6 +1,6 @@
 my_chat_member-promoted_transition =
     ❤️ Thank you for promoting me to an administrator!
-
+    
     💬 For full functionality, I need the following rights:
     { $can_delete_messages ->
         [1] ✅ Delete messages
@@ -16,7 +16,7 @@ my_chat_member-promoted_transition =
     }
 my_chat_member-join_transition =
     ❤️ Thank you for adding me to the chat.
-
+    
     💬 For full functionality, I need the following rights:
     { $can_delete_messages ->
         [1] ✅ Delete messages
@@ -32,5 +32,5 @@ my_chat_member-join_transition =
     }
 my_chat_member-demoted_transition =
     My administrator rights have been revoked.
-
+    
     I will continue to work in the chat, but with limited capabilities.

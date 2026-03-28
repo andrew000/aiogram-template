@@ -21,7 +21,7 @@ repos:
       - id: "check-json"
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.15.1
+    rev: v0.15.8
     hooks:
       - id: ruff
         args: [ "--fix" ]
@@ -31,7 +31,7 @@ repos:
         files: "app"
 
   - repo: https://github.com/pycqa/isort
-    rev: 7.0.0
+    rev: 8.0.1
     hooks:
       - id: isort
         name: isort (python)

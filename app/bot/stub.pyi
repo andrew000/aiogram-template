@@ -1,3 +1,5 @@
+# mypy: ignore-errors
+# This is auto-generated file, do not edit!
 from collections.abc import Generator
 from contextlib import contextmanager
 from typing import Any, Literal
@@ -22,41 +24,33 @@ class LazyFactory(I18nStub):
 L: LazyFactory
 
 class I18nStub:
-    class __Message:
+    class __ChangeLanguage:
         @staticmethod
-        def deprecated(**kwargs: Any) -> Literal["🗑 Message deprecated."]: ...
+        def button(**kwargs: Any) -> Literal["🌐 Change language"]: ...
 
-    message = __Message()
+    change_language = __ChangeLanguage
+    class __ChatMember:
+        @staticmethod
+        def join_transition(*, mention: Any, **kwargs: Any) -> Literal["Welcome, { $mention }"]: ...
+        @staticmethod
+        def leave_transition(*, mention: Any, **kwargs: Any) -> Literal["Bye, { $mention }"]: ...
 
+    chat_member = __ChatMember
     class __Close:
         @staticmethod
         def windows(**kwargs: Any) -> Literal["❌ Close"]: ...
 
-    close = __Close()
-
-    class __Window:
+    close = __Close
+    class __Message:
         @staticmethod
-        def closed(**kwargs: Any) -> Literal["✅ Closed"]: ...
+        def deprecated(**kwargs: Any) -> Literal["🗑 Message deprecated."]: ...
 
-    window = __Window()
-
-    class __ChatMember:
-        @staticmethod
-        def leave_transition(*, mention: Any, **kwargs: Any) -> Literal["Bye, { $mention }"]: ...
-        @staticmethod
-        def join_transition(*, mention: Any, **kwargs: Any) -> Literal["Welcome, { $mention }"]: ...
-
-    chat_member = __ChatMember()
-
+    message = __Message
     class __MyChatMember:
         @staticmethod
-        def promoted_transition(
-            *,
-            can_delete_messages: Any,
-            can_restrict_members: Any,
-            can_invite_users: Any,
+        def demoted_transition(
             **kwargs: Any,
-        ) -> Literal["❤️ Thank you for promoting me to an administrator!"]: ...
+        ) -> Literal["My administrator rights have been revoked."]: ...
         @staticmethod
         def join_transition(
             *,
@@ -66,48 +60,45 @@ class I18nStub:
             **kwargs: Any,
         ) -> Literal["❤️ Thank you for adding me to the chat."]: ...
         @staticmethod
-        def demoted_transition(
-            **kwargs: Any,
-        ) -> Literal["My administrator rights have been revoked."]: ...
-
-    my_chat_member = __MyChatMember()
-
-    class __ChangeLanguage:
-        @staticmethod
-        def button(**kwargs: Any) -> Literal["🌐 Change language"]: ...
-
-    change_language = __ChangeLanguage()
-
-    class __Start:
-        @staticmethod
-        def start_text(
+        def promoted_transition(
             *,
-            user_mention: Any,
+            can_delete_messages: Any,
+            can_restrict_members: Any,
+            can_invite_users: Any,
             **kwargs: Any,
-        ) -> Literal["👋 Hi, { $user_mention }"]: ...
+        ) -> Literal["❤️ Thank you for promoting me to an administrator!"]: ...
 
-    start = __Start()
-
+    my_chat_member = __MyChatMember
     class __Settings:
         @staticmethod
-        def language(**kwargs: Any) -> Literal["language"]: ...
-        @staticmethod
         def lang(**kwargs: Any) -> Literal["lang"]: ...
+        @staticmethod
+        def language(**kwargs: Any) -> Literal["language"]: ...
 
         class __SelectLanguage:
             @staticmethod
-            def code(*, language_code: Any, **kwargs: Any) -> Literal["{ $language_code ->"]: ...
-            @staticmethod
-            def text(**kwargs: Any) -> Literal["💁\u200d♂️ Choose a language:"]: ...
-            @staticmethod
             def changed(
-                *,
-                language_code: Any,
-                **kwargs: Any,
-            ) -> Literal["✅ Language changed to: { $language_code ->"]: ...
+                *, language_code: Any, **kwargs: Any
+            ) -> Literal["✅ Language changed to: {...}"]: ...
+            @staticmethod
+            def code(*, language_code: Any, **kwargs: Any) -> Literal["{...}"]: ...
             @staticmethod
             def goto_start(**kwargs: Any) -> Literal["↪️ Go to start"]: ...
+            @staticmethod
+            def text(**kwargs: Any) -> Literal["💁‍♂️ Choose a language:"]: ...
 
-        select_language = __SelectLanguage()
+        select_language = __SelectLanguage
 
-    settings = __Settings()
+    settings = __Settings
+    class __Start:
+        @staticmethod
+        def start_text(
+            *, user_mention: Any, **kwargs: Any
+        ) -> Literal["👋 Hi, { $user_mention }"]: ...
+
+    start = __Start
+    class __Window:
+        @staticmethod
+        def closed(**kwargs: Any) -> Literal["✅ Closed"]: ...
+
+    window = __Window

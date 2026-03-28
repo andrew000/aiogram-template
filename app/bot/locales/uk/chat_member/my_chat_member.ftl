@@ -1,6 +1,6 @@
 my_chat_member-promoted_transition =
     ❤️ Дякую, що підвищили мене до адміністратора!
-
+    
     💬 Для повноцінної роботи мені потрібні такі права:
     { $can_delete_messages ->
         [1] ✅ Видаляти повідомлення
@@ -16,7 +16,7 @@ my_chat_member-promoted_transition =
     }
 my_chat_member-join_transition =
     ❤️ Дякую, що додати мене до чату.
-
+    
     💬 Для повноцінної роботи мені потрібні такі права:
     { $can_delete_messages ->
         [1] ✅ Видаляти повідомлення
@@ -32,5 +32,5 @@ my_chat_member-join_transition =
     }
 my_chat_member-demoted_transition =
     Мої права адміністратора були забрані.
-
+    
     Я продовжу працювати в чаті, але з обмеженими можливостями.

@@ -104,13 +104,16 @@ extract-locales:
       -I 'core' \
       --comment-junks \
       --comment-keys-mode 'comment' \
-      --fast \
       --verbose
 
 stub:
     uv run ftl stub \
       './app/bot/locales/en' \
-      './app/bot'
+      './app/bot/stub.pyi'
+
+untranslated:
+    uv run ftl untranslated \
+      './app/bot/locales/'
 
 lint:
     echo "Running ruff..."
