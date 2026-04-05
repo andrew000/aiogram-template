@@ -4,7 +4,7 @@ import asyncio
 import logging
 from functools import partial
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import msgspec
 from aiogram import Bot, Dispatcher
@@ -23,6 +23,7 @@ from aiogram.webhook.security import DEFAULT_TELEGRAM_NETWORKS, IPFilter
 from aiogram_i18n import I18nMiddleware
 from aiogram_i18n.cores import FluentRuntimeCore
 from aiohttp import web
+from aiohttp.typedefs import Middleware
 
 import errors
 import handlers
@@ -112,7 +113,9 @@ async def main() -> None:
 
     if settings.webhooks:
         app = web.Application(
-            middlewares=[ip_filter_middleware(IPFilter(DEFAULT_TELEGRAM_NETWORKS))],
+            middlewares=[
+                cast(Middleware, ip_filter_middleware(IPFilter(DEFAULT_TELEGRAM_NETWORKS)))
+            ],
         )
 
         SimpleRequestHandler(
