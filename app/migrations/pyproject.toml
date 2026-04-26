@@ -6,8 +6,8 @@ dependencies = [
     "alembic-postgresql-enum==1.10.0",
     "alembic==1.18.4",
     "asyncpg==0.31.0",
-    "msgspec==0.20.0",
-    "pydantic-settings==2.13.1",
+    "msgspec==0.21.1",
+    "pydantic-settings>=2.14,<2.15",
     "redis[hiredis]==7.4.0",
     "sqlalchemy>=2.0,<2.1",
 ]

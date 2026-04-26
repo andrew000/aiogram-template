@@ -102,6 +102,7 @@ extract-locales:
       -l 'uk' \
       -K 'LF' \
       -I 'core' \
+      --cache \
       --comment-junks \
       --comment-keys-mode 'comment' \
       --verbose
@@ -131,7 +132,7 @@ format:
 
 mypy:
     echo "Running MyPy..."
-    uv run mypy --explicit-package-bases {{ app-dir }}/{{ bot-dir }}
+    uv run mypy --native-parser --explicit-package-bases {{ app-dir }}/{{ bot-dir }}
 
 outdated:
     uv tree --universal --outdated --depth 2
