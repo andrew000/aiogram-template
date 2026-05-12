@@ -14,7 +14,7 @@ services:
     depends_on:
       - database
       - redis
-    #      - caddy  # Uncomment if you want to use Caddy as a reverse proxy
+    #  - caddy  # Uncomment if you want to use Caddy as a reverse proxy
 
     restart: always
 
@@ -67,7 +67,7 @@ services:
     restart: always
 
   redis:
-    image: redis:8.6.2
+    image: redis:8.6.3
 
     command:
       - --port 6379
@@ -95,7 +95,7 @@ services:
 
     entrypoint: [ "redis-server" ]
 
-  caddy:  # Uncomment if you want to use Caddy as a reverse proxy
+  caddy:
     image: caddy:2.11.2
 
     networks:

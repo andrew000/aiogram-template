@@ -3,7 +3,7 @@ name = "bot"
 version = "0.0.1"
 dependencies = [
     "aiogram-i18n==1.5",
-    "aiogram>=3.27,<3.28",
+    "aiogram>=3.28,<3.29",
     "asyncpg==0.31.0",
     "fluent.runtime==0.4.0",
     "msgspec==0.21.1",

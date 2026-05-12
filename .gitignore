@@ -13,3 +13,5 @@ __pycache__/
 **/*.log
 stub.json
 uv.lock
+/reports/
+/.ftl-extract-cache/

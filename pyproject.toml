@@ -23,12 +23,12 @@ build-backend = "uv_build"
 
 [project.optional-dependencies]
 dev = [
-    "FTL-Extract==0.11.0a2",
+    "FTL-Extract==0.11.0",
     "pre-commit>=4.6,<4.7",
 ]
 lint = [
     "isort==8.0.1",
-    "mypy[native-parser]>=1.20,<1.21",
+    "mypy>=2.1,<2.2",
     "ruff>=0.15,<0.16",
     "types-pytz>=2026,<2027",
 ]
@@ -148,3 +148,27 @@ exclude = [
 init_forbid_extra = true
 init_typed = true
 warn_required_dynamic_aliases = true
+
+[tool.ftl-extract.extract]
+code-path = "app/bot"
+output-path = "app/bot/locales"
+languages = ["en", "uk"]
+i18n-keys-append = ["LF"]
+ignore-attributes-append = ["core"]
+comment-junks = true
+comment-keys-mode = "comment"
+line-endings = "crlf"
+cache = true
+
+[tool.ftl-extract.stub]
+ftl-path = "app/bot/locales/en"
+output-path = "app/bot/stub.pyi"
+export-tree = false
+
+[tool.ftl-extract.untranslated]
+locales-path = "app/bot/locales"
+languages = []  # If empty, all languages will be checked
+suggest-from = ["en"]
+fail-on-untranslated = true
+output = "reports/untranslated"
+output-format = "json"

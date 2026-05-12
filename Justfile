@@ -95,26 +95,16 @@ pull:
     git submodule update --init --recursive
 
 extract-locales:
-    uv run ftl extract \
-      './app/bot' \
-      './app/bot/locales' \
-      -l 'en' \
-      -l 'uk' \
-      -K 'LF' \
-      -I 'core' \
-      --cache \
-      --comment-junks \
-      --comment-keys-mode 'comment' \
-      --verbose
+    uv run ftl extract
 
 stub:
-    uv run ftl stub \
-      './app/bot/locales/en' \
-      './app/bot/stub.pyi'
+    uv run ftl stub
+    uv run ruff check {{ app-dir }}/{{ bot-dir }}/stub.pyi --fix --unsafe-fixes
+    uv run ruff format {{ app-dir }}/{{ bot-dir }}/stub.pyi
+    uv run isort {{ app-dir }}/{{ bot-dir }}/stub.pyi
 
 untranslated:
-    uv run ftl untranslated \
-      './app/bot/locales/'
+    uv run ftl untranslated
 
 lint:
     echo "Running ruff..."
@@ -132,12 +122,17 @@ format:
 
 mypy:
     echo "Running MyPy..."
-    uv run mypy --native-parser --explicit-package-bases {{ app-dir }}/{{ bot-dir }}
+    uv run mypy \
+    --explicit-package-bases \
+    --num-workers 8 \
+    --native-parser \
+    {{ app-dir }}/{{ bot-dir }}
 
 outdated:
     uv tree --universal --outdated --depth 2
 
 sync:
+    uv lock --upgrade
     uv sync --all-extras
 
 create-revision message: build

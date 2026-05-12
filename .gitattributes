@@ -1,4 +1,6 @@
-* text=auto
+* text=auto eol=crlf
+app/bot/locales/** text eol=crlf
+psql/db-init-scripts/** text eol=lf
 
-*.py     text diff=python
-*.pyi    text diff=python
+*.py     text diff=python eol=crlf
+*.pyi    text diff=python eol=crlf

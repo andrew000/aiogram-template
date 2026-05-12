@@ -9,7 +9,7 @@ repos:
       - id: "debug-statements"
       - id: "end-of-file-fixer"
       - id: "mixed-line-ending"
-        args: [ "--fix", "lf" ]
+        args: [ "--fix", "crlf" ]
         types:
           - python
           - yaml
@@ -20,11 +20,10 @@ repos:
       - id: "check-toml"
       - id: "check-json"
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.15.10
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.12
     hooks:
-      - id: ruff
-        args: [ "--fix" ]
+      - id: ruff-check
         files: "app"
 
       - id: ruff-format
