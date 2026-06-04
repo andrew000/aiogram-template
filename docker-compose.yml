@@ -44,7 +44,7 @@ services:
     restart: always
 
   database:
-    image: postgres:18.3
+    image: postgres:18.4
 
     environment:
       POSTGRES_USER: $PSQL_USER
@@ -67,7 +67,7 @@ services:
     restart: always
 
   redis:
-    image: redis:8.6.3
+    image: redis:8.8.0
 
     command:
       - --port 6379
@@ -96,7 +96,7 @@ services:
     entrypoint: [ "redis-server" ]
 
   caddy:
-    image: caddy:2.11.2
+    image: caddy:2.11.4
 
     networks:
       - aiogram
