@@ -30,6 +30,7 @@ import handlers
 from middlewares.check_chat_middleware import CheckChatMiddleware
 from middlewares.check_user_middleware import CheckUserMiddleware
 from middlewares.throttling_middleware import ThrottlingMiddleware
+from services import ChatProfileService, UserProfileService
 from settings import Settings
 from storages.psql.base import close_db_pool, create_db_pool
 from utils.fsm_manager import FSMManager
@@ -55,7 +56,12 @@ async def startup(dispatcher: Dispatcher, bot: Bot, settings: Settings, redis: R
     engine, db_pool = await create_db_pool(settings)
 
     dispatcher.workflow_data.update(
-        {"db_pool": db_pool, "db_pool_closer": partial(close_db_pool, engine)},
+        {
+            "db_pool": db_pool,
+            "db_pool_closer": partial(close_db_pool, engine),
+            "chat_profile_service": ChatProfileService(db_pool, redis),
+            "user_profile_service": UserProfileService(db_pool, redis),
+        },
     )
 
     dispatcher.message.middleware(ThrottlingMiddleware(redis))

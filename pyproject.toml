@@ -51,6 +51,7 @@ known_first_party = [
     "filters",
     "handlers",
     "middlewares",
+    "services",
     "settings",
     "storages",
     "stub",
