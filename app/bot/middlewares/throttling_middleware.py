@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from contextlib import suppress
 from datetime import timedelta
-from typing import TYPE_CHECKING, Any, Final, TypeVar
+from typing import TYPE_CHECKING, Any, Final, TypeVar, cast
 
 from aiogram import BaseMiddleware
 from aiogram.dispatcher.flags import get_flag
@@ -36,7 +36,7 @@ class TTLCache:
         return f"{cls.__name__}:{object_id}:{throttle_key}"
 
     async def get(self, key: KeyValueT, throttle_key: str = "-") -> bytes | None:
-        return await self.redis.get(self.key(key, throttle_key))
+        return cast(bytes | None, await self.redis.get(self.key(key, throttle_key)))
 
     async def set(
         self,

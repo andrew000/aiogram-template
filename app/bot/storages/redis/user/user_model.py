@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Final, Self
+from typing import Final, Self, cast
 
 import msgspec.msgpack
 from redis.asyncio import Redis
@@ -26,10 +26,10 @@ class UserRD(msgspec.Struct, AlchemyStruct["UserRD"], kw_only=True, array_like=T
     async def get(cls, redis: Redis, user_id: int | str) -> Self | None:
         data = await redis.get(cls.key(user_id))
         if data:
-            return msgspec.msgpack.decode(data, type=cls)
+            return msgspec.msgpack.decode(cast(bytes, data), type=cls)
         return None
 
-    async def save(self, redis: Redis, ttl: ExpiryT = timedelta(days=1)) -> str:
+    async def save(self, redis: Redis, ttl: ExpiryT = timedelta(days=1)) -> bool:
         return await redis.setex(self.key(self.id), ttl, ENCODER.encode(self))
 
     @classmethod

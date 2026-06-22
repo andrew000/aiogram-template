@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Final, Self
+from typing import Final, Self, cast
 
 import msgspec
 from aiogram.enums import ChatType
@@ -28,7 +28,7 @@ class ChatModelRD(msgspec.Struct, AlchemyStruct["ChatModelRD"], kw_only=True, ar
     async def get(cls, redis: Redis, chat_id: int | str) -> Self | None:
         data = await redis.get(cls.key(chat_id))
         if data:
-            return msgspec.msgpack.decode(data, type=cls)
+            return msgspec.msgpack.decode(cast(bytes, data), type=cls)
         return None
 
     async def save(self, redis: Redis, ttl: ExpiryT = timedelta(days=1)) -> int:

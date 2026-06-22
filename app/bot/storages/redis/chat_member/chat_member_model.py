@@ -61,14 +61,16 @@ class RDChatMemberModel(msgspec.Struct, kw_only=True, array_like=True):
     async def get(cls, redis: Redis, chat_id: int, user_id: int) -> Self | None:
         data = await redis.get(cls.key(chat_id, user_id))
         if data:
-            return msgspec.msgpack.decode(data, type=cls)
+            return msgspec.msgpack.decode(cast(bytes, data), type=cls)
         return None
 
     @classmethod
     async def get_all(cls, redis: Redis, chat_id: int) -> list[Self]:
         keys = await redis.keys(cls.key(chat_id, "*"))
         if keys:
-            return [msgspec.msgpack.decode(await redis.get(key), type=cls) for key in keys]
+            return [
+                msgspec.msgpack.decode(cast(bytes, await redis.get(key)), type=cls) for key in keys
+            ]
         return []
 
     async def save(self, redis: Redis, ttl: ExpiryT | None = None) -> Self:

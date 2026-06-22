@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import Final, Self
+from typing import Final, Self, cast
 
 import msgspec
 from redis.asyncio import Redis
@@ -25,7 +25,7 @@ class ChatSettingsModelRD(
     async def get(cls, redis: Redis, chat_id: int | str) -> Self | None:
         data = await redis.get(cls.key(chat_id))
         if data:
-            return msgspec.msgpack.decode(data, type=cls)
+            return msgspec.msgpack.decode(cast(bytes, data), type=cls)
         return None
 
     async def save(self, redis: Redis, ttl: ExpiryT = timedelta(days=1)) -> bool:

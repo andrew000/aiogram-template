@@ -59,4 +59,5 @@ class Settings(BaseSettings):
                 port=self.redis.port,
                 db=self.redis.db,
             ),
+            decode_responses=False,
         )

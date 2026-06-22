@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Self, cast
 
 import msgspec
 from aiogram.filters import Filter
@@ -44,7 +44,7 @@ class MsgOwner(msgspec.Struct, kw_only=True, array_like=True):
     async def get(cls, redis: Redis, chat_id: int, message_id: int) -> Self | None:
         data = await redis.get(cls.key(chat_id, message_id))
         if data:
-            return msgspec.msgpack.decode(data, type=cls)
+            return msgspec.msgpack.decode(cast(bytes, data), type=cls)
         return None
 
     @classmethod
@@ -97,7 +97,7 @@ class MsgMultipleOwners(msgspec.Struct, kw_only=True, array_like=True):
     async def get(cls, redis: Redis, chat_id: int, message_id: int) -> Self | None:
         data = await redis.get(cls.key(chat_id, message_id))
         if data:
-            return msgspec.msgpack.decode(data, type=cls)
+            return msgspec.msgpack.decode(cast(bytes, data), type=cls)
         return None
 
     @classmethod
