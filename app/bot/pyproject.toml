@@ -8,7 +8,7 @@ dependencies = [
     "fluent.runtime==0.4.0",
     "msgspec==0.21.1",
     "pydantic-settings>=2.14,<2.15",
-    "redis[hiredis]==8.0.0",
+    "redis[hiredis]==8.0.1",
     "sqlalchemy>=2.0,<2.1",
     "tzdata>=2026,<2027",
     "uvloop==0.22.1; sys_platform == 'linux' or sys_platform == 'darwin'"

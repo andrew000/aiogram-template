@@ -4,11 +4,11 @@ version = "0.0.1"
 dependencies = [
     "aiogram-i18n==1.5",
     "alembic-postgresql-enum==1.10.0",
-    "alembic==1.18.4",
+    "alembic==1.18.5",
     "asyncpg==0.31.0",
     "msgspec==0.21.1",
     "pydantic-settings>=2.14,<2.15",
-    "redis[hiredis]==8.0.0",
+    "redis[hiredis]==8.0.1",
     "sqlalchemy>=2.0,<2.1",
 ]
 
